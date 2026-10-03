@@ -2,17 +2,23 @@ import path from "node:path";
 import { app, BrowserWindow, shell } from "electron";
 import { registerIpcHandlers } from "./ipcHandlers";
 import { loadTheme, windowBackground } from "./themeSettings";
+import { loadWindowState, trackWindowState } from "./windowStateService";
 
 const devServerUrl = process.env.VITE_DEV_SERVER_URL;
 /** Ícone da janela (barra de tarefas/Alt+Tab). Também é usado pelo electron-builder. */
 const windowIcon = path.join(__dirname, "../../resources/icon.png");
 
 function createWindow(): void {
+	// Tamanho/posição da última sessão; na primeira, 70% × 90% da tela e maximizada.
+	const state = loadWindowState();
+	const { x, y, width, height } = state.bounds;
 	const win = new BrowserWindow({
-		width: 1280,
-		height: 860,
-		minWidth: 960,
-		minHeight: 600,
+		// Sem posição confiável (Wayland), o compositor escolhe onde abrir.
+		...(state.restorePosition ? { x, y } : {}),
+		width,
+		height,
+		minWidth: state.minimumSize.width,
+		minHeight: state.minimumSize.height,
 		show: false,
 		backgroundColor: windowBackground(),
 		icon: windowIcon,
@@ -26,7 +32,12 @@ function createWindow(): void {
 		},
 	});
 
-	win.once("ready-to-show", () => win.show());
+	win.once("ready-to-show", () => {
+		// Maximiza antes de exibir, para a janela não aparecer pequena e depois crescer.
+		if (state.maximized) win.maximize();
+		win.show();
+	});
+	trackWindowState(win, state);
 
 	// Links externos abrem no navegador padrão, nunca dentro do app.
 	win.webContents.setWindowOpenHandler(({ url }) => {
