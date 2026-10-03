@@ -25,6 +25,7 @@
 ## Sumário
 
 - [Sobre](#sobre)
+- [Telas](#telas)
 - [Inspiração e créditos](#inspiração-e-créditos)
 - [Funcionalidades](#funcionalidades)
 - [Como as regras são aplicadas](#como-as-regras-são-aplicadas)
@@ -43,6 +44,41 @@ O **Rename Plus** renomeia muitos arquivos e pastas de uma vez a partir de regra
 Antes de qualquer alteração no disco, a coluna **Novo nome** mostra o resultado de cada item selecionado. Conflitos, como dois arquivos com o mesmo nome final ou caracteres proibidos pelo sistema, aparecem em vermelho e bloqueiam a operação. Depois de renomear, é possível **desfazer** o último lote.
 
 A interface segue o modelo de três áreas: árvore de pastas à esquerda, lista de arquivos à direita e painéis de regras embaixo, com os botões **Renomear**, **Desfazer** e **Redefinir** sempre visíveis.
+
+## Telas
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/subpastas.png"><img src="docs/screenshots/subpastas.png" alt="Tema claro com o modo Subpastas: faixas de dois CDs renomeadas para '01 - Opening Theme.mp3', com numeração reiniciando em cada pasta"></a>
+      <p><b>Várias regras e subpastas.</b> Remover, Substituir, Título, Numeração por pasta e extensão em minúsculas, aplicados às faixas de dois CDs de uma vez (tema claro).</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/conflitos.png"><img src="docs/screenshots/conflitos.png" alt="Linhas em vermelho com o novo nome 'foto.jpg' repetido; a barra de status mostra 4 conflitos e o botão Renomear está bloqueado"></a>
+      <p><b>Conflitos.</b> Nomes repetidos no lote ou iguais a um arquivo que já existe ficam em vermelho, e o botão Renomear é bloqueado. O motivo aparece ao passar o mouse sobre a linha.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/erros.png"><img src="docs/screenshots/erros.png" alt="Painel de ações mostrando 'RegEx inválida: Unterminated group' e barra de status com 'Pasta não encontrada'"></a>
+      <p><b>Mensagens de erro.</b> Uma RegEx inválida é explicada no painel de ações; caminhos inexistentes digitados na barra de endereço aparecem em vermelho na barra de status.</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/validacao.png"><img src="docs/screenshots/validacao.png" alt="Diálogo 'Renomear arquivo' com o campo em vermelho e a mensagem 'Contém o caractere /'"></a>
+      <p><b>Validação de nomes.</b> Ao renomear um item (F2) ou criar uma pasta, nomes inválidos para o sistema são apontados antes de confirmar.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/arrastar.png"><img src="docs/screenshots/arrastar.png" alt="Janela com borda tracejada e o aviso 'Solte para abrir'"></a>
+      <p><b>Arrastar e soltar.</b> Solte uma pasta para abri-la, ou arquivos para abrir a pasta deles já com eles selecionados.</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Modal de Configurações com as seções Aparência e Menu de contexto do sistema, com o Dolphin adicionado"></a>
+      <p><b>Configurações.</b> Tema da interface e as opções "Abrir no Rename Plus" no menu de contexto do gerenciador de arquivos.</p>
+    </td>
+  </tr>
+</table>
 
 ## Inspiração e créditos
 
@@ -93,9 +129,15 @@ Se você usa Windows e precisa de recursos avançados como metadados EXIF/ID3, s
 
 Botão direito na lista ou na árvore para abrir com o aplicativo padrão, mostrar no gerenciador de arquivos, renomear um item, recortar, copiar e colar, copiar o caminho, criar pasta e mover para a lixeira. Em discos sem lixeira, o app oferece excluir definitivamente, com confirmação.
 
+### Abrir itens de fora do app
+
+- **Arrastar e soltar:** solte uma pasta na janela para abri-la, ou arquivos para abrir a pasta deles com eles já selecionados.
+- **Menu de contexto do sistema:** "Abrir no Rename Plus" (um item) e "Abrir selecionados no Rename Plus" (vários). No Windows, o instalador oferece a opção; no Linux, ela é ativada em **Configurações** para Dolphin, Nautilus, Nemo, Thunar, Caja ou PCManFM, com o gerenciador padrão do sistema em destaque.
+- **Linha de comando:** `rename-plus [--open | --select] [--] caminhos…`. Com o app já aberto, os itens vão para a janela existente.
+
 ### Interface
 
-- Tema **claro**, **escuro** ou **seguindo o sistema**.
+- Tema **claro**, **escuro** ou **seguindo o sistema**, escolhido em **Configurações** (botão no canto direito da barra superior).
 - Idiomas **português**, **inglês** e **espanhol**, escolhidos pelo botão no canto inferior direito da área de ações. O idioma inicial segue o sistema.
 - Layout ajustável: largura da árvore, altura da área de regras (até metade da janela) e largura das colunas.
 - A janela lembra tamanho, posição e se estava maximizada. Na primeira execução abre maximizada.
@@ -109,7 +151,7 @@ RegEx → Nome → Substituir → Maiúsc./Minúsc. → Remover → Adicionar
       → Data automática → Nome da pasta → Numeração → Extensão
 ```
 
-Exemplo do print acima: `IMG_2041.JPG` → RegEx troca `IMG_2041` por `Lisboa` → Data automática acrescenta `2024-06-10 ` → Numeração acrescenta ` - 01` → Extensão em minúsculas → **`2024-06-10 Lisboa - 01.jpg`**.
+Exemplo do print principal (no topo): `IMG_2041.JPG` → RegEx troca `IMG_2041` por `Lisboa` → Data automática acrescenta `2024-06-10 ` → Numeração acrescenta ` - 01` → Extensão em minúsculas → **`2024-06-10 Lisboa - 01.jpg`**.
 
 Em pastas, o ponto **não** é tratado como separador de extensão (`v1.2` continua sendo o nome inteiro), e o mesmo vale para arquivos ocultos como `.bashrc`.
 
@@ -122,7 +164,7 @@ Para deixar claro o escopo atual:
 - **Não move nem copia partes do nome** de uma posição para outra (o painel "Mover/Copiar" do Bulk Rename Utility).
 - **Não altera datas, atributos nem permissões** dos arquivos; só os nomes.
 - **Não move arquivos para outra pasta ao renomear:** o novo nome fica sempre na mesma pasta. Para mover, use recortar e colar.
-- **Não tem modo de linha de comando** nem agendamento.
+- **Não renomeia pela linha de comando:** ela só abre pastas e arquivos no app; também não há agendamento.
 - **O "Desfazer" vale só para o último lote** e só enquanto o app está aberto.
 - **Limite de listagem:** mostra até 50.000 itens por vez; acima disso a lista é truncada, com aviso.
 - **Não roda no macOS** por enquanto.
@@ -148,10 +190,11 @@ Para deixar claro o escopo atual:
    ```
 
 3. **Opcional:** integre ao menu de aplicativos com o [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher) ou outra ferramenta de integração de AppImage.
+4. **Opcional:** em **Configurações › Menu de contexto do sistema**, adicione as opções ao seu gerenciador de arquivos. Se o AppImage mudar de lugar ou de versão, basta abrir o app uma vez para corrigi-las.
 
 ### Windows
 
-Execute o instalador `rename-plus-<versão>-win-x64.exe` e siga as etapas. O app aparece em "Aplicativos instalados" com o editor **Generson Silva** e pode ser desinstalado por lá.
+Execute o instalador `rename-plus-<versão>-win-x64.exe` e siga as etapas. Uma das etapas oferece adicionar "Abrir no Rename Plus" e "Abrir selecionados no Rename Plus" ao menu de contexto do Explorador de Arquivos (no Windows 11, em "Mostrar mais opções"). O app aparece em "Aplicativos instalados" com o editor **Generson Silva** e pode ser desinstalado por lá.
 
 ## Atalhos de teclado
 

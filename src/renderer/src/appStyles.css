@@ -1146,7 +1146,8 @@ button.header-cell:hover {
 	outline-offset: -2px;
 }
 
-.settings-subsection summary .icon {
+.settings-subsection-chevron {
+	display: inline-flex;
 	transition: transform 0.12s;
 }
 
@@ -1155,7 +1156,7 @@ button.header-cell:hover {
 	border-radius: 8px 8px 0 0;
 }
 
-.settings-subsection[open] summary .icon {
+.settings-subsection[open] .settings-subsection-chevron {
 	transform: rotate(90deg);
 }
 

@@ -48,7 +48,9 @@ export function SettingsSubsection({
 	return (
 		<details className="settings-subsection">
 			<summary>
-				<AppIcon name="chevron" size={14} />
+				<span className="settings-subsection-chevron">
+					<AppIcon name="chevron" size={14} />
+				</span>
 				<span className="settings-subsection-title">{title}</span>
 				{count !== undefined && <span className="settings-subsection-count">{count}</span>}
 			</summary>
