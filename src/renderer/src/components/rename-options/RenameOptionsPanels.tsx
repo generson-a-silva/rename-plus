@@ -24,7 +24,10 @@ interface RenameOptionsPanelsProps {
 	actions: RenameActionsPanelProps;
 }
 
-/** Área inferior com os painéis numerados, na ordem em que o motor aplica cada seção. */
+/**
+ * Área inferior: painéis numerados (na ordem em que o motor aplica cada seção) à
+ * esquerda e, à direita, a coluna fixa com Renomear/Desfazer/Redefinir.
+ */
 export function RenameOptionsPanels({
 	options,
 	onChange,
@@ -43,19 +46,24 @@ export function RenameOptionsPanels({
 	});
 
 	return (
-		<div className="panels">
-			<RegexOptionsPanel {...sectionProps("regex")} />
-			<NameOptionsPanel {...sectionProps("name")} />
-			<ReplaceOptionsPanel {...sectionProps("replace")} />
-			<CaseOptionsPanel {...sectionProps("case")} />
-			<RemoveOptionsPanel {...sectionProps("remove")} />
-			<AddOptionsPanel {...sectionProps("add")} />
-			<AutoDateOptionsPanel {...sectionProps("autoDate")} />
-			<AppendFolderOptionsPanel {...sectionProps("appendFolder")} />
-			<NumberingOptionsPanel {...sectionProps("numbering")} />
-			<ExtensionOptionsPanel {...sectionProps("extension")} />
-			<ListFiltersPanel value={filters} onChange={onFiltersChange} />
-			<RenameActionsPanel {...actions} />
+		<div className="rename-options">
+			{/* Opções roláveis; as ações ficam numa coluna fixa à direita, sempre visíveis. */}
+			<div className="panels">
+				<RegexOptionsPanel {...sectionProps("regex")} />
+				<NameOptionsPanel {...sectionProps("name")} />
+				<ReplaceOptionsPanel {...sectionProps("replace")} />
+				<CaseOptionsPanel {...sectionProps("case")} />
+				<RemoveOptionsPanel {...sectionProps("remove")} />
+				<AddOptionsPanel {...sectionProps("add")} />
+				<AutoDateOptionsPanel {...sectionProps("autoDate")} />
+				<AppendFolderOptionsPanel {...sectionProps("appendFolder")} />
+				<NumberingOptionsPanel {...sectionProps("numbering")} />
+				<ExtensionOptionsPanel {...sectionProps("extension")} />
+				<ListFiltersPanel value={filters} onChange={onFiltersChange} />
+			</div>
+			<aside className="rename-actions" aria-label="Ações de renomeação">
+				<RenameActionsPanel {...actions} />
+			</aside>
 		</div>
 	);
 }

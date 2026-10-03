@@ -23,6 +23,8 @@
 	--active-panel: #2f6fe4;
 	--marquee-bg: rgb(47 111 228 / 0.12);
 	--marquee-border: rgb(47 111 228 / 0.7);
+	--scrollbar-thumb: #c4c9d1;
+	--scrollbar-thumb-hover: #a3aab5;
 }
 
 /*
@@ -49,6 +51,8 @@
 		--active-panel: #4c8dff;
 		--marquee-bg: rgb(76 141 255 / 0.16);
 		--marquee-border: rgb(76 141 255 / 0.8);
+		--scrollbar-thumb: #3a404b;
+		--scrollbar-thumb-hover: #4f5765;
 	}
 }
 
@@ -71,6 +75,8 @@
 	--active-panel: #4c8dff;
 	--marquee-bg: rgb(76 141 255 / 0.16);
 	--marquee-border: rgb(76 141 255 / 0.8);
+	--scrollbar-thumb: #3a404b;
+	--scrollbar-thumb-hover: #4f5765;
 }
 
 * {
@@ -104,6 +110,37 @@ input,
 select {
 	font: inherit;
 	color: inherit;
+}
+
+/* ---- Barras de rolagem ---------------------------------------------- */
+
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	/* A borda transparente cria um respiro em volta da barra. */
+	border: 2px solid transparent;
+	border-radius: 999px;
+	background: var(--scrollbar-thumb) padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background-color: var(--scrollbar-thumb-hover);
+}
+
+::-webkit-scrollbar-thumb:active {
+	background-color: var(--accent);
+}
+
+::-webkit-scrollbar-button {
+	display: none;
 }
 
 .mono {
@@ -413,15 +450,31 @@ button.header-cell:hover {
 
 /* ---- Painéis --------------------------------------------------------- */
 
+.rename-options {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) clamp(200px, 22%, 260px);
+	min-height: 0;
+	background: var(--bg);
+}
+
 .panels {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
 	grid-auto-flow: row dense;
 	align-items: start;
 	gap: 8px;
+	min-height: 0;
 	padding: 8px;
 	overflow: auto;
-	background: var(--bg);
+	/* Permite adaptar os painéis largos à largura disponível (ver @container abaixo). */
+	container-type: inline-size;
+}
+
+.rename-actions {
+	min-height: 0;
+	/* Mesmo espaçamento dos painéis, para não encostar na barra de rolagem deles. */
+	padding: 8px;
+	overflow: hidden auto;
 }
 
 .panel {
@@ -435,6 +488,13 @@ button.header-cell:hover {
 
 .panel.wide {
 	grid-column: span 2;
+}
+
+/* Com espaço para uma coluna só, os painéis largos não podem ocupar duas. */
+@container (max-width: 475px) {
+	.panel.wide {
+		grid-column: auto;
+	}
 }
 
 .panel.active {
@@ -559,6 +619,19 @@ button.header-cell:hover {
 
 /* ---- Ações ----------------------------------------------------------- */
 
+.actions-card {
+	display: grid;
+	align-content: start;
+	gap: 6px;
+	/* Alinha com a borda dos painéis, que começa no meio da legenda (18px de altura). */
+	margin-top: 9px;
+	min-height: calc(100% - 9px);
+	padding: 10px;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	background: var(--surface);
+}
+
 .actions-summary {
 	min-height: 2.8em;
 	margin: 0;
@@ -567,7 +640,8 @@ button.header-cell:hover {
 
 .actions-row {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	/* Lado a lado quando couber; um embaixo do outro em colunas estreitas. */
+	grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 	gap: 6px;
 }
 

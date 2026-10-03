@@ -9,8 +9,8 @@ export function RemoveOptionsPanel({
 	onReset,
 }: RenameSectionPanelProps<"remove">) {
 	return (
-		<OptionPanel number={5} title="Remover" className="wide" active={active} onReset={onReset}>
-			<div className="grid-4">
+		<OptionPanel number={5} title="Remover" active={active} onReset={onReset}>
+			<div className="grid-2">
 				<NumberField
 					label="Primeiros"
 					min={0}

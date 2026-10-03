@@ -1,4 +1,4 @@
-import { AppIcon, OptionPanel } from "@components/common";
+import { AppIcon } from "@components/common";
 
 export interface RenameActionsPanelProps {
 	canRename: boolean;
@@ -10,7 +10,10 @@ export interface RenameActionsPanelProps {
 	onResetAll: () => void;
 }
 
-/** Botões Renomear/Desfazer/Redefinir e o resumo da pré-visualização (12). */
+/**
+ * Botões Renomear/Desfazer/Redefinir e o resumo da pré-visualização. Fica fora da
+ * sequência numerada de painéis, pois não é uma etapa da renomeação.
+ */
 export function RenameActionsPanel({
 	canRename,
 	canUndo,
@@ -21,7 +24,7 @@ export function RenameActionsPanel({
 	onResetAll,
 }: RenameActionsPanelProps) {
 	return (
-		<OptionPanel number={12} title="Renomear" active={false} className="actions-panel">
+		<section className="actions-card" aria-label="Ações de renomeação">
 			<p className="actions-summary">{summary}</p>
 			<button
 				type="button"
@@ -47,6 +50,6 @@ export function RenameActionsPanel({
 					Redefinir
 				</button>
 			</div>
-		</OptionPanel>
+		</section>
 	);
 }
