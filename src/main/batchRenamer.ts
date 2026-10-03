@@ -5,6 +5,7 @@ import type { RenameFailure, RenameOperation, RenameResult } from "../shared/ipc
 import { getPlatformPaths } from "../shared/paths";
 import { validateFileName } from "../shared/rename";
 import { describeFileSystemError } from "./fileSystemErrors";
+import { tMain, tMainRef } from "./mainLocale";
 
 interface PlannedOperation extends RenameOperation {
 	isDir: boolean;
@@ -52,19 +53,19 @@ async function plan(
 
 	for (const original of operations) {
 		if (!path.isAbsolute(original.from) || !path.isAbsolute(original.to)) {
-			return { error: failure(original, "Caminho não absoluto") };
+			return { error: failure(original, tMain("batch.notAbsolute")) };
 		}
 		// Normaliza separadores e barras repetidas ("C:/a//b" → "C:\a\b" no Windows).
 		const op = { from: path.resolve(original.from), to: path.resolve(original.to) };
 		// Mudar só maiúsculas/minúsculas ("a.txt" → "A.txt") é uma operação válida.
 		if (op.from === op.to) continue;
 		if (!platformPaths.equals(path.dirname(op.from), path.dirname(op.to))) {
-			return { error: failure(op, "O destino deve ficar na mesma pasta") };
+			return { error: failure(op, tMain("batch.otherFolder")) };
 		}
 		const invalid = validateFileName(path.basename(op.to), process.platform);
-		if (invalid) return { error: failure(op, invalid) };
-		if (sources.has(key(op.from))) return { error: failure(op, "Item repetido no lote") };
-		if (targets.has(key(op.to))) return { error: failure(op, "Nome duplicado no lote") };
+		if (invalid) return { error: failure(op, tMainRef(invalid)) };
+		if (sources.has(key(op.from))) return { error: failure(op, tMain("batch.repeated")) };
+		if (targets.has(key(op.to))) return { error: failure(op, tMain("preview.duplicate")) };
 		sources.add(key(op.from));
 		targets.add(key(op.to));
 		ops.push(op);
@@ -75,11 +76,11 @@ async function plan(
 		try {
 			source = await fs.lstat(op.from);
 		} catch {
-			return { error: failure(op, "O item original não existe mais") };
+			return { error: failure(op, tMain("batch.sourceMissing")) };
 		}
 		const sameItem = key(op.to) === key(op.from);
 		if (!sameItem && !sources.has(key(op.to)) && (await occupiedByOther(op.to, source))) {
-			return { error: failure(op, "Já existe um item com esse nome") };
+			return { error: failure(op, tMain("preview.exists")) };
 		}
 		planned.push({ ...op, isDir: source.isDirectory() });
 	}
@@ -123,7 +124,7 @@ async function execute(planned: readonly PlannedOperation[]): Promise<RenameResu
 			for (const [i, op] of ops.entries()) {
 				current = op;
 				// fs.rename pode sobrescrever destinos existentes; verifica antes.
-				if (await exists(op.to)) throw new Error("Já existe um item com esse nome");
+				if (await exists(op.to)) throw new Error(tMain("preview.exists"));
 				await move(temps[i] as string, op.to);
 			}
 		}
@@ -142,7 +143,7 @@ async function execute(planned: readonly PlannedOperation[]): Promise<RenameResu
 				from: current?.from ?? "",
 				to: current?.to ?? "",
 				error: rollbackErrors.length
-					? `${message}. Falha ao desfazer: ${rollbackErrors.join("; ")}`
+					? tMain("batch.rollbackFailed", { error: message, details: rollbackErrors.join("; ") })
 					: message,
 			},
 		];

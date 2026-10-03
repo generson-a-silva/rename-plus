@@ -1,5 +1,7 @@
 import { AppIcon, type AppIconName } from "@components/common";
+import { useI18n } from "@hooks";
 import { isRootPath } from "@lib";
+import type { MessageKey } from "@shared/i18n";
 import type { ThemeMode } from "@shared/ipc";
 import { useEffect, useState } from "react";
 
@@ -19,10 +21,10 @@ interface NavigationToolbarProps {
 	onCycleTheme: () => void;
 }
 
-const THEME_BUTTON: Record<ThemeMode, { icon: AppIconName; label: string }> = {
-	system: { icon: "monitor", label: "Tema: sistema (clique para claro)" },
-	light: { icon: "sun", label: "Tema: claro (clique para escuro)" },
-	dark: { icon: "moon", label: "Tema: escuro (clique para seguir o sistema)" },
+const THEME_BUTTON: Record<ThemeMode, { icon: AppIconName; labelKey: MessageKey }> = {
+	system: { icon: "monitor", labelKey: "toolbar.themeSystem" },
+	light: { icon: "sun", labelKey: "toolbar.themeLight" },
+	dark: { icon: "moon", labelKey: "toolbar.themeDark" },
 };
 
 function ToolButton(props: {
@@ -51,6 +53,7 @@ function ToolButton(props: {
 /** Barra superior: navegação entre pastas, seleção em massa, itens ocultos e tema. */
 export function NavigationToolbar(props: NavigationToolbarProps) {
 	const { currentDir } = props;
+	const { t } = useI18n();
 	const [draft, setDraft] = useState(currentDir ?? "");
 
 	useEffect(() => setDraft(currentDir ?? ""), [currentDir]);
@@ -59,18 +62,18 @@ export function NavigationToolbar(props: NavigationToolbarProps) {
 		<header className="toolbar">
 			<ToolButton
 				icon="up"
-				label="Pasta acima"
+				label={t("toolbar.up")}
 				disabled={!currentDir || isRootPath(currentDir)}
 				onClick={props.onUp}
 			/>
-			<ToolButton icon="home" label="Pasta pessoal" onClick={props.onHome} />
+			<ToolButton icon="home" label={t("toolbar.home")} onClick={props.onHome} />
 			<ToolButton
 				icon="refresh"
-				label="Atualizar (F5)"
+				label={t("toolbar.refresh")}
 				disabled={!currentDir}
 				onClick={props.onRefresh}
 			/>
-			<ToolButton icon="open" label="Abrir pasta…" onClick={props.onPickFolder} />
+			<ToolButton icon="open" label={t("toolbar.openFolder")} onClick={props.onPickFolder} />
 
 			<form
 				className="path-form"
@@ -84,7 +87,7 @@ export function NavigationToolbar(props: NavigationToolbarProps) {
 					className="path-input mono"
 					value={draft}
 					spellCheck={false}
-					aria-label="Caminho da pasta"
+					aria-label={t("toolbar.path")}
 					onChange={(event) => setDraft(event.target.value)}
 					onKeyDown={(event) => {
 						if (event.key === "Escape") setDraft(currentDir ?? "");
@@ -93,20 +96,26 @@ export function NavigationToolbar(props: NavigationToolbarProps) {
 			</form>
 
 			<div className="toolbar-group">
-				<ToolButton icon="selectAll" label="Selecionar tudo (Ctrl+A)" onClick={props.onSelectAll} />
-				<ToolButton icon="selectNone" label="Limpar seleção (Esc)" onClick={props.onSelectNone} />
-				<ToolButton icon="invert" label="Inverter seleção" onClick={props.onInvert} />
+				<ToolButton icon="selectAll" label={t("toolbar.selectAll")} onClick={props.onSelectAll} />
+				<ToolButton
+					icon="selectNone"
+					label={t("toolbar.selectNone")}
+					onClick={props.onSelectNone}
+				/>
+				<ToolButton icon="invert" label={t("toolbar.invert")} onClick={props.onInvert} />
 			</div>
 			<div className="toolbar-group">
 				<ToolButton
 					icon={props.showHidden ? "eye" : "eyeOff"}
-					label={
-						props.showHidden ? "Ocultar itens ocultos (Ctrl+H)" : "Mostrar itens ocultos (Ctrl+H)"
-					}
+					label={t(props.showHidden ? "toolbar.hideHidden" : "toolbar.showHidden")}
 					pressed={props.showHidden}
 					onClick={props.onToggleHidden}
 				/>
-				<ToolButton {...THEME_BUTTON[props.theme]} onClick={props.onCycleTheme} />
+				<ToolButton
+					icon={THEME_BUTTON[props.theme].icon}
+					label={t(THEME_BUTTON[props.theme].labelKey)}
+					onClick={props.onCycleTheme}
+				/>
 			</div>
 		</header>
 	);

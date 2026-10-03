@@ -168,11 +168,11 @@ describe("buildPreview", () => {
 			options({ name: { mode: "fixed", fixed: "c" } }),
 		);
 
-		expect(preview.items.get(a.path)?.message).toBe("Nome duplicado no lote");
+		expect(preview.items.get(a.path)?.message?.key).toBe("preview.duplicate");
 		expect(preview.errors).toBe(2);
 
 		const single = buildPreview([a], [a, c], options({ name: { mode: "fixed", fixed: "c" } }));
-		expect(single.items.get(a.path)?.message).toBe("Já existe um item com esse nome");
+		expect(single.items.get(a.path)?.message?.key).toBe("preview.exists");
 	});
 
 	it("permite trocar nomes entre itens do mesmo lote", () => {
@@ -195,7 +195,7 @@ describe("buildPreview", () => {
 
 	it("reporta erro de configuração sem lançar exceção", () => {
 		const preview = buildPreview([entry("a")], [], options({ regex: { match: "[" } }));
-		expect(preview.configError).toMatch(/RegEx inválida/);
+		expect(preview.configError?.key).toBe("engine.invalidRegex");
 	});
 });
 
@@ -214,13 +214,13 @@ describe("Windows", () => {
 		entry(name, { dir, path: `${dir}\\${name}` });
 
 	it("rejeita caracteres, nomes reservados e ponto/espaço no final", () => {
-		expect(validateFileName("a:b.txt", "win32")).toMatch(/não permitido/);
-		expect(validateFileName("a\\b", "win32")).toMatch(/não permitido/);
-		expect(validateFileName("CON", "win32")).toMatch(/reservado/);
-		expect(validateFileName("nul.txt", "win32")).toMatch(/reservado/);
+		expect(validateFileName("a:b.txt", "win32")?.key).toBe("validation.windowsChar");
+		expect(validateFileName("a\\b", "win32")?.key).toBe("validation.windowsChar");
+		expect(validateFileName("CON", "win32")?.key).toBe("validation.windowsReserved");
+		expect(validateFileName("nul.txt", "win32")?.key).toBe("validation.windowsReserved");
 		expect(validateFileName("console.txt", "win32")).toBeNull();
-		expect(validateFileName("arquivo.", "win32")).toMatch(/ponto ou espaço/);
-		expect(validateFileName("arquivo ", "win32")).toMatch(/ponto ou espaço/);
+		expect(validateFileName("arquivo.", "win32")?.key).toBe("validation.trailingDotSpace");
+		expect(validateFileName("arquivo ", "win32")?.key).toBe("validation.trailingDotSpace");
 		expect(validateFileName("a:b.txt", "linux")).toBeNull();
 	});
 
@@ -230,7 +230,7 @@ describe("Windows", () => {
 		const fixedA = options({ name: { mode: "fixed", fixed: "A" } });
 
 		const duplicate = buildPreview([a, b], [a, b], fixedA, { platform: "win32" });
-		expect(duplicate.items.get(b.path)?.message).toBe("Nome duplicado no lote");
+		expect(duplicate.items.get(b.path)?.message?.key).toBe("preview.duplicate");
 
 		const existing = winEntry("FOTO.txt");
 		const collision = buildPreview(
@@ -239,7 +239,7 @@ describe("Windows", () => {
 			options({ name: { mode: "fixed", fixed: "foto" } }),
 			{ platform: "win32" },
 		);
-		expect(collision.items.get(b.path)?.message).toBe("Já existe um item com esse nome");
+		expect(collision.items.get(b.path)?.message?.key).toBe("preview.exists");
 
 		// No Linux são arquivos diferentes.
 		const linux = buildPreview(
@@ -274,6 +274,6 @@ describe("Windows", () => {
 			options({ autoDate: { mode: "prefix", format: "HH:mm" } }),
 			{ platform: "win32" },
 		);
-		expect(preview.items.get(a.path)?.message).toMatch(/não permitido/);
+		expect(preview.items.get(a.path)?.message?.key).toBe("validation.windowsChar");
 	});
 });

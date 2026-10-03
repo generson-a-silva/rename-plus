@@ -1,4 +1,5 @@
-import { AppIcon } from "@components/common";
+import { AppIcon, LanguageMenuButton } from "@components/common";
+import { useI18n } from "@hooks";
 
 export interface RenameActionsPanelProps {
 	canRename: boolean;
@@ -23,8 +24,9 @@ export function RenameActionsPanel({
 	onUndo,
 	onResetAll,
 }: RenameActionsPanelProps) {
+	const { t } = useI18n();
 	return (
-		<section className="actions-card" aria-label="Ações de renomeação">
+		<section className="actions-card" aria-label={t("actions.label")}>
 			<p className="actions-summary">{summary}</p>
 			<button
 				type="button"
@@ -33,22 +35,26 @@ export function RenameActionsPanel({
 				onClick={onRename}
 			>
 				<AppIcon name="rename" />
-				Renomear
+				{t("actions.rename")}
 			</button>
 			<div className="actions-row">
 				<button type="button" className="button" disabled={!canUndo || busy} onClick={onUndo}>
 					<AppIcon name="undo" />
-					Desfazer
+					{t("actions.undo")}
 				</button>
 				<button
 					type="button"
 					className="button"
-					title="Redefinir todas as seções"
+					title={t("actions.resetHint")}
 					onClick={onResetAll}
 				>
 					<AppIcon name="reset" />
-					Redefinir
+					{t("actions.reset")}
 				</button>
+			</div>
+			{/* Rodapé: seletor de idioma no canto inferior direito. */}
+			<div className="actions-footer">
+				<LanguageMenuButton />
 			</div>
 		</section>
 	);

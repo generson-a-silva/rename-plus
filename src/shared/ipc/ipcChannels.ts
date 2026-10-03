@@ -2,6 +2,7 @@
 export const IpcChannel = {
 	GetAppInfo: "app:get-info",
 	SetTheme: "app:set-theme",
+	SetLocale: "app:set-locale",
 	GetHomeDir: "fs:get-home-dir",
 	ListDirectories: "fs:list-directories",
 	ListEntries: "fs:list-entries",

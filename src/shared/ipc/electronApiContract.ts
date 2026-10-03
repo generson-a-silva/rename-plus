@@ -1,3 +1,4 @@
+import type { Locale } from "../i18n";
 import type { AppInfo } from "./appInfoTypes";
 import type { RenameOperation, RenameResult } from "./batchRenameTypes";
 import type { ContextMenuItem } from "./contextMenuTypes";
@@ -11,6 +12,8 @@ export interface ElectronApi {
 	platform: string;
 	getAppInfo: () => Promise<AppInfo>;
 	setTheme: (mode: ThemeMode) => Promise<void>;
+	/** Idioma das mensagens do processo principal (erros, botões de diálogos). */
+	setLocale: (locale: Locale) => Promise<void>;
 	getHomeDir: () => Promise<string>;
 	listDirectories: (dir: string, showHidden: boolean) => Promise<DirEntry[]>;
 	listEntries: (dir: string, options: ListOptions) => Promise<ListResult>;

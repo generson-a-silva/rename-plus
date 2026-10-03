@@ -4,6 +4,7 @@ import type { FileOperationFailure, FileOperationResult } from "../shared/ipc";
 import { getPlatformPaths } from "../shared/paths";
 import { splitName, validateFileName } from "../shared/rename";
 import { describeFileSystemError } from "./fileSystemErrors";
+import { tMain, tMainRef } from "./mainLocale";
 
 const platformPaths = getPlatformPaths(process.platform);
 
@@ -41,7 +42,7 @@ export async function findAvailablePath(
 export async function createFolder(parentDir: string, name: string): Promise<FileOperationResult> {
 	const target = path.join(parentDir, name);
 	const invalid = validateFileName(name, process.platform);
-	if (invalid) return result([], [{ path: target, error: invalid }]);
+	if (invalid) return result([], [{ path: target, error: tMainRef(invalid) }]);
 	try {
 		// Sem `recursive`: falha com EEXIST se já houver um item com esse nome.
 		await fs.mkdir(target);
@@ -87,11 +88,10 @@ async function transferItems(
 			const isDir = stats.isDirectory();
 			if (mode === "move" && platformPaths.equals(path.dirname(source), targetDir)) continue;
 			if (isDir && platformPaths.contains(source, targetDir)) {
-				const verb = mode === "copy" ? "copiar" : "mover";
-				failed.push({
-					path: source,
-					error: `Não é possível ${verb} uma pasta para dentro dela mesma`,
-				});
+				const error = tMain(
+					mode === "copy" ? "transfer.copyIntoItself" : "transfer.moveIntoItself",
+				);
+				failed.push({ path: source, error });
 				continue;
 			}
 			const target = await findAvailablePath(targetDir, path.basename(source), isDir);

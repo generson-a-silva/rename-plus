@@ -682,8 +682,9 @@ button.header-cell:hover {
 /* ---- Ações ----------------------------------------------------------- */
 
 .actions-card {
-	display: grid;
-	align-content: start;
+	/* Coluna: resumo e botões no topo, seletor de idioma no rodapé. */
+	display: flex;
+	flex-direction: column;
 	gap: 6px;
 	/* Alinha com a borda dos painéis, que começa no meio do badge do título (22px). */
 	margin-top: 11px;
@@ -692,6 +693,82 @@ button.header-cell:hover {
 	border: 1px solid var(--border);
 	border-radius: 8px;
 	background: var(--surface);
+}
+
+/* Empurra o seletor de idioma para o canto inferior direito do bloco. */
+.actions-footer {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: auto;
+	padding-top: 6px;
+}
+
+.language-button {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	height: 26px;
+	padding: 0 8px;
+	border: 1px solid var(--border);
+	border-radius: 999px;
+	background: var(--surface-2);
+	color: var(--muted);
+	font-size: 12px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.language-button:hover,
+.language-button.open {
+	border-color: var(--accent);
+	color: var(--fg);
+}
+
+.language-button .icon:last-child {
+	transition: transform 0.12s;
+}
+
+.language-button.open .icon:last-child {
+	transform: rotate(180deg);
+}
+
+/* Lista que abre acima do botão (posição fixa calculada no componente). */
+.language-menu {
+	position: fixed;
+	z-index: 20;
+	display: flex;
+	flex-direction: column;
+	min-width: 190px;
+	padding: 4px;
+	border: 1px solid var(--border-strong);
+	border-radius: 8px;
+	background: var(--surface);
+	box-shadow: 0 8px 24px rgb(0 0 0 / 0.25);
+}
+
+.language-option {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	height: 30px;
+	padding: 0 10px;
+	border: 0;
+	border-radius: 5px;
+	background: none;
+	text-align: left;
+	cursor: pointer;
+}
+
+.language-option:hover,
+.language-option:focus-visible {
+	background: var(--row-hover);
+	outline: none;
+}
+
+.language-option[aria-checked="true"] {
+	color: var(--accent);
+	font-weight: 600;
 }
 
 .actions-summary {

@@ -1,4 +1,5 @@
 import { CheckField, NumberField, OptionPanel, SelectField, TextField } from "@components/common";
+import { useI18n } from "@hooks";
 import type { RenameSectionPanelProps } from "./renameSectionPanelShared";
 
 /** Remoção de caracteres, palavras e trechos. */
@@ -8,61 +9,62 @@ export function RemoveOptionsPanel({
 	active,
 	onReset,
 }: RenameSectionPanelProps<"remove">) {
+	const { t } = useI18n();
 	return (
-		<OptionPanel title="Remover" active={active} onReset={onReset}>
+		<OptionPanel title={t("remove.title")} active={active} onReset={onReset}>
 			<div className="grid-2">
 				<NumberField
-					label="Primeiros"
+					label={t("remove.first")}
 					min={0}
 					value={value.first}
 					onChange={(first) => onChange({ first })}
 				/>
 				<NumberField
-					label="Últimos"
+					label={t("remove.last")}
 					min={0}
 					value={value.last}
 					onChange={(last) => onChange({ last })}
 				/>
 				<NumberField
-					label="De"
+					label={t("remove.from")}
 					min={0}
-					title="Posição inicial (a partir de 1) do trecho a remover."
+					title={t("remove.fromHint")}
 					value={value.from}
 					onChange={(from) => onChange({ from })}
 				/>
 				<NumberField
-					label="Até"
+					label={t("remove.to")}
 					min={0}
-					title="Posição final (inclusive) do trecho a remover."
+					title={t("remove.toHint")}
 					value={value.to}
 					onChange={(to) => onChange({ to })}
 				/>
 			</div>
 			<div className="grid-2">
 				<TextField
-					label="Caracteres"
+					label={t("remove.chars")}
 					value={value.chars}
-					title="Remove cada um destes caracteres."
+					title={t("remove.charsHint")}
 					onChange={(chars) => onChange({ chars })}
 				/>
 				<TextField
-					label="Palavras"
+					label={t("remove.words")}
 					value={value.words}
-					title="Palavras inteiras separadas por espaço."
+					title={t("remove.wordsHint")}
 					onChange={(words) => onChange({ words })}
 				/>
 				<SelectField
-					label="Cortar"
+					label={t("remove.crop")}
 					value={value.cropMode}
 					options={[
-						["none", "Não"],
-						["before", "Antes de"],
-						["after", "Depois de"],
+						["none", t("remove.cropNone")],
+						["before", t("remove.cropBefore")],
+						["after", t("remove.cropAfter")],
 					]}
 					onChange={(cropMode) => onChange({ cropMode })}
 				/>
 				<TextField
-					label="Texto"
+					label={t("remove.cropText")}
 					value={value.cropText}
 					disabled={value.cropMode === "none"}
 					onChange={(cropText) => onChange({ cropText })}
@@ -70,39 +72,39 @@ export function RemoveOptionsPanel({
 			</div>
 			<div className="checks">
 				<CheckField
-					label="Dígitos"
+					label={t("remove.digits")}
 					checked={value.digits}
 					onChange={(digits) => onChange({ digits })}
 				/>
 				<CheckField
-					label="Acentos"
+					label={t("remove.accents")}
 					checked={value.accents}
 					onChange={(accents) => onChange({ accents })}
 				/>
 				<CheckField
-					label="Símbolos"
-					title="Tudo que não é letra, número ou espaço."
+					label={t("remove.symbols")}
+					title={t("remove.symbolsHint")}
 					checked={value.symbols}
 					onChange={(symbols) => onChange({ symbols })}
 				/>
 				<CheckField
-					label="Não-ASCII"
+					label={t("remove.high")}
 					checked={value.high}
 					onChange={(high) => onChange({ high })}
 				/>
 				<CheckField
-					label="Aparar"
-					title="Remove espaços no início e no fim."
+					label={t("remove.trim")}
+					title={t("remove.trimHint")}
 					checked={value.trim}
 					onChange={(trim) => onChange({ trim })}
 				/>
 				<CheckField
-					label="Espaços duplos"
+					label={t("remove.doubleSpaces")}
 					checked={value.doubleSpaces}
 					onChange={(doubleSpaces) => onChange({ doubleSpaces })}
 				/>
 				<CheckField
-					label="Pontos iniciais"
+					label={t("remove.leadDots")}
 					checked={value.leadDots}
 					onChange={(leadDots) => onChange({ leadDots })}
 				/>

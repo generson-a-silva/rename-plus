@@ -8,6 +8,7 @@ import {
 } from "electron";
 import type { ContextMenuItem, FileOperationFailure, FileOperationResult } from "../shared/ipc";
 import { describeFileSystemError } from "./fileSystemErrors";
+import { tMain } from "./mainLocale";
 
 /** Tempo para aguardar um clique depois que o menu fecha (a ordem dos eventos varia por sistema). */
 const MENU_CLOSE_GRACE_MS = 100;
@@ -72,7 +73,7 @@ export async function trashItems(paths: readonly string[]): Promise<FileOperatio
 			if (await exists(target)) {
 				failed.push({
 					path: target,
-					error: "A lixeira não está disponível neste disco",
+					error: tMain("trash.unavailable"),
 					trashUnavailable: true,
 				});
 			} else {

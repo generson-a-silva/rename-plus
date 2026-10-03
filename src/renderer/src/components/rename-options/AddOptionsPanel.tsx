@@ -1,4 +1,5 @@
 import { CheckField, NumberField, OptionPanel, TextField } from "@components/common";
+import { useI18n } from "@hooks";
 import type { RenameSectionPanelProps } from "./renameSectionPanelShared";
 
 /** Prefixo, sufixo e inserção de texto. */
@@ -8,26 +9,35 @@ export function AddOptionsPanel({
 	active,
 	onReset,
 }: RenameSectionPanelProps<"add">) {
+	const { t } = useI18n();
 	return (
-		<OptionPanel title="Adicionar" active={active} onReset={onReset}>
-			<TextField label="Prefixo" value={value.prefix} onChange={(prefix) => onChange({ prefix })} />
+		<OptionPanel title={t("add.title")} active={active} onReset={onReset}>
+			<TextField
+				label={t("option.prefix")}
+				value={value.prefix}
+				onChange={(prefix) => onChange({ prefix })}
+			/>
 			<div className="grid-2">
 				<TextField
-					label="Inserir"
+					label={t("add.insert")}
 					value={value.insert}
 					onChange={(insert) => onChange({ insert })}
 				/>
 				<NumberField
-					label="Na posição"
-					title="Quantidade de caracteres antes do texto; negativo conta do fim."
+					label={t("field.insertAt")}
+					title={t("add.insertAtHint")}
 					value={value.insertAt}
 					onChange={(insertAt) => onChange({ insertAt })}
 				/>
 			</div>
-			<TextField label="Sufixo" value={value.suffix} onChange={(suffix) => onChange({ suffix })} />
+			<TextField
+				label={t("option.suffix")}
+				value={value.suffix}
+				onChange={(suffix) => onChange({ suffix })}
+			/>
 			<CheckField
-				label="Espaço entre palavras"
-				title='Separa palavras coladas: "MinhaFoto" → "Minha Foto".'
+				label={t("add.wordSpace")}
+				title={t("add.wordSpaceHint")}
 				checked={value.wordSpace}
 				onChange={(wordSpace) => onChange({ wordSpace })}
 			/>

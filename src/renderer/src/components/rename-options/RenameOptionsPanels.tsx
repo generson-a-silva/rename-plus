@@ -1,4 +1,4 @@
-import { useMasonryGrid } from "@hooks";
+import { useI18n, useMasonryGrid } from "@hooks";
 import type { ListFilters } from "@lib";
 import { createDefaultOptions, type RenameOptions, type RenameSection } from "@shared/rename";
 import { useMemo, useRef } from "react";
@@ -37,6 +37,7 @@ export function RenameOptionsPanels({
 	onFiltersChange,
 	actions,
 }: RenameOptionsPanelsProps) {
+	const { t } = useI18n();
 	const defaults = useMemo(createDefaultOptions, []);
 	const panelsRef = useRef<HTMLDivElement>(null);
 	// Encaixa os painéis sem vãos entre as linhas (valores iguais aos de .panels no CSS).
@@ -65,7 +66,7 @@ export function RenameOptionsPanels({
 				<ExtensionOptionsPanel {...sectionProps("extension")} />
 				<ListFiltersPanel value={filters} onChange={onFiltersChange} />
 			</div>
-			<aside className="rename-actions" aria-label="Ações de renomeação">
+			<aside className="rename-actions" aria-label={t("actions.label")}>
 				<RenameActionsPanel {...actions} />
 			</aside>
 		</div>

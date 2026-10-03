@@ -1,4 +1,6 @@
-import { fileType, formatDateTime, formatSize, relativePath, type SortKey } from "@lib";
+import type { I18n } from "@hooks";
+import { fileType, relativePath, type SortKey } from "@lib";
+import type { MessageKey } from "@shared/i18n";
 import type { FileEntry } from "@shared/ipc";
 
 export type FileListColumnId = "name" | "newName" | "size" | "type" | "mtime" | "dir";
@@ -7,7 +9,7 @@ export interface FileListColumn {
 	id: FileListColumnId;
 	/** `null` = sem ordenação (o novo nome depende da ordem, por causa da numeração). */
 	sortKey: SortKey | null;
-	label: string;
+	labelKey: MessageKey;
 	align?: "right";
 	/** `false` = largura fixa (sempre a padrão), sem divisória de redimensionar. */
 	resizable?: boolean;
@@ -16,13 +18,13 @@ export interface FileListColumn {
 export type ColumnWidths = Record<FileListColumnId, number>;
 
 const ALL_COLUMNS: readonly FileListColumn[] = [
-	{ id: "name", sortKey: "name", label: "Nome" },
-	{ id: "newName", sortKey: null, label: "Novo nome" },
-	{ id: "size", sortKey: "size", label: "Tamanho", align: "right" },
-	{ id: "type", sortKey: "type", label: "Tipo" },
+	{ id: "name", sortKey: "name", labelKey: "columns.name" },
+	{ id: "newName", sortKey: null, labelKey: "columns.newName" },
+	{ id: "size", sortKey: "size", labelKey: "columns.size", align: "right" },
+	{ id: "type", sortKey: "type", labelKey: "columns.type" },
 	// Largura fixa: a data e a hora aparecem sempre inteiras.
-	{ id: "mtime", sortKey: "mtime", label: "Modificado", resizable: false },
-	{ id: "dir", sortKey: "dir", label: "Pasta" },
+	{ id: "mtime", sortKey: "mtime", labelKey: "columns.modified", resizable: false },
+	{ id: "dir", sortKey: "dir", labelKey: "columns.folder" },
 ];
 
 export const DEFAULT_COLUMN_WIDTHS: ColumnWidths = {
@@ -63,6 +65,7 @@ export function cellText(
 	entry: FileEntry,
 	newName: string,
 	rootDir: string,
+	i18n: Pick<I18n, "t" | "formatSize" | "formatDateTime">,
 ): string {
 	switch (columnId) {
 		case "name":
@@ -70,11 +73,11 @@ export function cellText(
 		case "newName":
 			return newName;
 		case "size":
-			return entry.isDir ? "" : formatSize(entry.size);
+			return entry.isDir ? "" : i18n.formatSize(entry.size);
 		case "type":
-			return fileType(entry);
+			return fileType(entry, i18n.t);
 		case "mtime":
-			return formatDateTime(entry.mtimeMs);
+			return i18n.formatDateTime(entry.mtimeMs);
 		case "dir":
 			return relativePath(rootDir, entry.dir);
 	}
@@ -92,6 +95,7 @@ export function measureColumnFit(
 	rootDir: string,
 	/** Elemento da lista, de onde vêm o tamanho e a família da fonte. */
 	fontSource: Element,
+	i18n: Pick<I18n, "t" | "formatSize" | "formatDateTime">,
 ): number {
 	const context = document.createElement("canvas").getContext("2d");
 	if (!context) return FALLBACK_FIT_WIDTH;
@@ -99,10 +103,10 @@ export function measureColumnFit(
 	// Negrito cobre o caso mais largo (títulos e novos nomes alterados usam peso 600).
 	context.font = `600 ${fontSize} ${fontFamily}`;
 
-	const headerWidth = context.measureText(column.label).width + 14; // + seta de ordenação
+	const headerWidth = context.measureText(i18n.t(column.labelKey)).width + 14; // + seta de ordenação
 	let widest = headerWidth;
 	for (const entry of entries) {
-		const text = cellText(column.id, entry, newNameOf(entry), rootDir);
+		const text = cellText(column.id, entry, newNameOf(entry), rootDir, i18n);
 		if (text) widest = Math.max(widest, context.measureText(text).width);
 	}
 	const iconSpace = column.id === "name" ? 20 : 0; // ícone de 14px + espaço de 6px

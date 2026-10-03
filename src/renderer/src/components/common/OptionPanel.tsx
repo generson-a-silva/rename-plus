@@ -1,3 +1,4 @@
+import { useI18n } from "@hooks";
 import type { ReactNode } from "react";
 import { AppIcon } from "./AppIcon";
 
@@ -11,12 +12,13 @@ interface OptionPanelProps {
 
 /** Caixa de opções com o título em badge; destacada quando a seção altera o nome. */
 export function OptionPanel({ title, active, className, onReset, children }: OptionPanelProps) {
+	const { t } = useI18n();
 	return (
 		<fieldset className={`panel${active ? " active" : ""} ${className ?? ""}`}>
 			<legend className="panel-badge">
 				{title}
 				{onReset && active && (
-					<button type="button" className="panel-reset" title="Redefinir seção" onClick={onReset}>
+					<button type="button" className="panel-reset" title={t("panel.reset")} onClick={onReset}>
 						<AppIcon name="reset" size={12} />
 					</button>
 				)}

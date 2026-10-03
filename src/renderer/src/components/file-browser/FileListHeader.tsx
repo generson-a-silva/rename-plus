@@ -1,3 +1,4 @@
+import { useI18n } from "@hooks";
 import type { SortKey, SortState } from "@lib";
 import type { KeyboardEvent, PointerEvent, RefObject } from "react";
 import {
@@ -39,6 +40,7 @@ export function FileListHeader({
 	onResize,
 	onAutoFit,
 }: FileListHeaderProps) {
+	const { t } = useI18n();
 	const toggleSort = (key: SortKey) => {
 		onSortChange({ key, desc: sort.key === key ? !sort.desc : false });
 	};
@@ -81,7 +83,8 @@ export function FileListHeader({
 	return (
 		<div ref={viewportRef} className="file-header-viewport">
 			<div className="file-header" style={{ gridTemplateColumns: template, minWidth: totalWidth }}>
-				{columns.map(({ id, sortKey, label, align, resizable }) => {
+				{columns.map(({ id, sortKey, labelKey, align, resizable }) => {
+					const label = t(labelKey);
 					const className = `header-cell${align === "right" ? " right" : ""}`;
 					return (
 						<div key={id} className="header-column">
@@ -100,12 +103,12 @@ export function FileListHeader({
 										className="column-resizer"
 										role="separator"
 										aria-orientation="vertical"
-										aria-label={`Largura da coluna ${label}`}
+										aria-label={t("columns.resizeLabel", { column: label })}
 										aria-valuenow={widths[id]}
 										aria-valuemin={MIN_COLUMN_WIDTH}
 										aria-valuemax={MAX_COLUMN_WIDTH}
 										tabIndex={0}
-										title="Arraste para ajustar a largura · duplo clique para ajustar ao conteúdo"
+										title={t("columns.resizeHint")}
 										onPointerDown={(event) => startResize(id, event)}
 										onDoubleClick={() => onAutoFit(id)}
 										onKeyDown={(event) => resizeWithKeyboard(id, event)}

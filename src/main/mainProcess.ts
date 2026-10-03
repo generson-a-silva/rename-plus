@@ -1,6 +1,8 @@
 import path from "node:path";
 import { app, BrowserWindow, shell } from "electron";
+import { resolveLocale } from "../shared/i18n";
 import { registerIpcHandlers } from "./ipcHandlers";
+import { setMainLocale } from "./mainLocale";
 import { loadTheme, windowBackground } from "./themeSettings";
 import { loadWindowState, trackWindowState } from "./windowStateService";
 
@@ -58,6 +60,8 @@ function createWindow(): void {
 if (process.platform === "win32") app.setAppUserModelId("com.renameplus.app");
 
 app.whenReady().then(() => {
+	// Até a interface informar a escolha do usuário, segue o idioma do sistema.
+	setMainLocale(resolveLocale(app.getLocale()));
 	loadTheme();
 	registerIpcHandlers();
 	createWindow();

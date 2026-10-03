@@ -11,4 +11,4 @@ export { RemoveOptionsPanel } from "./RemoveOptionsPanel";
 export { RenameActionsPanel, type RenameActionsPanelProps } from "./RenameActionsPanel";
 export { RenameOptionsPanels } from "./RenameOptionsPanels";
 export { ReplaceOptionsPanel } from "./ReplaceOptionsPanel";
-export { PLACEMENT_SELECT_OPTIONS, type RenameSectionPanelProps } from "./renameSectionPanelShared";
+export { placementSelectOptions, type RenameSectionPanelProps } from "./renameSectionPanelShared";

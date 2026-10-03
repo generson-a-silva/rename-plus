@@ -1,5 +1,5 @@
 import { AppIcon } from "@components/common";
-import { useMarqueeSelection, usePersistentState } from "@hooks";
+import { useI18n, useMarqueeSelection, usePersistentState } from "@hooks";
 import type { SortState } from "@lib";
 import type { FileEntry } from "@shared/ipc";
 import type { Preview } from "@shared/rename";
@@ -38,6 +38,7 @@ interface FileListViewProps {
 /** Lista virtualizada de arquivos (painel direito) com pré-visualização dos novos nomes. */
 export function FileListView(props: FileListViewProps) {
 	const { entries, selection, preview, rootDir, showDirColumn, sort } = props;
+	const i18n = useI18n();
 	const columns = visibleColumns(showDirColumn);
 	const [widths, setWidths] = usePersistentState<ColumnWidths>(
 		"columnWidths",
@@ -186,7 +187,7 @@ export function FileListView(props: FileListViewProps) {
 		const column = columns.find((candidate) => candidate.id === columnId);
 		const list = scrollRef.current;
 		if (!column || column.resizable === false || !list) return;
-		resizeColumn(columnId, measureColumnFit(column, entries, visibleNewName, rootDir, list));
+		resizeColumn(columnId, measureColumnFit(column, entries, visibleNewName, rootDir, list, i18n));
 	};
 
 	const rows = [];
@@ -204,10 +205,10 @@ export function FileListView(props: FileListViewProps) {
 				role="option"
 				tabIndex={-1}
 				aria-selected={isSelected}
-				title={item?.message ?? undefined}
+				title={item?.message ? i18n.tr(item.message) : undefined}
 			>
 				{columns.map((column) => {
-					const text = cellText(column.id, entry, visibleNewName(entry), rootDir);
+					const text = cellText(column.id, entry, visibleNewName(entry), rootDir, i18n);
 					if (column.id === "name") {
 						return (
 							<span key={column.id} className="cell name">
@@ -246,7 +247,7 @@ export function FileListView(props: FileListViewProps) {
 				className="file-scroll"
 				role="listbox"
 				aria-multiselectable="true"
-				aria-label="Arquivos"
+				aria-label={i18n.t("list.label")}
 				tabIndex={0}
 				onScroll={(event) => {
 					setScrollTop(event.currentTarget.scrollTop);
@@ -286,7 +287,7 @@ export function FileListView(props: FileListViewProps) {
 				)}
 				{entries.length === 0 && (
 					<div className="file-empty">
-						{props.loading ? "Carregando…" : (props.error ?? "Nenhum item nesta pasta.")}
+						{props.loading ? i18n.t("list.loading") : (props.error ?? i18n.t("list.empty"))}
 					</div>
 				)}
 			</div>

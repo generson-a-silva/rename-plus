@@ -7,6 +7,7 @@ export {
 	useFileOperations,
 } from "./useFileOperations";
 export { type ChildrenState, type FolderTreeState, useFolderTreeState } from "./useFolderTreeState";
+export { type I18n, I18nContext, useI18n, useI18nState } from "./useI18n";
 export { type MarqueeMode, type MarqueeRect, useMarqueeSelection } from "./useMarqueeSelection";
 export { useMasonryGrid } from "./useMasonryGrid";
 export { usePersistentState } from "./usePersistentState";

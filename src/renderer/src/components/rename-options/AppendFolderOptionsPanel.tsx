@@ -1,5 +1,6 @@
 import { NumberField, OptionPanel, SelectField, TextField } from "@components/common";
-import { PLACEMENT_SELECT_OPTIONS, type RenameSectionPanelProps } from "./renameSectionPanelShared";
+import { useI18n } from "@hooks";
+import { placementSelectOptions, type RenameSectionPanelProps } from "./renameSectionPanelShared";
 
 /** Nome da(s) pasta(s) no nome do arquivo. */
 export function AppendFolderOptionsPanel({
@@ -8,22 +9,23 @@ export function AppendFolderOptionsPanel({
 	active,
 	onReset,
 }: RenameSectionPanelProps<"appendFolder">) {
+	const { t } = useI18n();
 	return (
-		<OptionPanel title="Nome da pasta" active={active} onReset={onReset}>
+		<OptionPanel title={t("appendFolder.title")} active={active} onReset={onReset}>
 			<SelectField
-				label="Modo"
+				label={t("field.mode")}
 				value={value.mode}
-				options={PLACEMENT_SELECT_OPTIONS}
+				options={placementSelectOptions(t)}
 				onChange={(mode) => onChange({ mode })}
 			/>
 			<div className="grid-2">
 				<TextField
-					label="Separador"
+					label={t("field.separator")}
 					value={value.separator}
 					onChange={(separator) => onChange({ separator })}
 				/>
 				<NumberField
-					label="Níveis"
+					label={t("appendFolder.levels")}
 					min={1}
 					max={20}
 					value={value.levels}

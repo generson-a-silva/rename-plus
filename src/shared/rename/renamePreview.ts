@@ -1,3 +1,4 @@
+import type { MessageRef } from "../i18n";
 import type { FileEntry } from "../ipc";
 import { getPlatformPaths } from "../paths";
 import { validateFileName } from "./fileNameValidation";
@@ -9,14 +10,15 @@ export type PreviewStatus = "unchanged" | "ok" | "error";
 export interface PreviewItem {
 	newName: string;
 	status: PreviewStatus;
-	message: string | null;
+	/** Motivo do erro, traduzido por quem exibe. */
+	message: MessageRef | null;
 }
 
 export interface Preview {
 	/** Indexado pelo caminho original do item. */
 	items: Map<string, PreviewItem>;
 	/** Erro de configuração que impede calcular os nomes (ex.: RegEx inválida). */
-	configError: string | null;
+	configError: MessageRef | null;
 	changed: number;
 	errors: number;
 }
@@ -46,7 +48,7 @@ export function buildPreview(
 		renamer = createRenamer(options, platform);
 	} catch (error) {
 		if (error instanceof RenameConfigError) {
-			return { items, configError: error.message, changed: 0, errors: 0 };
+			return { items, configError: error.ref, changed: 0, errors: 0 };
 		}
 		throw error;
 	}
@@ -83,9 +85,9 @@ export function buildPreview(
 		if (invalid) {
 			item.message = invalid;
 		} else if ((targets.get(target) ?? 0) > 1) {
-			item.message = "Nome duplicado no lote";
+			item.message = { key: "preview.duplicate" };
 		} else if (item.status === "ok" && existing.has(target)) {
-			item.message = "Já existe um item com esse nome";
+			item.message = { key: "preview.exists" };
 		}
 
 		if (item.message) {

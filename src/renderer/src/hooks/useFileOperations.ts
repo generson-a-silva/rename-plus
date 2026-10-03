@@ -1,7 +1,9 @@
-import { baseName, joinPath, parentPath, pluralize } from "@lib";
+import { baseName, joinPath, parentPath } from "@lib";
+import type { Translator } from "@shared/i18n";
 import type { FileOperationResult, RenameOperation } from "@shared/ipc";
 import { validateFileName } from "@shared/rename";
 import { useCallback, useState } from "react";
+import { useI18n } from "./useI18n";
 import type { TextPromptRequest } from "./useTextPrompt";
 
 export interface FileOperationNotice {
@@ -33,13 +35,12 @@ interface FileOperationsOptions {
 }
 
 const platform = window.api.platform;
-const validateName = (value: string) => validateFileName(value, platform);
 
-function describeFailure(result: FileOperationResult): string {
+function describeFailure(result: FileOperationResult, t: Translator): string {
 	const first = result.failed[0];
 	if (!first) return "";
 	const others = result.failed.length - 1;
-	const suffix = others > 0 ? ` (e mais ${pluralize(others, "erro", "erros")})` : "";
+	const suffix = others > 0 ? t("ops.moreErrors", { count: others }) : "";
 	return `${baseName(first.path)}: ${first.error}${suffix}`;
 }
 
@@ -50,15 +51,25 @@ const uniqueParents = (paths: readonly string[]) => [...new Set(paths.map(parent
  * copiar, colar, nova pasta e lixeira. Mantém a "área de transferência" interna.
  */
 export function useFileOperations({ ask, notify, onChanged }: FileOperationsOptions) {
+	const { t, tr } = useI18n();
 	const [clipboard, setClipboard] = useState<FileClipboard | null>(null);
+
+	/** Validação do nome digitado nos diálogos, já traduzida. */
+	const validateName = useCallback(
+		(value: string) => {
+			const issue = validateFileName(value, platform);
+			return issue ? tr(issue) : null;
+		},
+		[tr],
+	);
 
 	const openFile = useCallback(
 		async (path: string) => {
 			const error = await window.api.openPath(path);
 			if (error)
-				notify({ kind: "error", text: `Não foi possível abrir ${baseName(path)}: ${error}` });
+				notify({ kind: "error", text: t("ops.openFailed", { name: baseName(path), error }) });
 		},
-		[notify],
+		[notify, t],
 	);
 
 	const showInFolder = useCallback((path: string) => window.api.showInFolder(path), []);
@@ -66,29 +77,19 @@ export function useFileOperations({ ask, notify, onChanged }: FileOperationsOpti
 	const copyPaths = useCallback(
 		async (paths: readonly string[]) => {
 			await window.api.copyText(paths.join("\n"));
-			notify({
-				kind: "info",
-				text:
-					paths.length === 1
-						? "Caminho copiado."
-						: `${pluralize(paths.length, "caminho copiado", "caminhos copiados")}.`,
-			});
+			notify({ kind: "info", text: t("ops.pathCopied", { count: paths.length }) });
 		},
-		[notify],
+		[notify, t],
 	);
 
 	const putInClipboard = useCallback(
 		(mode: FileClipboard["mode"], paths: readonly string[]) => {
 			if (paths.length === 0) return;
 			setClipboard({ mode, paths: [...paths] });
-			const what = pluralize(paths.length, "item", "itens");
-			const verb = mode === "cut" ? "recortado" : "copiado";
-			notify({
-				kind: "info",
-				text: `${what} ${verb}${paths.length === 1 ? "" : "s"} — use Colar na pasta de destino.`,
-			});
+			const key = mode === "cut" ? "ops.cutToClipboard" : "ops.copiedToClipboard";
+			notify({ kind: "info", text: t(key, { count: paths.length }) });
 		},
-		[notify],
+		[notify, t],
 	);
 
 	const paste = useCallback(
@@ -110,20 +111,22 @@ export function useFileOperations({ ask, notify, onChanged }: FileOperationsOpti
 				removed: moved,
 			});
 			if (result.ok) {
-				const verb = mode === "cut" ? "movido" : "colado";
-				const n = result.created.length;
+				const count = result.created.length;
 				notify({
 					kind: "success",
 					text:
-						n === 0
-							? "Nada a colar: os itens já estão nesta pasta."
-							: `${pluralize(n, `item ${verb}`, `itens ${verb}s`)}.`,
+						count === 0
+							? t("ops.pasteNothing")
+							: t(mode === "cut" ? "ops.moved" : "ops.pasted", { count }),
 				});
 			} else {
-				notify({ kind: "error", text: `Falha ao colar — ${describeFailure(result)}` });
+				notify({
+					kind: "error",
+					text: t("ops.pasteFailed", { detail: describeFailure(result, t) }),
+				});
 			}
 		},
-		[clipboard, notify, onChanged],
+		[clipboard, notify, onChanged, t],
 	);
 
 	const trash = useCallback(
@@ -132,10 +135,10 @@ export function useFileOperations({ ask, notify, onChanged }: FileOperationsOpti
 			const confirmed = await window.api.confirm({
 				message:
 					paths.length === 1
-						? `Mover "${baseName(paths[0] ?? "")}" para a lixeira?`
-						: `Mover ${pluralize(paths.length, "item", "itens")} para a lixeira?`,
-				detail: "Os itens podem ser restaurados pela lixeira do sistema.",
-				confirmLabel: "Mover para a lixeira",
+						? t("ops.trashConfirmOne", { name: baseName(paths[0] ?? "") })
+						: t("ops.trashConfirmMany", { count: paths.length }),
+				detail: t("ops.trashDetail"),
+				confirmLabel: t("ops.trashButton"),
 			});
 			if (!confirmed) return;
 
@@ -149,17 +152,17 @@ export function useFileOperations({ ask, notify, onChanged }: FileOperationsOpti
 					severity: "warning",
 					message:
 						noTrash.length === 1
-							? `"${baseName(noTrash[0] ?? "")}" não pode ir para a lixeira. Excluir permanentemente?`
-							: `${pluralize(noTrash.length, "item não pode", "itens não podem")} ir para a lixeira. Excluir permanentemente?`,
-					detail: "Este disco não tem lixeira. A exclusão não poderá ser desfeita.",
-					confirmLabel: "Excluir permanentemente",
+							? t("ops.noTrashOne", { name: baseName(noTrash[0] ?? "") })
+							: t("ops.noTrashMany", { count: noTrash.length }),
+					detail: t("ops.noTrashDetail"),
+					confirmLabel: t("ops.deleteButton"),
 				});
 				const deleted = deleteConfirmed
 					? await window.api.deleteItems(noTrash)
 					: {
 							ok: false,
 							created: [],
-							failed: noTrash.map((path) => ({ path, error: "Exclusão cancelada" })),
+							failed: noTrash.map((path) => ({ path, error: t("ops.deleteCancelled") })),
 						};
 				failed = [...failed.filter((failure) => !failure.trashUnavailable), ...deleted.failed];
 			}
@@ -174,23 +177,20 @@ export function useFileOperations({ ask, notify, onChanged }: FileOperationsOpti
 			const result: FileOperationResult = { ok: failed.length === 0, created: [], failed };
 			notify(
 				result.ok
-					? {
-							kind: "success",
-							text: `${pluralize(removed.length, "item removido", "itens removidos")}.`,
-						}
-					: { kind: "error", text: `Falha ao remover — ${describeFailure(result)}` },
+					? { kind: "success", text: t("ops.removed", { count: removed.length }) }
+					: { kind: "error", text: t("ops.removeFailed", { detail: describeFailure(result, t) }) },
 			);
 		},
-		[notify, onChanged],
+		[notify, onChanged, t],
 	);
 
 	const createFolder = useCallback(
 		async (parentDir: string) => {
 			const name = await ask({
-				title: "Nova pasta",
-				label: `Nome da pasta em ${baseName(parentDir) || parentDir}`,
-				initialValue: "Nova pasta",
-				confirmLabel: "Criar",
+				title: t("ops.newFolderTitle"),
+				label: t("ops.newFolderLabel", { folder: baseName(parentDir) || parentDir }),
+				initialValue: t("ops.newFolderDefault"),
+				confirmLabel: t("ops.create"),
 				validate: validateName,
 			});
 			if (name === null) return;
@@ -198,24 +198,24 @@ export function useFileOperations({ ask, notify, onChanged }: FileOperationsOpti
 			if (!result.ok) {
 				notify({
 					kind: "error",
-					text: `Não foi possível criar a pasta — ${describeFailure(result)}`,
+					text: t("ops.createFailed", { detail: describeFailure(result, t) }),
 				});
 				return;
 			}
 			await onChanged({ dirs: [parentDir], select: result.created });
-			notify({ kind: "success", text: `Pasta "${name}" criada.` });
+			notify({ kind: "success", text: t("ops.created", { name }) });
 		},
-		[ask, notify, onChanged],
+		[ask, notify, onChanged, t, validateName],
 	);
 
 	const renameItem = useCallback(
 		async (path: string, isDir: boolean) => {
 			const current = baseName(path);
 			const name = await ask({
-				title: isDir ? "Renomear pasta" : "Renomear arquivo",
-				label: "Novo nome",
+				title: t(isDir ? "ops.renameFolderTitle" : "ops.renameFileTitle"),
+				label: t("ops.newName"),
 				initialValue: current,
-				confirmLabel: "Renomear",
+				confirmLabel: t("actions.rename"),
 				selectBaseName: !isDir,
 				requireChange: true,
 				validate: validateName,
@@ -225,14 +225,14 @@ export function useFileOperations({ ask, notify, onChanged }: FileOperationsOpti
 			const operation = { from: path, to: joinPath(parentPath(path), name) };
 			const result = await window.api.rename([operation]);
 			if (!result.ok) {
-				const error = result.failed[0]?.error ?? "erro desconhecido";
-				notify({ kind: "error", text: `Não foi possível renomear ${current}: ${error}` });
+				const error = result.failed[0]?.error ?? t("ops.unknownError");
+				notify({ kind: "error", text: t("ops.renameFailed", { name: current, error }) });
 				return;
 			}
 			await onChanged({ dirs: [parentPath(path)], select: [operation.to], renamed: [operation] });
-			notify({ kind: "success", text: `"${current}" renomeado para "${name}".` });
+			notify({ kind: "success", text: t("ops.renamed", { from: current, to: name }) });
 		},
-		[ask, notify, onChanged],
+		[ask, notify, onChanged, t, validateName],
 	);
 
 	return {

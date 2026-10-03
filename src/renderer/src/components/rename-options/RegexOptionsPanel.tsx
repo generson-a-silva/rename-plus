@@ -1,4 +1,5 @@
 import { CheckField, OptionPanel, TextField } from "@components/common";
+import { useI18n } from "@hooks";
 import type { RenameSectionPanelProps } from "./renameSectionPanelShared";
 
 /** Expressão regular aplicada ao nome. */
@@ -8,37 +9,38 @@ export function RegexOptionsPanel({
 	active,
 	onReset,
 }: RenameSectionPanelProps<"regex">) {
+	const { t } = useI18n();
 	return (
-		<OptionPanel title="RegEx" active={active} onReset={onReset}>
+		<OptionPanel title={t("regex.title")} active={active} onReset={onReset}>
 			<TextField
-				label="Buscar"
+				label={t("field.find")}
 				mono
 				value={value.match}
-				placeholder="ex.: IMG_(\d+)"
+				placeholder={t("regex.findPlaceholder")}
 				onChange={(match) => onChange({ match })}
 			/>
 			<TextField
-				label="Substituir"
+				label={t("regex.replace")}
 				mono
 				value={value.replace}
-				placeholder="ex.: Foto $1"
-				title="Use $1, $2… para grupos de captura e $& para o trecho encontrado."
+				placeholder={t("regex.replacePlaceholder")}
+				title={t("regex.replaceHint")}
 				onChange={(text) => onChange({ replace: text })}
 			/>
 			<div className="checks">
 				<CheckField
-					label="Incl. ext."
+					label={t("regex.includeExt")}
 					checked={value.includeExt}
 					onChange={(includeExt) => onChange({ includeExt })}
 				/>
 				<CheckField
-					label="Global"
-					title="Substitui todas as ocorrências, não só a primeira."
+					label={t("regex.global")}
+					title={t("regex.globalHint")}
 					checked={value.global}
 					onChange={(global) => onChange({ global })}
 				/>
 				<CheckField
-					label="Ignorar maiúsc."
+					label={t("regex.ignoreCase")}
 					checked={value.ignoreCase}
 					onChange={(ignoreCase) => onChange({ ignoreCase })}
 				/>

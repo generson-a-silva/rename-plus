@@ -8,6 +8,7 @@ import {
 import type { FileEntry } from "@shared/ipc";
 import { useCallback, useEffect } from "react";
 import type { useFileOperations } from "./useFileOperations";
+import { useI18n } from "./useI18n";
 
 /** Sobre o que um comando age. */
 type CommandTarget =
@@ -58,6 +59,7 @@ export function useFileCommands(options: FileCommandsOptions) {
 		operations,
 		shortcutsEnabled,
 	} = options;
+	const { t } = useI18n();
 
 	const run = useCallback(
 		async (command: FileCommand, target: CommandTarget) => {
@@ -136,7 +138,7 @@ export function useFileCommands(options: FileCommandsOptions) {
 		async (index: number | null) => {
 			const entry = index === null ? undefined : visibleEntries[index];
 			if (!entry) {
-				const items = buildListBackgroundMenu({
+				const items = buildListBackgroundMenu(t, {
 					canPaste,
 					hasEntries: visibleEntries.length > 0,
 					showHidden,
@@ -148,7 +150,7 @@ export function useFileCommands(options: FileCommandsOptions) {
 			// Como nos gerenciadores de arquivos: clicar fora da seleção seleciona só o item clicado.
 			const entries = selection.has(entry.path) ? selectedEntries : [entry];
 			if (!selection.has(entry.path)) setSelection(new Set([entry.path]));
-			const items = buildEntriesMenu({
+			const items = buildEntriesMenu(t, {
 				count: entries.length,
 				singleIsDir: entries.length === 1 && entry.isDir,
 				canPaste,
@@ -157,18 +159,18 @@ export function useFileCommands(options: FileCommandsOptions) {
 			const command = (await window.api.showContextMenu(items)) as FileCommand | null;
 			if (command) await run(command, { kind: "entries", entries });
 		},
-		[canPaste, run, selectedEntries, selection, setSelection, showHidden, visibleEntries],
+		[canPaste, run, selectedEntries, selection, setSelection, showHidden, t, visibleEntries],
 	);
 
 	const openFolderMenu = useCallback(
 		async (path: string) => {
 			const isRoot = rootPaths.includes(path);
 			const command = (await window.api.showContextMenu(
-				buildFolderMenu({ isRoot, canPaste, showHidden }),
+				buildFolderMenu(t, { isRoot, canPaste, showHidden }),
 			)) as FileCommand | null;
 			if (command) await run(command, { kind: "folder", path, isRoot });
 		},
-		[canPaste, rootPaths, run, showHidden],
+		[canPaste, rootPaths, run, showHidden, t],
 	);
 
 	useEffect(() => {

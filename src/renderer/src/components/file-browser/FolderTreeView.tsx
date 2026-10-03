@@ -1,5 +1,5 @@
 import { AppIcon, type AppIconName } from "@components/common";
-import type { FolderTreeState } from "@hooks";
+import { type FolderTreeState, useI18n } from "@hooks";
 import { useEffect, useRef } from "react";
 
 export interface TreeRoot {
@@ -39,6 +39,7 @@ function FolderTreeNode({
 	onContextMenu,
 	hidden,
 }: FolderTreeNodeProps) {
+	const { t } = useI18n();
 	const ref = useRef<HTMLDivElement>(null);
 	const isOpen = tree.expanded.has(path);
 	const isActive = currentDir === path;
@@ -76,7 +77,7 @@ function FolderTreeNode({
 					type="button"
 					className={`tree-twisty${isOpen ? " open" : ""}${isEmpty ? " hidden" : ""}`}
 					tabIndex={-1}
-					aria-label={isOpen ? "Recolher" : "Expandir"}
+					aria-label={t(isOpen ? "tree.collapse" : "tree.expand")}
 					onClick={(event) => {
 						event.stopPropagation();
 						tree.toggle(path);
@@ -89,7 +90,7 @@ function FolderTreeNode({
 			</div>
 			{isOpen && children === "loading" && (
 				<div className="tree-loading" style={{ paddingLeft: 26 + (depth + 1) * 14 }}>
-					Carregando…
+					{t("tree.loading")}
 				</div>
 			)}
 			{isOpen &&
@@ -120,8 +121,9 @@ export function FolderTreeView({
 	onSelect,
 	onContextMenu,
 }: FolderTreeViewProps) {
+	const { t } = useI18n();
 	return (
-		<div className="folder-tree" role="tree" aria-label="Pastas">
+		<div className="folder-tree" role="tree" aria-label={t("tree.label")}>
 			{roots.map((root) => (
 				<FolderTreeNode
 					key={root.path}

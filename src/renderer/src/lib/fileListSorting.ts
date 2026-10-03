@@ -1,5 +1,5 @@
 import type { FileEntry } from "@shared/ipc";
-import { fileType } from "./fileFormatting";
+import { fileExtensionLabel } from "./fileFormatting";
 
 export type SortKey = "name" | "size" | "type" | "mtime" | "dir";
 
@@ -15,7 +15,7 @@ const collator = new Intl.Collator("pt-BR", { numeric: true, sensitivity: "base"
 const COMPARATORS: Record<SortKey, (a: FileEntry, b: FileEntry) => number> = {
 	name: (a, b) => collator.compare(a.name, b.name),
 	size: (a, b) => a.size - b.size,
-	type: (a, b) => collator.compare(fileType(a), fileType(b)),
+	type: (a, b) => collator.compare(fileExtensionLabel(a), fileExtensionLabel(b)),
 	mtime: (a, b) => a.mtimeMs - b.mtimeMs,
 	dir: (a, b) => collator.compare(a.dir, b.dir),
 };

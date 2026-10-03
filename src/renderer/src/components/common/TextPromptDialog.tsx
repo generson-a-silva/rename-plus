@@ -1,4 +1,4 @@
-import type { TextPromptRequest } from "@hooks";
+import { type TextPromptRequest, useI18n } from "@hooks";
 import { splitName } from "@shared/rename";
 import { useEffect, useId, useRef, useState } from "react";
 
@@ -9,6 +9,7 @@ interface TextPromptDialogProps {
 
 /** Diálogo modal com um campo de texto (nova pasta, renomear item). */
 export function TextPromptDialog({ request, onClose }: TextPromptDialogProps) {
+	const { t } = useI18n();
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [value, setValue] = useState("");
@@ -73,7 +74,7 @@ export function TextPromptDialog({ request, onClose }: TextPromptDialogProps) {
 					</p>
 					<div className="prompt-actions">
 						<button type="button" className="button" onClick={() => onClose(null)}>
-							Cancelar
+							{t("common.cancel")}
 						</button>
 						<button type="submit" className="button primary" disabled={error !== null || unchanged}>
 							{request.confirmLabel}

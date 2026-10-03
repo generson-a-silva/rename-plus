@@ -6,6 +6,7 @@ import { getAppInfo } from "./appInfo";
 import { canUndo, renameBatch, undoLastBatch } from "./batchRenamer";
 import { listDirectories, listEntries, listRoots, resolveDirectory } from "./fileSystemService";
 import { copyItems, createFolder, deleteItems, moveItems } from "./fileTransferService";
+import { setMainLocale, tMain } from "./mainLocale";
 import {
 	copyText,
 	openPath,
@@ -18,6 +19,7 @@ import { setTheme } from "./themeSettings";
 export function registerIpcHandlers(): void {
 	ipcMain.handle(IpcChannel.GetAppInfo, () => getAppInfo());
 	ipcMain.handle(IpcChannel.SetTheme, (_event, mode: unknown) => setTheme(mode));
+	ipcMain.handle(IpcChannel.SetLocale, (_event, locale: unknown) => setMainLocale(locale));
 	ipcMain.handle(IpcChannel.GetHomeDir, () => os.homedir());
 
 	ipcMain.handle(IpcChannel.ListDirectories, (_event, dir: string, showHidden: boolean) =>
@@ -48,7 +50,7 @@ export function registerIpcHandlers(): void {
 		const win = BrowserWindow.fromWebContents(event.sender);
 		const options: Electron.MessageBoxOptions = {
 			type: request.severity ?? "question",
-			buttons: ["Cancelar", request.confirmLabel ?? "Confirmar"],
+			buttons: [tMain("common.cancel"), request.confirmLabel ?? tMain("common.confirm")],
 			defaultId: 1,
 			cancelId: 0,
 			message: request.message,

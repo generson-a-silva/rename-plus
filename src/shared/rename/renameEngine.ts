@@ -1,3 +1,4 @@
+import type { MessageRef } from "../i18n";
 import type { FileEntry } from "../ipc";
 import { getPlatformPaths, type PlatformPaths } from "../paths";
 import type {
@@ -34,7 +35,12 @@ export interface RenameContext {
 
 export type Renamer = (entry: FileEntry, context: RenameContext) => string;
 
-export class RenameConfigError extends Error {}
+/** Opções que impedem calcular os nomes (ex.: RegEx malformada); `ref` descreve o motivo. */
+export class RenameConfigError extends Error {
+	constructor(readonly ref: MessageRef) {
+		super(ref.key);
+	}
+}
 
 function compileRegex(options: RenameOptions["regex"]): RegExp | null {
 	if (!options.match) return null;
@@ -42,7 +48,10 @@ function compileRegex(options: RenameOptions["regex"]): RegExp | null {
 	try {
 		return new RegExp(options.match, flags);
 	} catch (error) {
-		throw new RenameConfigError(`RegEx inválida: ${(error as Error).message}`);
+		throw new RenameConfigError({
+			key: "engine.invalidRegex",
+			params: { detail: (error as Error).message },
+		});
 	}
 }
 

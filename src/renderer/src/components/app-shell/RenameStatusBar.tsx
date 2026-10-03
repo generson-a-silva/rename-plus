@@ -1,4 +1,4 @@
-import { pluralize } from "@lib";
+import { type I18n, useI18n } from "@hooks";
 import type { AppInfo } from "@shared/ipc";
 
 export interface StatusMessage {
@@ -18,9 +18,9 @@ interface RenameStatusBarProps {
 }
 
 /** Dica exibida ao passar o mouse sobre a versão. */
-function versionTooltip({ productName, version, author }: AppInfo): string {
+function versionTooltip({ productName, version, author }: AppInfo, t: I18n["t"]): string {
 	const title = `${productName} ${version}`;
-	return author ? `${title}\nDesenvolvido por ${author}` : title;
+	return author ? `${title}\n${t("status.developedBy", { author })}` : title;
 }
 
 /**
@@ -36,24 +36,27 @@ export function RenameStatusBar({
 	message,
 	appInfo,
 }: RenameStatusBarProps) {
+	const { t } = useI18n();
 	return (
 		<footer className="status-bar">
-			<span>{pluralize(total, "item", "itens")}</span>
-			<span>{pluralize(selected, "selecionado", "selecionados")}</span>
+			<span>{t("status.items", { count: total })}</span>
+			<span>{t("status.selected", { count: selected })}</span>
 			<span className={changed ? "status-changed" : undefined}>
-				{pluralize(changed, "será renomeado", "serão renomeados")}
+				{t("status.willRename", { count: changed })}
 			</span>
 			{errors > 0 && (
-				<span className="status-error">{pluralize(errors, "conflito", "conflitos")}</span>
+				<span className="status-error">{t("status.conflicts", { count: errors })}</span>
 			)}
-			{truncated && <span className="status-error">Listagem limitada a 50.000 itens</span>}
+			{truncated && (
+				<span className="status-error">{t("status.truncated", { count: 50_000 })}</span>
+			)}
 			{message && (
 				<span className={`status-message ${message.kind}`} role="status">
 					{message.text}
 				</span>
 			)}
 			{appInfo && (
-				<span className="status-version" title={versionTooltip(appInfo)}>
+				<span className="status-version" title={versionTooltip(appInfo, t)}>
 					v{appInfo.version}
 				</span>
 			)}

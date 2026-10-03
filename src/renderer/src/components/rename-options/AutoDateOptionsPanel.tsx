@@ -1,5 +1,6 @@
 import { OptionPanel, SelectField, TextField } from "@components/common";
-import { PLACEMENT_SELECT_OPTIONS, type RenameSectionPanelProps } from "./renameSectionPanelShared";
+import { useI18n } from "@hooks";
+import { placementSelectOptions, type RenameSectionPanelProps } from "./renameSectionPanelShared";
 
 /** Data de modificação/criação/atual no nome. */
 export function AutoDateOptionsPanel({
@@ -8,36 +9,37 @@ export function AutoDateOptionsPanel({
 	active,
 	onReset,
 }: RenameSectionPanelProps<"autoDate">) {
+	const { t } = useI18n();
 	return (
-		<OptionPanel title="Data automática" active={active} onReset={onReset}>
+		<OptionPanel title={t("autoDate.title")} active={active} onReset={onReset}>
 			<div className="grid-2">
 				<SelectField
-					label="Modo"
+					label={t("field.mode")}
 					value={value.mode}
-					options={PLACEMENT_SELECT_OPTIONS}
+					options={placementSelectOptions(t)}
 					onChange={(mode) => onChange({ mode })}
 				/>
 				<SelectField
-					label="Tipo"
+					label={t("autoDate.type")}
 					value={value.type}
 					options={[
-						["modified", "Modificação"],
-						["created", "Criação"],
-						["current", "Atual"],
+						["modified", t("autoDate.modified")],
+						["created", t("autoDate.created")],
+						["current", t("autoDate.current")],
 					]}
 					onChange={(type) => onChange({ type })}
 				/>
 			</div>
 			<div className="grid-2">
 				<TextField
-					label="Formato"
+					label={t("autoDate.format")}
 					mono
 					value={value.format}
-					title="Tokens: YYYY, YY, MM, DD, HH, mm, ss"
+					title={t("autoDate.formatHint")}
 					onChange={(format) => onChange({ format })}
 				/>
 				<TextField
-					label="Separador"
+					label={t("field.separator")}
 					value={value.separator}
 					onChange={(separator) => onChange({ separator })}
 				/>

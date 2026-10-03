@@ -6,6 +6,7 @@ import type { ElectronApi, IpcChannel } from "../shared/ipc";
 const C = {
 	GetAppInfo: "app:get-info",
 	SetTheme: "app:set-theme",
+	SetLocale: "app:set-locale",
 	GetHomeDir: "fs:get-home-dir",
 	ListDirectories: "fs:list-directories",
 	ListEntries: "fs:list-entries",
@@ -31,6 +32,7 @@ const api: ElectronApi = {
 	platform: process.platform,
 	getAppInfo: () => ipcRenderer.invoke(C.GetAppInfo),
 	setTheme: (mode) => ipcRenderer.invoke(C.SetTheme, mode),
+	setLocale: (locale) => ipcRenderer.invoke(C.SetLocale, locale),
 	getHomeDir: () => ipcRenderer.invoke(C.GetHomeDir),
 	listDirectories: (dir, showHidden) => ipcRenderer.invoke(C.ListDirectories, dir, showHidden),
 	listEntries: (dir, options) => ipcRenderer.invoke(C.ListEntries, dir, options),

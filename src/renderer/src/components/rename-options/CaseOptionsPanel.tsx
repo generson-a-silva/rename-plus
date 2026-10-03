@@ -1,4 +1,5 @@
 import { OptionPanel, SelectField, TextField } from "@components/common";
+import { useI18n } from "@hooks";
 import type { RenameSectionPanelProps } from "./renameSectionPanelShared";
 
 /** Maiúsculas/minúsculas com exceções. */
@@ -8,25 +9,26 @@ export function CaseOptionsPanel({
 	active,
 	onReset,
 }: RenameSectionPanelProps<"case">) {
+	const { t } = useI18n();
 	return (
-		<OptionPanel title="Maiúsc./Minúsc." active={active} onReset={onReset}>
+		<OptionPanel title={t("case.title")} active={active} onReset={onReset}>
 			<SelectField
-				label="Caixa"
+				label={t("case.field")}
 				value={value.mode}
 				options={[
-					["same", "Manter"],
-					["lower", "minúsculas"],
-					["upper", "MAIÚSCULAS"],
-					["title", "Título"],
-					["sentence", "Frase"],
+					["same", t("option.keep")],
+					["lower", t("option.lowercase")],
+					["upper", t("option.uppercase")],
+					["title", t("option.titleCase")],
+					["sentence", t("case.sentence")],
 				]}
 				onChange={(mode) => onChange({ mode })}
 			/>
 			<TextField
-				label="Exceções"
+				label={t("case.exceptions")}
 				value={value.exceptions}
-				placeholder="de;da;do;e"
-				title="Palavras separadas por ; que ficam exatamente como escritas."
+				placeholder={t("case.exceptionsPlaceholder")}
+				title={t("case.exceptionsHint")}
 				onChange={(exceptions) => onChange({ exceptions })}
 			/>
 		</OptionPanel>

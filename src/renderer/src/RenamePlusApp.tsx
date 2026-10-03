@@ -14,6 +14,7 @@ import {
 	useFileCommands,
 	useFileOperations,
 	useFolderTreeState,
+	useI18n,
 	usePersistentState,
 	useResizableSplitter,
 	useTextPrompt,
@@ -31,12 +32,12 @@ import {
 	type ListFilters,
 	parentPath,
 	platformPaths,
-	pluralize,
 	type SortState,
 	sortEntries,
 	toListOptions,
 	treeRootFor,
 } from "@lib";
+import type { Translator } from "@shared/i18n";
 import type {
 	AppInfo,
 	FileEntry,
@@ -68,14 +69,18 @@ const MAX_PANELS_FRACTION = 0.5;
 /** Sistema em que o app roda: define regras de nome e comparação de caminhos na pré-visualização. */
 const PREVIEW_CONTEXT = { platform: window.api.platform };
 
-function toTreeRoot(root: FileSystemRoot): TreeRoot {
+function toTreeRoot(root: FileSystemRoot, t: Translator): TreeRoot {
 	switch (root.kind) {
 		case "home":
-			return { label: "Pasta pessoal", path: root.path, icon: "home" };
+			return { label: t("roots.home"), path: root.path, icon: "home" };
 		case "filesystem":
-			return { label: "Sistema de arquivos", path: root.path, icon: "drive" };
+			return { label: t("roots.filesystem"), path: root.path, icon: "drive" };
 		case "drive":
-			return { label: `Unidade ${root.path.slice(0, 2)}`, path: root.path, icon: "drive" };
+			return {
+				label: t("roots.drive", { drive: root.path.slice(0, 2) }),
+				path: root.path,
+				icon: "drive",
+			};
 	}
 }
 
@@ -98,12 +103,16 @@ export function RenamePlusApp() {
 	const [busy, setBusy] = useState(false);
 	const [canUndo, setCanUndo] = useState(false);
 
+	const { t, tr } = useI18n();
 	const theme = useThemeMode();
 	const tree = useFolderTreeState(filters.hidden);
 	const { reveal, refresh: refreshTree } = tree;
 
 	const [fileSystemRoots, setFileSystemRoots] = useState<FileSystemRoot[]>([]);
-	const roots = useMemo(() => fileSystemRoots.map(toTreeRoot), [fileSystemRoots]);
+	const roots = useMemo(
+		() => fileSystemRoots.map((root) => toTreeRoot(root, t)),
+		[fileSystemRoots, t],
+	);
 
 	// --- Inicialização -------------------------------------------------------
 	const currentDirRef = useRef(currentDir);
@@ -155,10 +164,13 @@ export function RenamePlusApp() {
 				);
 			} catch (error) {
 				if (request !== requestRef.current) return;
-				setListing({ ...EMPTY_LISTING, error: `Erro ao listar: ${(error as Error).message}` });
+				setListing({
+					...EMPTY_LISTING,
+					error: t("list.error", { detail: (error as Error).message }),
+				});
 			}
 		},
-		[listOptions],
+		[listOptions, t],
 	);
 
 	useEffect(() => {
@@ -173,7 +185,7 @@ export function RenamePlusApp() {
 			// O processo principal valida e devolve o caminho canônico ("c:/users" → "C:\Users").
 			const path = await window.api.resolveDirectory(expandHomeShortcut(input, home));
 			if (!path) {
-				setMessage({ kind: "error", text: `Pasta não encontrada: ${input}` });
+				setMessage({ kind: "error", text: t("navigation.notFound", { path: input }) });
 				return;
 			}
 			if (path === currentDir) return;
@@ -182,7 +194,7 @@ export function RenamePlusApp() {
 			setListing(EMPTY_LISTING);
 			setCurrentDir(path);
 		},
-		[currentDir, home, setCurrentDir],
+		[currentDir, home, setCurrentDir, t],
 	);
 
 	const refresh = useCallback(() => {
@@ -229,7 +241,7 @@ export function RenamePlusApp() {
 	const applyResult = useCallback(
 		async (result: RenameResult, successText: (count: number) => string) => {
 			if (!result.ok) {
-				setMessage({ kind: "error", text: describeRenameFailure(result) });
+				setMessage({ kind: "error", text: describeRenameFailure(result, t) });
 				return;
 			}
 			const moved = new Map(result.renamed.map((op) => [op.from, op.to]));
@@ -238,20 +250,20 @@ export function RenamePlusApp() {
 			if (currentDir) await loadListing(currentDir, nextSelection);
 			await refreshTree(result.renamed.map((op) => parentPath(op.to)));
 		},
-		[selection, currentDir, loadListing, refreshTree],
+		[selection, currentDir, loadListing, refreshTree, t],
 	);
 
 	const rename = useCallback(async () => {
 		// Recalcula com as opções atuais (a pré-visualização pode estar adiada).
 		const fresh = buildPreview(selectedEntries, listing.entries, options, PREVIEW_CONTEXT);
 		if (fresh.configError) {
-			setMessage({ kind: "error", text: fresh.configError });
+			setMessage({ kind: "error", text: tr(fresh.configError) });
 			return;
 		}
 		if (fresh.errors > 0) {
 			setMessage({
 				kind: "error",
-				text: `Corrija ${pluralize(fresh.errors, "conflito", "conflitos")} antes de renomear (destacados em vermelho).`,
+				text: t("rename.fixConflicts", { count: fresh.errors }),
 			});
 			return;
 		}
@@ -262,7 +274,7 @@ export function RenamePlusApp() {
 				: [];
 		});
 		if (operations.length === 0) {
-			setMessage({ kind: "info", text: "Nenhum nome seria alterado." });
+			setMessage({ kind: "info", text: t("preview.nothingToChange") });
 			return;
 		}
 
@@ -271,37 +283,40 @@ export function RenamePlusApp() {
 			.map((op) => `${baseName(op.from)}  →  ${baseName(op.to)}`)
 			.join("\n");
 		const confirmed = await window.api.confirm({
-			message: `Renomear ${pluralize(operations.length, "item", "itens")}?`,
-			detail: operations.length > 6 ? `${sample}\n… e mais ${operations.length - 6}` : sample,
-			confirmLabel: "Renomear",
+			message: t("rename.confirm", { count: operations.length }),
+			detail:
+				operations.length > 6
+					? `${sample}\n${t("rename.confirmMore", { count: operations.length - 6 })}`
+					: sample,
+			confirmLabel: t("actions.rename"),
 		});
 		if (!confirmed) return;
 
 		setBusy(true);
 		try {
 			const result = await window.api.rename(operations);
-			await applyResult(result, (n) => `${pluralize(n, "item renomeado", "itens renomeados")}.`);
+			await applyResult(result, (count) => t("rename.done", { count }));
 		} finally {
 			setBusy(false);
 			await refreshUndo();
 		}
-	}, [selectedEntries, listing.entries, options, applyResult, refreshUndo]);
+	}, [selectedEntries, listing.entries, options, applyResult, refreshUndo, t, tr]);
 
 	const undo = useCallback(async () => {
 		const confirmed = await window.api.confirm({
-			message: "Desfazer a última renomeação?",
-			confirmLabel: "Desfazer",
+			message: t("undo.confirm"),
+			confirmLabel: t("actions.undo"),
 		});
 		if (!confirmed) return;
 		setBusy(true);
 		try {
 			const result = await window.api.undo();
-			await applyResult(result, (n) => `${pluralize(n, "item restaurado", "itens restaurados")}.`);
+			await applyResult(result, (count) => t("undo.done", { count }));
 		} finally {
 			setBusy(false);
 			await refreshUndo();
 		}
-	}, [applyResult, refreshUndo]);
+	}, [applyResult, refreshUndo, t]);
 
 	const changeOption = useCallback(
 		<K extends RenameSection>(section: K, patch: Partial<RenameOptions[K]>) => {
@@ -317,7 +332,7 @@ export function RenamePlusApp() {
 		[setOptions],
 	);
 
-	const summary = describePreview(preview, selection.size);
+	const summary = describePreview(preview, selection.size, t);
 
 	// --- Operações de arquivo (menus de contexto e atalhos) -----------------
 	const prompt = useTextPrompt();
@@ -456,7 +471,7 @@ export function RenamePlusApp() {
 				</div>
 				<div
 					className="splitter horizontal"
-					title="Arraste para redimensionar (até metade da área)"
+					title={t("layout.panelsSplitter")}
 					onPointerDown={startPanelsResize}
 				/>
 				<RenameOptionsPanels

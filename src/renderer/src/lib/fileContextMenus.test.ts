@@ -1,3 +1,4 @@
+import { createTranslator } from "@shared/i18n";
 import { describe, expect, it } from "vitest";
 import {
 	buildEntriesMenu,
@@ -6,6 +7,8 @@ import {
 	matchFileShortcut,
 	type ShortcutKeyEvent,
 } from "./fileContextMenus";
+
+const t = createTranslator("pt-BR");
 
 const key = (k: string, mods: Partial<ShortcutKeyEvent> = {}): ShortcutKeyEvent => ({
 	key: k,
@@ -21,7 +24,7 @@ const enabledIds = (items: ReturnType<typeof buildEntriesMenu>) =>
 
 describe("menus de contexto", () => {
 	it("com um item, permite abrir e renomear", () => {
-		const items = buildEntriesMenu({
+		const items = buildEntriesMenu(t, {
 			count: 1,
 			singleIsDir: false,
 			canPaste: false,
@@ -40,7 +43,7 @@ describe("menus de contexto", () => {
 	});
 
 	it("com vários itens, desativa abrir/renomear e mostra a quantidade", () => {
-		const items = buildEntriesMenu({
+		const items = buildEntriesMenu(t, {
 			count: 3,
 			singleIsDir: false,
 			canPaste: true,
@@ -55,7 +58,9 @@ describe("menus de contexto", () => {
 	});
 
 	it("protege as raízes da árvore", () => {
-		const ids = enabledIds(buildFolderMenu({ isRoot: true, canPaste: false, showHidden: false }));
+		const ids = enabledIds(
+			buildFolderMenu(t, { isRoot: true, canPaste: false, showHidden: false }),
+		);
 		expect(ids).not.toContain("rename");
 		expect(ids).not.toContain("trash");
 		expect(ids).toContain("newFolder");
@@ -63,7 +68,7 @@ describe("menus de contexto", () => {
 
 	it("na área livre, oferece nova pasta e colar", () => {
 		const ids = enabledIds(
-			buildListBackgroundMenu({ canPaste: true, hasEntries: false, showHidden: false }),
+			buildListBackgroundMenu(t, { canPaste: true, hasEntries: false, showHidden: false }),
 		);
 		expect(ids).toEqual(expect.arrayContaining(["newFolder", "paste", "refresh"]));
 		expect(ids).not.toContain("selectAll");

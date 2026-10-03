@@ -1,5 +1,5 @@
+import type { Translator } from "@shared/i18n";
 import type { ContextMenuItem } from "@shared/ipc";
-import { pluralize } from "./textPluralization";
 
 /** Comandos disparados pelos menus de contexto e pelos atalhos de teclado. */
 export type FileCommand =
@@ -38,82 +38,77 @@ function item(id: FileCommand, label: string, enabled = true): ActionMenuItem {
 	return { id, label, enabled, ...(accelerator ? { accelerator } : {}) };
 }
 
-function hiddenToggle(showHidden: boolean): ContextMenuItem {
+function hiddenToggle(t: Translator, showHidden: boolean): ContextMenuItem {
 	return {
-		...item("toggleHidden", "Mostrar itens ocultos"),
+		...item("toggleHidden", t("menu.showHidden")),
 		type: "checkbox",
 		checked: showHidden,
 	};
 }
 
 /** Menu sobre itens selecionados na lista. */
-export function buildEntriesMenu(options: {
-	count: number;
-	singleIsDir: boolean;
-	canPaste: boolean;
-	showHidden: boolean;
-}): ContextMenuItem[] {
+export function buildEntriesMenu(
+	t: Translator,
+	options: { count: number; singleIsDir: boolean; canPaste: boolean; showHidden: boolean },
+): ContextMenuItem[] {
 	const { count, singleIsDir, canPaste, showHidden } = options;
 	const single = count === 1;
-	const items = single ? "" : ` ${pluralize(count, "item", "itens")}`;
 	return [
-		item("open", singleIsDir ? "Abrir pasta" : "Abrir", single),
-		item("showInFolder", "Mostrar no gerenciador de arquivos", single),
+		item("open", t(singleIsDir ? "menu.openFolder" : "menu.open"), single),
+		item("showInFolder", t("menu.showInFolder"), single),
 		SEPARATOR,
-		item("rename", "Renomear…", single),
+		item("rename", t("menu.rename"), single),
 		SEPARATOR,
-		item("cut", `Recortar${items}`),
-		item("copy", `Copiar${items}`),
-		item("paste", "Colar", canPaste),
-		item("copyPath", single ? "Copiar caminho" : "Copiar caminhos"),
+		item("cut", t("menu.cut", { count })),
+		item("copy", t("menu.copy", { count })),
+		item("paste", t("menu.paste"), canPaste),
+		item("copyPath", t("menu.copyPath", { count })),
 		SEPARATOR,
-		item("trash", `Mover${items} para a lixeira`),
+		item("trash", t("menu.trash", { count })),
 		SEPARATOR,
-		hiddenToggle(showHidden),
+		hiddenToggle(t, showHidden),
 	];
 }
 
 /** Menu da área livre da lista (age sobre a pasta atual). */
-export function buildListBackgroundMenu(options: {
-	canPaste: boolean;
-	hasEntries: boolean;
-	showHidden: boolean;
-}): ContextMenuItem[] {
+export function buildListBackgroundMenu(
+	t: Translator,
+	options: { canPaste: boolean; hasEntries: boolean; showHidden: boolean },
+): ContextMenuItem[] {
 	return [
-		item("newFolder", "Nova pasta…"),
-		item("paste", "Colar", options.canPaste),
+		item("newFolder", t("menu.newFolder")),
+		item("paste", t("menu.paste"), options.canPaste),
 		SEPARATOR,
-		item("selectAll", "Selecionar tudo", options.hasEntries),
-		item("refresh", "Atualizar"),
-		item("showInFolder", "Abrir no gerenciador de arquivos"),
+		item("selectAll", t("menu.selectAll"), options.hasEntries),
+		item("refresh", t("menu.refresh")),
+		item("showInFolder", t("menu.openInFileManager")),
 		SEPARATOR,
-		hiddenToggle(options.showHidden),
+		hiddenToggle(t, options.showHidden),
 	];
 }
 
 /** Menu de uma pasta da árvore. Raízes (pasta pessoal, "/", unidades) não podem ser alteradas. */
-export function buildFolderMenu(options: {
-	isRoot: boolean;
-	canPaste: boolean;
-	showHidden: boolean;
-}): ContextMenuItem[] {
+export function buildFolderMenu(
+	t: Translator,
+	options: { isRoot: boolean; canPaste: boolean; showHidden: boolean },
+): ContextMenuItem[] {
 	const { isRoot, canPaste, showHidden } = options;
 	return [
-		item("open", "Abrir"),
-		item("showInFolder", "Abrir no gerenciador de arquivos"),
+		item("open", t("menu.open")),
+		item("showInFolder", t("menu.openInFileManager")),
 		SEPARATOR,
-		item("newFolder", "Nova subpasta…"),
-		item("rename", "Renomear…", !isRoot),
+		item("newFolder", t("menu.newSubfolder")),
+		item("rename", t("menu.rename"), !isRoot),
 		SEPARATOR,
-		item("cut", "Recortar", !isRoot),
-		item("copy", "Copiar", !isRoot),
-		item("paste", "Colar aqui", canPaste),
-		item("copyPath", "Copiar caminho"),
+		item("cut", t("menu.cut", { count: 1 }), !isRoot),
+		item("copy", t("menu.copy", { count: 1 }), !isRoot),
+		item("paste", t("menu.pasteHere"), canPaste),
+		item("copyPath", t("menu.copyPath", { count: 1 })),
 		SEPARATOR,
-		item("trash", "Mover para a lixeira", !isRoot),
+		item("trash", t("menu.trash", { count: 1 }), !isRoot),
 		SEPARATOR,
-		item("refresh", "Atualizar"),
-		hiddenToggle(showHidden),
+		item("refresh", t("menu.refresh")),
+		hiddenToggle(t, showHidden),
 	];
 }
 
