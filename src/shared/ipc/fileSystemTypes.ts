@@ -7,6 +7,8 @@ export interface FileEntry {
 	/** Nome completo, incluindo extensão. */
 	name: string;
 	isDir: boolean;
+	/** Oculto no sistema (ponto inicial no Linux, atributo "Oculto" no Windows). */
+	hidden: boolean;
 	size: number;
 	mtimeMs: number;
 	birthtimeMs: number;
@@ -25,6 +27,7 @@ export interface FileSystemRoot {
 export interface DirEntry {
 	name: string;
 	path: string;
+	hidden: boolean;
 }
 
 export interface ListOptions {

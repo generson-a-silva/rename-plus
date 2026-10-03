@@ -5,9 +5,19 @@ import {
 	RenameOptionsPanels,
 	RenameStatusBar,
 	type StatusMessage,
+	TextPromptDialog,
 	type TreeRoot,
 } from "@components";
-import { useFolderTreeState, usePersistentState, useResizableSplitter, useThemeMode } from "@hooks";
+import {
+	type FileChange,
+	useFileCommands,
+	useFileOperations,
+	useFolderTreeState,
+	usePersistentState,
+	useResizableSplitter,
+	useTextPrompt,
+	useThemeMode,
+} from "@hooks";
 import {
 	baseName,
 	createMaskFilter,
@@ -19,6 +29,7 @@ import {
 	joinPath,
 	type ListFilters,
 	parentPath,
+	platformPaths,
 	pluralize,
 	type SortState,
 	sortEntries,
@@ -166,16 +177,19 @@ export function RenamePlusApp() {
 		void refreshTree([currentDir]);
 	}, [currentDir, loadListing, refreshTree]);
 
-	useEffect(() => {
-		const onKeyDown = (event: KeyboardEvent) => {
-			if (event.key === "F5") {
-				event.preventDefault();
-				refresh();
-			}
-		};
-		window.addEventListener("keydown", onKeyDown);
-		return () => window.removeEventListener("keydown", onKeyDown);
-	}, [refresh]);
+	/** Atualiza uma pasta da árvore (e a lista, se for a pasta atual). */
+	const refreshFolder = useCallback(
+		(path: string) => {
+			void refreshTree([path]);
+			if (platformPaths.equals(path, currentDir)) void loadListing(currentDir);
+		},
+		[currentDir, loadListing, refreshTree],
+	);
+
+	const toggleHidden = useCallback(
+		() => setFilters((prev) => ({ ...prev, hidden: !prev.hidden })),
+		[setFilters],
+	);
 
 	// --- Lista visível e pré-visualização ------------------------------------
 	const visibleEntries = useMemo(() => {
@@ -291,6 +305,55 @@ export function RenamePlusApp() {
 
 	const summary = describePreview(preview, selection.size);
 
+	// --- Operações de arquivo (menus de contexto e atalhos) -----------------
+	const prompt = useTextPrompt();
+
+	/** Recarrega o que mudou e corrige a pasta atual se ela foi renomeada, movida ou apagada. */
+	const handleFileChange = useCallback(
+		async (change: FileChange) => {
+			let nextDir = currentDir;
+			for (const op of change.renamed ?? []) {
+				if (platformPaths.contains(op.from, nextDir))
+					nextDir = op.to + nextDir.slice(op.from.length);
+			}
+			for (const removed of change.removed ?? []) {
+				if (platformPaths.contains(removed, nextDir)) nextDir = parentPath(removed);
+			}
+			if (nextDir !== currentDir) {
+				setSelection(new Set());
+				setCurrentDir(nextDir);
+			} else if (currentDir) {
+				await loadListing(currentDir, change.select ? new Set(change.select) : undefined);
+			}
+			await refreshTree(change.dirs);
+			await refreshUndo();
+		},
+		[currentDir, loadListing, refreshTree, refreshUndo, setCurrentDir],
+	);
+
+	const operations = useFileOperations({
+		ask: prompt.ask,
+		notify: setMessage,
+		onChanged: handleFileChange,
+	});
+
+	const rootPaths = useMemo(() => roots.map((root) => root.path), [roots]);
+	const commands = useFileCommands({
+		currentDir,
+		visibleEntries,
+		selectedEntries,
+		selection,
+		setSelection,
+		rootPaths,
+		showHidden: filters.hidden,
+		toggleHidden,
+		navigate,
+		refresh,
+		refreshFolder,
+		operations,
+		shortcutsEnabled: prompt.request === null,
+	});
+
 	// --- Layout --------------------------------------------------------------
 	const startTreeResize = useResizableSplitter({
 		axis: "x",
@@ -322,6 +385,8 @@ export function RenamePlusApp() {
 				}}
 				onSelectAll={() => setSelection(new Set(visibleEntries.map((entry) => entry.path)))}
 				onSelectNone={() => setSelection(new Set())}
+				showHidden={filters.hidden}
+				onToggleHidden={toggleHidden}
 				theme={theme.mode}
 				onCycleTheme={theme.cycle}
 				onInvert={() =>
@@ -344,6 +409,7 @@ export function RenamePlusApp() {
 						tree={tree}
 						currentDir={currentDir || null}
 						onSelect={navigate}
+						onContextMenu={commands.openFolderMenu}
 					/>
 					<div className="splitter vertical" onPointerDown={startTreeResize} />
 					<FileListView
@@ -357,7 +423,10 @@ export function RenamePlusApp() {
 						error={listing.error}
 						onSortChange={setSort}
 						onSelectionChange={setSelection}
-						onOpen={(entry) => entry.isDir && navigate(entry.path)}
+						onOpen={(entry) =>
+							entry.isDir ? navigate(entry.path) : operations.openFile(entry.path)
+						}
+						onContextMenu={commands.openListMenu}
 					/>
 				</div>
 				<div className="splitter horizontal" onPointerDown={startPanelsResize} />
@@ -387,6 +456,7 @@ export function RenamePlusApp() {
 				truncated={listing.truncated}
 				message={message}
 			/>
+			<TextPromptDialog request={prompt.request} onClose={prompt.close} />
 		</div>
 	);
 }

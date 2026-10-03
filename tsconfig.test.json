@@ -5,7 +5,10 @@
 		"module": "NodeNext",
 		"moduleResolution": "NodeNext",
 		"types": ["node"],
-		"noEmit": true
+		"noEmit": true,
+		"paths": {
+			"@shared/*": ["./src/shared/*/index.ts"]
+		}
 	},
 	"include": ["src/**/*.test.ts"]
 }

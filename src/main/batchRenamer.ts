@@ -4,6 +4,7 @@ import path from "node:path";
 import type { RenameFailure, RenameOperation, RenameResult } from "../shared/ipc";
 import { getPlatformPaths } from "../shared/paths";
 import { validateFileName } from "../shared/rename";
+import { describeFileSystemError } from "./fileSystemErrors";
 
 interface PlannedOperation extends RenameOperation {
 	isDir: boolean;
@@ -12,23 +13,6 @@ interface PlannedOperation extends RenameOperation {
 /** Regras de caminho do sistema atual (no Windows, comparação sem diferenciar maiúsculas). */
 const platformPaths = getPlatformPaths(process.platform);
 const depth = (p: string) => p.split(path.sep).length;
-
-/** Mensagens legíveis para os erros mais comuns de `fs.rename`. */
-const ERROR_MESSAGES: Record<string, string> = {
-	EBUSY: "O item está em uso por outro programa",
-	EPERM: "Sem permissão (o item pode estar em uso, protegido ou ser somente leitura)",
-	EACCES: "Sem permissão para renomear",
-	ENOENT: "O item não foi encontrado",
-	ENAMETOOLONG: "O caminho ficou longo demais",
-	EEXIST: "Já existe um item com esse nome",
-	ENOTEMPTY: "Já existe uma pasta com esse nome",
-	EROFS: "O disco é somente leitura",
-};
-
-function describeError(error: unknown): string {
-	const { code, message } = error as NodeJS.ErrnoException;
-	return (code && ERROR_MESSAGES[code]) || message;
-}
 
 async function exists(target: string): Promise<boolean> {
 	try {
@@ -149,10 +133,10 @@ async function execute(planned: readonly PlannedOperation[]): Promise<RenameResu
 			try {
 				await fs.rename(to, from);
 			} catch (rollbackError) {
-				rollbackErrors.push(`${to}: ${describeError(rollbackError)}`);
+				rollbackErrors.push(`${to}: ${describeFileSystemError(rollbackError)}`);
 			}
 		}
-		const message = describeError(error);
+		const message = describeFileSystemError(error);
 		const failed: RenameFailure[] = [
 			{
 				from: current?.from ?? "",

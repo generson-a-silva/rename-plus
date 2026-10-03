@@ -44,6 +44,8 @@ interface FileListViewProps {
 	onSortChange: (sort: SortState) => void;
 	onSelectionChange: (selection: Set<string>) => void;
 	onOpen: (entry: FileEntry) => void;
+	/** Clique direito sobre uma linha (`index`) ou sobre a área livre (`null`). */
+	onContextMenu: (index: number | null) => void;
 }
 
 /** Lista virtualizada de arquivos (painel direito) com pré-visualização dos novos nomes. */
@@ -188,7 +190,7 @@ export function FileListView(props: FileListViewProps) {
 		rows.push(
 			<div
 				key={entry.path}
-				className={`file-row ${isSelected ? "selected" : ""} ${status}`}
+				className={`file-row ${isSelected ? "selected" : ""} ${status}${entry.hidden ? " hidden-item" : ""}`}
 				style={{ top: index * ROW_HEIGHT, gridTemplateColumns: template }}
 				role="option"
 				tabIndex={-1}
@@ -246,6 +248,10 @@ export function FileListView(props: FileListViewProps) {
 				onScroll={(event) => setScrollTop(event.currentTarget.scrollTop)}
 				onKeyDown={onKeyDown}
 				onPointerDown={marquee.onPointerDown}
+				onContextMenu={(event) => {
+					event.preventDefault();
+					props.onContextMenu(marquee.hitTest(event.clientX, event.clientY));
+				}}
 				onDoubleClick={(event) => {
 					const index = marquee.hitTest(event.clientX, event.clientY);
 					const entry = index === null ? undefined : entries[index];

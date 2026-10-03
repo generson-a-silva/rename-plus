@@ -1,5 +1,7 @@
 import type { RenameOperation, RenameResult } from "./batchRenameTypes";
+import type { ContextMenuItem } from "./contextMenuTypes";
 import type { ConfirmRequest } from "./dialogTypes";
+import type { FileOperationResult } from "./fileOperationTypes";
 import type { DirEntry, FileSystemRoot, ListOptions, ListResult } from "./fileSystemTypes";
 import type { ThemeMode } from "./themeModes";
 
@@ -19,4 +21,19 @@ export interface ElectronApi {
 	canUndo: () => Promise<boolean>;
 	pickFolder: (defaultPath: string) => Promise<string | null>;
 	confirm: (request: ConfirmRequest) => Promise<boolean>;
+	/** Exibe um menu de contexto nativo e devolve o `id` do item clicado (ou `null`). */
+	showContextMenu: (items: ContextMenuItem[]) => Promise<string | null>;
+	/** Abre com o aplicativo padrão do sistema. Devolve a mensagem de erro, se houver. */
+	openPath: (path: string) => Promise<string | null>;
+	/** Abre o gerenciador de arquivos com o item selecionado. */
+	showInFolder: (path: string) => Promise<void>;
+	copyText: (text: string) => Promise<void>;
+	/** Move para a lixeira. Falhas com `trashUnavailable` indicam disco sem lixeira. */
+	trashItems: (paths: string[]) => Promise<FileOperationResult>;
+	/** Exclui permanentemente (sem lixeira). Só usar após confirmação explícita. */
+	deleteItems: (paths: string[]) => Promise<FileOperationResult>;
+	createFolder: (parentDir: string, name: string) => Promise<FileOperationResult>;
+	/** Copia para `targetDir`; nomes repetidos ganham sufixo " (2)", " (3)"… */
+	copyItems: (paths: string[], targetDir: string) => Promise<FileOperationResult>;
+	moveItems: (paths: string[], targetDir: string) => Promise<FileOperationResult>;
 }

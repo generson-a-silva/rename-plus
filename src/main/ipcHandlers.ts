@@ -1,9 +1,17 @@
 import os from "node:os";
 import { app, BrowserWindow, dialog, ipcMain } from "electron";
-import type { ConfirmRequest, ListOptions, RenameOperation } from "../shared/ipc";
+import type { ConfirmRequest, ContextMenuItem, ListOptions, RenameOperation } from "../shared/ipc";
 import { IpcChannel } from "../shared/ipc";
 import { canUndo, renameBatch, undoLastBatch } from "./batchRenamer";
 import { listDirectories, listEntries, listRoots, resolveDirectory } from "./fileSystemService";
+import { copyItems, createFolder, deleteItems, moveItems } from "./fileTransferService";
+import {
+	copyText,
+	openPath,
+	showContextMenu,
+	showInFolder,
+	trashItems,
+} from "./nativeShellService";
 import { setTheme } from "./themeSettings";
 
 export function registerIpcHandlers(): void {
@@ -38,7 +46,7 @@ export function registerIpcHandlers(): void {
 	ipcMain.handle(IpcChannel.Confirm, async (event, request: ConfirmRequest) => {
 		const win = BrowserWindow.fromWebContents(event.sender);
 		const options: Electron.MessageBoxOptions = {
-			type: "question",
+			type: request.severity ?? "question",
 			buttons: ["Cancelar", request.confirmLabel ?? "Confirmar"],
 			defaultId: 1,
 			cancelId: 0,
@@ -50,4 +58,22 @@ export function registerIpcHandlers(): void {
 			: await dialog.showMessageBox(options);
 		return response === 1;
 	});
+
+	ipcMain.handle(IpcChannel.ShowContextMenu, (event, items: ContextMenuItem[]) =>
+		showContextMenu(BrowserWindow.fromWebContents(event.sender), items),
+	);
+	ipcMain.handle(IpcChannel.OpenPath, (_event, target: string) => openPath(target));
+	ipcMain.handle(IpcChannel.ShowInFolder, (_event, target: string) => showInFolder(target));
+	ipcMain.handle(IpcChannel.CopyText, (_event, text: string) => copyText(text));
+	ipcMain.handle(IpcChannel.TrashItems, (_event, paths: string[]) => trashItems(paths));
+	ipcMain.handle(IpcChannel.DeleteItems, (_event, paths: string[]) => deleteItems(paths));
+	ipcMain.handle(IpcChannel.CreateFolder, (_event, parentDir: string, name: string) =>
+		createFolder(parentDir, name),
+	);
+	ipcMain.handle(IpcChannel.CopyItems, (_event, paths: string[], targetDir: string) =>
+		copyItems(paths, targetDir),
+	);
+	ipcMain.handle(IpcChannel.MoveItems, (_event, paths: string[], targetDir: string) =>
+		moveItems(paths, targetDir),
+	);
 }

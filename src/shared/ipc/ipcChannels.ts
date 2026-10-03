@@ -12,6 +12,15 @@ export const IpcChannel = {
 	CanUndo: "rename:can-undo",
 	PickFolder: "dialog:pick-folder",
 	Confirm: "dialog:confirm",
+	ShowContextMenu: "dialog:show-context-menu",
+	OpenPath: "shell:open-path",
+	ShowInFolder: "shell:show-in-folder",
+	CopyText: "shell:copy-text",
+	TrashItems: "file:trash-items",
+	DeleteItems: "file:delete-items",
+	CreateFolder: "file:create-folder",
+	CopyItems: "file:copy-items",
+	MoveItems: "file:move-items",
 } as const;
 
 export type IpcChannel = (typeof IpcChannel)[keyof typeof IpcChannel];

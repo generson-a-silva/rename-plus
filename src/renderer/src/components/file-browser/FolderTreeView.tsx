@@ -13,9 +13,11 @@ interface FolderTreeViewProps {
 	tree: FolderTreeState;
 	currentDir: string | null;
 	onSelect: (path: string) => void;
+	onContextMenu: (path: string) => void;
 }
 
 interface FolderTreeNodeProps {
+	hidden: boolean;
 	label: string;
 	path: string;
 	icon: AppIconName;
@@ -23,6 +25,7 @@ interface FolderTreeNodeProps {
 	tree: FolderTreeState;
 	currentDir: string | null;
 	onSelect: (path: string) => void;
+	onContextMenu: (path: string) => void;
 }
 
 function FolderTreeNode({
@@ -33,6 +36,8 @@ function FolderTreeNode({
 	tree,
 	currentDir,
 	onSelect,
+	onContextMenu,
+	hidden,
 }: FolderTreeNodeProps) {
 	const ref = useRef<HTMLDivElement>(null);
 	const isOpen = tree.expanded.has(path);
@@ -48,7 +53,7 @@ function FolderTreeNode({
 		<>
 			<div
 				ref={ref}
-				className={`tree-node${isActive ? " active" : ""}`}
+				className={`tree-node${isActive ? " active" : ""}${hidden ? " hidden-item" : ""}`}
 				style={{ paddingLeft: 6 + depth * 14 }}
 				role="treeitem"
 				aria-selected={isActive}
@@ -56,6 +61,10 @@ function FolderTreeNode({
 				tabIndex={-1}
 				title={path}
 				onClick={() => onSelect(path)}
+				onContextMenu={(event) => {
+					event.preventDefault();
+					onContextMenu(path);
+				}}
 				onDoubleClick={() => tree.toggle(path)}
 				onKeyDown={(event) => {
 					if (event.key === "Enter") onSelect(path);
@@ -95,6 +104,8 @@ function FolderTreeNode({
 						tree={tree}
 						currentDir={currentDir}
 						onSelect={onSelect}
+						onContextMenu={onContextMenu}
+						hidden={child.hidden}
 					/>
 				))}
 		</>
@@ -102,7 +113,13 @@ function FolderTreeNode({
 }
 
 /** Árvore de pastas (painel esquerdo), com subpastas carregadas sob demanda. */
-export function FolderTreeView({ roots, tree, currentDir, onSelect }: FolderTreeViewProps) {
+export function FolderTreeView({
+	roots,
+	tree,
+	currentDir,
+	onSelect,
+	onContextMenu,
+}: FolderTreeViewProps) {
 	return (
 		<div className="folder-tree" role="tree" aria-label="Pastas">
 			{roots.map((root) => (
@@ -115,6 +132,8 @@ export function FolderTreeView({ roots, tree, currentDir, onSelect }: FolderTree
 					tree={tree}
 					currentDir={currentDir}
 					onSelect={onSelect}
+					onContextMenu={onContextMenu}
+					hidden={false}
 				/>
 			))}
 		</div>

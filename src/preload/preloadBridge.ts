@@ -16,6 +16,15 @@ const C = {
 	CanUndo: "rename:can-undo",
 	PickFolder: "dialog:pick-folder",
 	Confirm: "dialog:confirm",
+	ShowContextMenu: "dialog:show-context-menu",
+	OpenPath: "shell:open-path",
+	ShowInFolder: "shell:show-in-folder",
+	CopyText: "shell:copy-text",
+	TrashItems: "file:trash-items",
+	DeleteItems: "file:delete-items",
+	CreateFolder: "file:create-folder",
+	CopyItems: "file:copy-items",
+	MoveItems: "file:move-items",
 } as const satisfies typeof IpcChannel;
 
 const api: ElectronApi = {
@@ -32,6 +41,15 @@ const api: ElectronApi = {
 	canUndo: () => ipcRenderer.invoke(C.CanUndo),
 	pickFolder: (defaultPath) => ipcRenderer.invoke(C.PickFolder, defaultPath),
 	confirm: (request) => ipcRenderer.invoke(C.Confirm, request),
+	showContextMenu: (items) => ipcRenderer.invoke(C.ShowContextMenu, items),
+	openPath: (path) => ipcRenderer.invoke(C.OpenPath, path),
+	showInFolder: (path) => ipcRenderer.invoke(C.ShowInFolder, path),
+	copyText: (text) => ipcRenderer.invoke(C.CopyText, text),
+	trashItems: (paths) => ipcRenderer.invoke(C.TrashItems, paths),
+	deleteItems: (paths) => ipcRenderer.invoke(C.DeleteItems, paths),
+	createFolder: (parentDir, name) => ipcRenderer.invoke(C.CreateFolder, parentDir, name),
+	copyItems: (paths, targetDir) => ipcRenderer.invoke(C.CopyItems, paths, targetDir),
+	moveItems: (paths, targetDir) => ipcRenderer.invoke(C.MoveItems, paths, targetDir),
 };
 
 contextBridge.exposeInMainWorld("api", api);

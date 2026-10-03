@@ -22,6 +22,7 @@ function entry(name: string, extra: Partial<FileEntry> = {}): FileEntry {
 		dir,
 		name,
 		isDir: false,
+		hidden: false,
 		size: 0,
 		mtimeMs: new Date(2024, 0, 15, 10, 30, 45).getTime(),
 		birthtimeMs: new Date(2023, 11, 31).getTime(),

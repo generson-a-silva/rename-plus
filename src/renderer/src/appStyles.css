@@ -645,3 +645,85 @@ button.header-cell:hover {
 .status-message.error {
 	color: var(--error);
 }
+
+/* ---- Itens ocultos --------------------------------------------------- */
+
+.file-row.hidden-item .cell,
+.tree-node.hidden-item .tree-label {
+	opacity: 0.6;
+}
+
+.file-row.hidden-item .name .cell-text,
+.tree-node.hidden-item .tree-label {
+	font-style: italic;
+}
+
+.tool-button.pressed {
+	background: var(--accent-soft);
+	border-color: var(--accent);
+	color: var(--accent);
+}
+
+/* ---- Diálogo de texto (nova pasta, renomear) ------------------------- */
+
+.prompt-dialog {
+	width: min(420px, calc(100vw - 32px));
+	padding: 0;
+	border: 1px solid var(--border-strong);
+	border-radius: 10px;
+	background: var(--surface);
+	color: var(--fg);
+	box-shadow: 0 12px 40px rgb(0 0 0 / 0.35);
+}
+
+.prompt-dialog::backdrop {
+	background: rgb(0 0 0 / 0.35);
+}
+
+.prompt-dialog form {
+	display: grid;
+	gap: 8px;
+	padding: 16px 18px;
+}
+
+.prompt-dialog h2 {
+	margin: 0 0 4px;
+	font-size: 15px;
+}
+
+.prompt-dialog label {
+	color: var(--muted);
+	font-size: 12px;
+}
+
+.prompt-dialog input {
+	height: 30px;
+	padding: 0 8px;
+	border: 1px solid var(--border);
+	border-radius: 6px;
+	background: var(--surface-2);
+	user-select: text;
+}
+
+.prompt-dialog input:focus {
+	outline: 2px solid var(--accent);
+	outline-offset: -1px;
+}
+
+.prompt-dialog input[aria-invalid="true"] {
+	outline-color: var(--error);
+	border-color: var(--error);
+}
+
+.prompt-error {
+	min-height: 1.4em;
+	margin: 0;
+	color: var(--error);
+	font-size: 12px;
+}
+
+.prompt-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+}

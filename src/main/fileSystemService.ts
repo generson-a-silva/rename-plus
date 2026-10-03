@@ -40,8 +40,10 @@ export async function listDirectories(dir: string, showHidden: boolean): Promise
 	const result: DirEntry[] = [];
 	for (const dirent of dirents) {
 		const fullPath = path.join(dir, dirent.name);
-		if (!showHidden && isHidden(fullPath, dirent.name)) continue;
-		if (await isDirectory(dirent, fullPath)) result.push({ name: dirent.name, path: fullPath });
+		const hidden = isHidden(fullPath, dirent.name);
+		if (hidden && !showHidden) continue;
+		if (await isDirectory(dirent, fullPath))
+			result.push({ name: dirent.name, path: fullPath, hidden });
 	}
 	return result.sort((a, b) => collator.compare(a.name, b.name));
 }
@@ -49,9 +51,8 @@ export async function listDirectories(dir: string, showHidden: boolean): Promise
 export async function listEntries(root: string, options: ListOptions): Promise<ListResult> {
 	const entries: FileEntry[] = [];
 	const queue = [root];
-	const isHidden = options.showHidden
-		? () => false
-		: await createHiddenCheck(root, options.recursive);
+	// Calculado mesmo quando os ocultos são exibidos, para a interface destacá-los.
+	const isHidden = await createHiddenCheck(root, options.recursive);
 
 	while (queue.length > 0) {
 		const dir = queue.shift() as string;
@@ -59,8 +60,9 @@ export async function listEntries(root: string, options: ListOptions): Promise<L
 
 		for (const dirent of dirents) {
 			const fullPath = path.join(dir, dirent.name);
+			const hidden = isHidden(fullPath, dirent.name);
 			// Pastas ocultas também não são percorridas no modo recursivo.
-			if (isHidden(fullPath, dirent.name)) continue;
+			if (hidden && !options.showHidden) continue;
 
 			let stats: Awaited<ReturnType<typeof fs.lstat>>;
 			try {
@@ -79,6 +81,7 @@ export async function listEntries(root: string, options: ListOptions): Promise<L
 				dir,
 				name: dirent.name,
 				isDir,
+				hidden,
 				size: isDir ? 0 : stats.size,
 				mtimeMs: stats.mtimeMs,
 				birthtimeMs: stats.birthtimeMs || stats.ctimeMs,

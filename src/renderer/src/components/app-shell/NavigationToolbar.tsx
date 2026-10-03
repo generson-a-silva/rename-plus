@@ -14,6 +14,8 @@ interface NavigationToolbarProps {
 	onSelectNone: () => void;
 	onInvert: () => void;
 	theme: ThemeMode;
+	showHidden: boolean;
+	onToggleHidden: () => void;
 	onCycleTheme: () => void;
 }
 
@@ -28,12 +30,15 @@ function ToolButton(props: {
 	label: string;
 	onClick: () => void;
 	disabled?: boolean;
+	/** Botão de alternância: `true`/`false` indica ligado/desligado. */
+	pressed?: boolean;
 }) {
 	return (
 		<button
 			type="button"
-			className="tool-button"
+			className={`tool-button${props.pressed ? " pressed" : ""}`}
 			title={props.label}
+			aria-pressed={props.pressed}
 			aria-label={props.label}
 			disabled={props.disabled}
 			onClick={props.onClick}
@@ -43,7 +48,7 @@ function ToolButton(props: {
 	);
 }
 
-/** Barra superior: navegação entre pastas, seleção em massa e tema. */
+/** Barra superior: navegação entre pastas, seleção em massa, itens ocultos e tema. */
 export function NavigationToolbar(props: NavigationToolbarProps) {
 	const { currentDir } = props;
 	const [draft, setDraft] = useState(currentDir ?? "");
@@ -93,6 +98,14 @@ export function NavigationToolbar(props: NavigationToolbarProps) {
 				<ToolButton icon="invert" label="Inverter seleção" onClick={props.onInvert} />
 			</div>
 			<div className="toolbar-group">
+				<ToolButton
+					icon={props.showHidden ? "eye" : "eyeOff"}
+					label={
+						props.showHidden ? "Ocultar itens ocultos (Ctrl+H)" : "Mostrar itens ocultos (Ctrl+H)"
+					}
+					pressed={props.showHidden}
+					onClick={props.onToggleHidden}
+				/>
 				<ToolButton {...THEME_BUTTON[props.theme]} onClick={props.onCycleTheme} />
 			</div>
 		</header>
