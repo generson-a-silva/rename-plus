@@ -1,6 +1,6 @@
 {
 	"name": "rename-plus",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "Renomeador de arquivos e pastas em lote",
 	"main": "build-electron/main/mainProcess.js",
 	"desktopName": "rename-plus.desktop",
