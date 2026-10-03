@@ -1,0 +1,83 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Pacote (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: --linux
+            files: build/*.AppImage
+          - os: windows-latest
+            platform: --win
+            files: build/*.exe
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Dependências
+        run: npm ci
+
+      - name: Conferir tag x versão do package.json
+        shell: bash
+        run: |
+          VERSION="v$(node -p "require('./package.json').version")"
+          if [ "$VERSION" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::A tag $GITHUB_REF_NAME não corresponde à versão do package.json ($VERSION)."
+            exit 1
+          fi
+
+      - name: Lint, tipos e testes
+        run: npm run ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Empacotar
+        run: npx electron-builder ${{ matrix.platform }} --publish never
+        env:
+          # Sem certificado de assinatura de código.
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - name: Guardar o pacote
+        uses: actions/upload-artifact@v7
+        with:
+          name: pacote-${{ matrix.os }}
+          path: ${{ matrix.files }}
+          if-no-files-found: error
+
+  release:
+    name: Publicar release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar os pacotes
+        uses: actions/download-artifact@v8
+        with:
+          path: pacotes
+          merge-multiple: true
+
+      - name: Criar release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: pacotes/*
+          generate_release_notes: true
+          # Troque para true se preferir revisar antes de publicar.
+          draft: true
