@@ -51,6 +51,7 @@
 		"files": [
 			"build-electron/**/*",
 			"build-react/**/*",
+			"resources/icon.png",
 			"package.json",
 			"!**/*.map"
 		],
@@ -69,6 +70,7 @@
 			"target": [
 				"dmg"
 			]
-		}
+		},
+		"icon": "resources/icon.png"
 	}
 }

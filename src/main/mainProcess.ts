@@ -4,6 +4,8 @@ import { registerIpcHandlers } from "./ipcHandlers";
 import { loadTheme, windowBackground } from "./themeSettings";
 
 const devServerUrl = process.env.VITE_DEV_SERVER_URL;
+/** Ícone da janela (barra de tarefas/Alt+Tab). Também é usado pelo electron-builder. */
+const windowIcon = path.join(__dirname, "../../resources/icon.png");
 
 function createWindow(): void {
 	const win = new BrowserWindow({
@@ -13,6 +15,7 @@ function createWindow(): void {
 		minHeight: 600,
 		show: false,
 		backgroundColor: windowBackground(),
+		icon: windowIcon,
 		title: "Rename Plus",
 		autoHideMenuBar: true,
 		webPreferences: {
