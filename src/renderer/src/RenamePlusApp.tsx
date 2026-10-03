@@ -114,8 +114,8 @@ export function RenamePlusApp() {
 		})();
 	}, [setCurrentDir]);
 
+	// O título da janela fica fixo ("Rename Plus", do index.html); a pasta atual aparece na barra de caminho.
 	useEffect(() => {
-		document.title = currentDir ? `${currentDir} — Rename Plus` : "Rename Plus";
 		if (!currentDir) return;
 		const root = treeRootFor(
 			currentDir,
