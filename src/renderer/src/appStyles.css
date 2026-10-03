@@ -327,10 +327,59 @@ select {
 	padding: 0 8px;
 }
 
-.file-header {
-	height: 28px;
+/* Recebe a rolagem horizontal da lista (sincronizada via JS); sem barra própria. */
+.file-header-viewport {
+	overflow: hidden;
 	border-bottom: 1px solid var(--border);
 	background: var(--surface-2);
+}
+
+.file-header {
+	height: 28px;
+}
+
+.header-column {
+	position: relative;
+	display: flex;
+	min-width: 0;
+	height: 100%;
+}
+
+/* Alça de redimensionar na borda direita de cada título. */
+.column-resizer {
+	position: absolute;
+	top: 0;
+	right: -4px;
+	z-index: 1;
+	width: 8px;
+	height: 100%;
+	cursor: col-resize;
+	touch-action: none;
+	outline: none;
+}
+
+.column-resizer::after {
+	content: "";
+	position: absolute;
+	top: 6px;
+	bottom: 6px;
+	left: 3px;
+	width: 2px;
+	border-radius: 1px;
+	background: var(--border-strong);
+	opacity: 0.6;
+	transition:
+		background 0.12s,
+		opacity 0.12s;
+}
+
+.column-resizer:hover::after,
+.column-resizer:focus-visible::after,
+body.resizing-x .column-resizer:active::after {
+	top: 0;
+	bottom: 0;
+	background: var(--accent);
+	opacity: 1;
 }
 
 .header-cell {
@@ -357,6 +406,12 @@ button.header-cell:hover {
 
 .header-cell.right {
 	justify-content: flex-end;
+}
+
+.header-column .header-cell {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
 }
 
 .sort {

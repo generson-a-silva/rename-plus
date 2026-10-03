@@ -1,36 +1,23 @@
 import { AppIcon } from "@components/common";
-import { useMarqueeSelection } from "@hooks";
-import {
-	fileType,
-	formatDateTime,
-	formatSize,
-	relativePath,
-	type SortKey,
-	type SortState,
-} from "@lib";
+import { useMarqueeSelection, usePersistentState } from "@hooks";
+import type { SortState } from "@lib";
 import type { FileEntry } from "@shared/ipc";
 import type { Preview } from "@shared/rename";
 import { type KeyboardEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { FileListHeader } from "./FileListHeader";
+import {
+	type ColumnWidths,
+	cellText,
+	columnWidth,
+	DEFAULT_COLUMN_WIDTHS,
+	type FileListColumnId,
+	measureColumnFit,
+	ROW_HORIZONTAL_PADDING,
+	visibleColumns,
+} from "./fileListColumns";
 
 const ROW_HEIGHT = 24;
 const OVERSCAN = 8;
-
-interface Column {
-	/** `null` = coluna sem ordenação (o novo nome depende da ordem, por causa da numeração). */
-	key: SortKey | null;
-	label: string;
-	width: string;
-	align?: "right";
-}
-
-const BASE_COLUMNS: Column[] = [
-	{ key: "name", label: "Nome", width: "minmax(160px, 2fr)" },
-	{ key: null, label: "Novo nome", width: "minmax(160px, 2fr)" },
-	{ key: "size", label: "Tamanho", width: "90px", align: "right" },
-	{ key: "type", label: "Tipo", width: "90px" },
-	{ key: "mtime", label: "Modificado", width: "130px" },
-];
-const DIR_COLUMN: Column = { key: "dir", label: "Pasta", width: "minmax(120px, 1.2fr)" };
 
 interface FileListViewProps {
 	entries: FileEntry[];
@@ -51,8 +38,16 @@ interface FileListViewProps {
 /** Lista virtualizada de arquivos (painel direito) com pré-visualização dos novos nomes. */
 export function FileListView(props: FileListViewProps) {
 	const { entries, selection, preview, rootDir, showDirColumn, sort } = props;
-	const columns = showDirColumn ? [...BASE_COLUMNS, DIR_COLUMN] : BASE_COLUMNS;
-	const template = columns.map((column) => column.width).join(" ");
+	const columns = visibleColumns(showDirColumn);
+	const [widths, setWidths] = usePersistentState<ColumnWidths>(
+		"columnWidths",
+		DEFAULT_COLUMN_WIDTHS,
+	);
+	// Larguras fixas por coluna + uma trilha final que ocupa a sobra quando há espaço.
+	const template = `${columns.map((column) => `${columnWidth(column, widths)}px`).join(" ")} minmax(0, 1fr)`;
+	const totalWidth =
+		columns.reduce((sum, column) => sum + columnWidth(column, widths), 0) + ROW_HORIZONTAL_PADDING;
+	const headerViewportRef = useRef<HTMLDivElement>(null);
 
 	const scrollRef = useRef<HTMLDivElement>(null);
 	const [scrollTop, setScrollTop] = useState(0);
@@ -176,8 +171,22 @@ export function FileListView(props: FileListViewProps) {
 		scrollToIndex(index);
 	};
 
-	const toggleSort = (key: SortKey) => {
-		props.onSortChange({ key, desc: sort.key === key ? !sort.desc : false });
+	/** Novo nome exibido na coluna "Novo nome" ("" se o item não está selecionado ou não muda). */
+	const visibleNewName = (entry: FileEntry): string => {
+		if (!selection.has(entry.path)) return "";
+		const item = preview.items.get(entry.path);
+		return item && item.status !== "unchanged" ? item.newName : "";
+	};
+
+	const resizeColumn = (columnId: FileListColumnId, width: number) => {
+		setWidths((current) => ({ ...current, [columnId]: width }));
+	};
+
+	const autoFitColumn = (columnId: FileListColumnId) => {
+		const column = columns.find((candidate) => candidate.id === columnId);
+		const list = scrollRef.current;
+		if (!column || column.resizable === false || !list) return;
+		resizeColumn(columnId, measureColumnFit(column, entries, visibleNewName, rootDir, list));
 	};
 
 	const rows = [];
@@ -197,47 +206,41 @@ export function FileListView(props: FileListViewProps) {
 				aria-selected={isSelected}
 				title={item?.message ?? undefined}
 			>
-				<span className="cell name">
-					<AppIcon name={entry.isDir ? "folder" : "file"} size={14} />
-					<span className="cell-text">{entry.name}</span>
-				</span>
-				<span className="cell new-name">
-					<span className="cell-text">
-						{item && item.status !== "unchanged" ? item.newName : ""}
-					</span>
-				</span>
-				<span className="cell right">{entry.isDir ? "" : formatSize(entry.size)}</span>
-				<span className="cell">{fileType(entry)}</span>
-				<span className="cell">{formatDateTime(entry.mtimeMs)}</span>
-				{showDirColumn && (
-					<span className="cell">
-						<span className="cell-text">{relativePath(rootDir, entry.dir)}</span>
-					</span>
-				)}
+				{columns.map((column) => {
+					const text = cellText(column.id, entry, visibleNewName(entry), rootDir);
+					if (column.id === "name") {
+						return (
+							<span key={column.id} className="cell name">
+								<AppIcon name={entry.isDir ? "folder" : "file"} size={14} />
+								<span className="cell-text">{text}</span>
+							</span>
+						);
+					}
+					const className =
+						column.id === "newName" ? "new-name" : column.align === "right" ? "right" : "";
+					return (
+						<span key={column.id} className={`cell ${className}`}>
+							<span className="cell-text">{text}</span>
+						</span>
+					);
+				})}
 			</div>,
 		);
 	}
 
 	return (
 		<section className="file-list">
-			<div className="file-header" style={{ gridTemplateColumns: template }}>
-				{columns.map(({ key, label, align }) => {
-					const className = `header-cell${align === "right" ? " right" : ""}`;
-					if (key === null) {
-						return (
-							<span key={label} className={className}>
-								{label}
-							</span>
-						);
-					}
-					return (
-						<button key={key} type="button" className={className} onClick={() => toggleSort(key)}>
-							{label}
-							{sort.key === key && <span className="sort">{sort.desc ? "▼" : "▲"}</span>}
-						</button>
-					);
-				})}
-			</div>
+			<FileListHeader
+				columns={columns}
+				widths={widths}
+				template={template}
+				totalWidth={totalWidth}
+				sort={sort}
+				viewportRef={headerViewportRef}
+				onSortChange={props.onSortChange}
+				onResize={resizeColumn}
+				onAutoFit={autoFitColumn}
+			/>
 			<div
 				ref={scrollRef}
 				className="file-scroll"
@@ -245,7 +248,13 @@ export function FileListView(props: FileListViewProps) {
 				aria-multiselectable="true"
 				aria-label="Arquivos"
 				tabIndex={0}
-				onScroll={(event) => setScrollTop(event.currentTarget.scrollTop)}
+				onScroll={(event) => {
+					setScrollTop(event.currentTarget.scrollTop);
+					// O cabeçalho acompanha a rolagem horizontal da lista.
+					if (headerViewportRef.current) {
+						headerViewportRef.current.scrollLeft = event.currentTarget.scrollLeft;
+					}
+				}}
 				onKeyDown={onKeyDown}
 				onPointerDown={marquee.onPointerDown}
 				onContextMenu={(event) => {
@@ -258,7 +267,10 @@ export function FileListView(props: FileListViewProps) {
 					if (entry) props.onOpen(entry);
 				}}
 			>
-				<div className="file-rows" style={{ height: entries.length * ROW_HEIGHT }}>
+				<div
+					className="file-rows"
+					style={{ height: entries.length * ROW_HEIGHT, minWidth: totalWidth }}
+				>
 					{rows}
 				</div>
 				{marquee.rect && (
