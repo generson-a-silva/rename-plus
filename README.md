@@ -9,11 +9,15 @@
 </p>
 
 <p align="center">
-  <img alt="Versão 1.3.2" src="https://img.shields.io/badge/vers%C3%A3o-1.3.2-2f6fe4">
+  <a href="https://github.com/generson-a-silva/rename-plus/releases/latest"><img alt="Última versão" src="https://img.shields.io/github/v/release/generson-a-silva/rename-plus?label=vers%C3%A3o&color=2f6fe4"></a>
   <img alt="Linux" src="https://img.shields.io/badge/Linux-suportado-1a7f37?logo=linux&logoColor=white">
   <img alt="Windows" src="https://img.shields.io/badge/Windows-suportado-1a7f37?logo=windows&logoColor=white">
   <img alt="macOS" src="https://img.shields.io/badge/macOS-planejado-8d96a0?logo=apple&logoColor=white">
   <img alt="Idiomas" src="https://img.shields.io/badge/idiomas-PT%20%C2%B7%20EN%20%C2%B7%20ES-2f6fe4">
+</p>
+
+<p align="center">
+  <a href="https://github.com/generson-a-silva/rename-plus/releases/latest"><img alt="Baixar a última versão" src="https://img.shields.io/badge/%E2%AC%87%20Baixar-%C3%BAltima%20vers%C3%A3o-1a7f37?style=for-the-badge"></a>
 </p>
 
 <p align="center">
@@ -179,9 +183,18 @@ Para deixar claro o escopo atual:
 
 ## Instalação
 
+Baixe o pacote do seu sistema na **[última release](https://github.com/generson-a-silva/rename-plus/releases/latest)**, em "Assets":
+
+| Sistema | Arquivo |
+|---|---|
+| Linux (x64) | `rename-plus-<versão>-linux-x86_64.AppImage` |
+| Windows (x64) | `rename-plus-<versão>-win-x64.exe` |
+
+Versões anteriores ficam na [lista de releases](https://github.com/generson-a-silva/rename-plus/releases). Para gerar o pacote a partir do código, veja [Desenvolvimento](#desenvolvimento).
+
 ### Linux (AppImage)
 
-1. Gere o pacote (veja [Desenvolvimento](#desenvolvimento)) ou use um AppImage já gerado: `rename-plus-<versão>-linux-x86_64.AppImage`.
+1. Baixe o `rename-plus-<versão>-linux-x86_64.AppImage` da [última release](https://github.com/generson-a-silva/rename-plus/releases/latest).
 2. Dê permissão de execução e abra:
 
    ```bash
@@ -194,7 +207,7 @@ Para deixar claro o escopo atual:
 
 ### Windows
 
-Execute o instalador `rename-plus-<versão>-win-x64.exe` e siga as etapas. Uma das etapas oferece adicionar "Abrir no Rename Plus" e "Abrir selecionados no Rename Plus" ao menu de contexto do Explorador de Arquivos (no Windows 11, em "Mostrar mais opções"). O app aparece em "Aplicativos instalados" com o editor **Generson Silva** e pode ser desinstalado por lá.
+Baixe o `rename-plus-<versão>-win-x64.exe` da [última release](https://github.com/generson-a-silva/rename-plus/releases/latest), execute o instalador e siga as etapas. Uma das etapas oferece adicionar "Abrir no Rename Plus" e "Abrir selecionados no Rename Plus" ao menu de contexto do Explorador de Arquivos (no Windows 11, em "Mostrar mais opções"). O app aparece em "Aplicativos instalados" com o editor **Generson Silva** e pode ser desinstalado por lá.
 
 ## Atalhos de teclado
 
