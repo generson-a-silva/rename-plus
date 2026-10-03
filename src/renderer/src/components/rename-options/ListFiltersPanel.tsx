@@ -6,11 +6,10 @@ interface ListFiltersPanelProps {
 	onChange: (patch: Partial<ListFilters>) => void;
 }
 
-/** Filtros da listagem: máscara de nomes, arquivos/pastas, ocultos e subpastas (11). */
+/** Filtros da listagem: máscara de nomes, arquivos/pastas, ocultos e subpastas. */
 export function ListFiltersPanel({ value, onChange }: ListFiltersPanelProps) {
 	return (
 		<OptionPanel
-			number={11}
 			title="Filtros"
 			active={JSON.stringify(value) !== JSON.stringify(DEFAULT_FILTERS)}
 			onReset={() => onChange(DEFAULT_FILTERS)}

@@ -460,9 +460,15 @@ button.header-cell:hover {
 .panels {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+	/*
+	 * Masonry: linhas de 2px e cada painel ocupa as linhas da sua altura (calculado em
+	 * useMasonryGrid). O espaço vertical vem desse cálculo, por isso row-gap é 0.
+	 */
+	grid-auto-rows: 2px;
+	/* "dense": cada painel vai para o espaço livre mais alto, sem deixar vãos para trás. */
 	grid-auto-flow: row dense;
 	align-items: start;
-	gap: 8px;
+	gap: 0 8px;
 	min-height: 0;
 	padding: 8px;
 	overflow: auto;
@@ -502,49 +508,50 @@ button.header-cell:hover {
 	box-shadow: inset 3px 0 0 var(--active-panel);
 }
 
-.panel legend {
-	display: flex;
+/* Título da seção em formato de badge, apoiado sobre a borda do painel. */
+.panel-badge {
+	display: inline-flex;
 	align-items: center;
-	gap: 6px;
-	padding: 0 4px;
-	font-weight: 600;
-}
-
-.panel-number {
-	display: inline-grid;
-	place-items: center;
-	min-width: 18px;
-	height: 18px;
-	padding: 0 4px;
-	border-radius: 9px;
-	background: var(--surface-2);
+	gap: 4px;
+	height: 22px;
+	padding: 0 10px;
 	border: 1px solid var(--border);
-	font-size: 11px;
+	border-radius: 999px;
+	background: var(--surface-2);
 	color: var(--muted);
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1;
+	white-space: nowrap;
 }
 
-.panel.active .panel-number {
-	background: var(--active-panel);
+.panel.active .panel-badge {
 	border-color: var(--active-panel);
+	background: var(--active-panel);
 	color: var(--accent-fg);
+}
+
+/* Com o botão de redefinir, o badge fica um pouco mais justo à direita. */
+.panel-badge:has(.panel-reset) {
+	padding-right: 3px;
 }
 
 .panel-reset {
 	display: grid;
 	place-items: center;
-	width: 20px;
-	height: 20px;
+	width: 18px;
+	height: 18px;
 	padding: 0;
 	border: 0;
-	border-radius: 4px;
+	border-radius: 999px;
 	background: none;
-	color: var(--muted);
+	/* Aparece só com a seção ativa, sobre o badge colorido: herda a cor do texto dele. */
+	color: inherit;
 	cursor: pointer;
 }
 
 .panel-reset:hover {
-	background: var(--surface-2);
-	color: var(--fg);
+	background: rgb(255 255 255 / 0.25);
 }
 
 .panel-body {
@@ -623,9 +630,9 @@ button.header-cell:hover {
 	display: grid;
 	align-content: start;
 	gap: 6px;
-	/* Alinha com a borda dos painéis, que começa no meio da legenda (18px de altura). */
-	margin-top: 9px;
-	min-height: calc(100% - 9px);
+	/* Alinha com a borda dos painéis, que começa no meio do badge do título (22px). */
+	margin-top: 11px;
+	min-height: calc(100% - 11px);
 	padding: 10px;
 	border: 1px solid var(--border);
 	border-radius: 8px;

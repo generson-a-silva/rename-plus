@@ -1,7 +1,7 @@
 import { OptionPanel, SelectField, TextField } from "@components/common";
 import { PLACEMENT_SELECT_OPTIONS, type RenameSectionPanelProps } from "./renameSectionPanelShared";
 
-/** Data de modificação/criação/atual no nome (7). */
+/** Data de modificação/criação/atual no nome. */
 export function AutoDateOptionsPanel({
 	value,
 	onChange,
@@ -9,7 +9,7 @@ export function AutoDateOptionsPanel({
 	onReset,
 }: RenameSectionPanelProps<"autoDate">) {
 	return (
-		<OptionPanel number={7} title="Data automática" active={active} onReset={onReset}>
+		<OptionPanel title="Data automática" active={active} onReset={onReset}>
 			<div className="grid-2">
 				<SelectField
 					label="Modo"

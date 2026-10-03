@@ -1,6 +1,7 @@
+import { useMasonryGrid } from "@hooks";
 import type { ListFilters } from "@lib";
 import { createDefaultOptions, type RenameOptions, type RenameSection } from "@shared/rename";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { AddOptionsPanel } from "./AddOptionsPanel";
 import { AppendFolderOptionsPanel } from "./AppendFolderOptionsPanel";
 import { AutoDateOptionsPanel } from "./AutoDateOptionsPanel";
@@ -37,6 +38,9 @@ export function RenameOptionsPanels({
 	actions,
 }: RenameOptionsPanelsProps) {
 	const defaults = useMemo(createDefaultOptions, []);
+	const panelsRef = useRef<HTMLDivElement>(null);
+	// Encaixa os painéis sem vãos entre as linhas (valores iguais aos de .panels no CSS).
+	useMasonryGrid(panelsRef, { rowUnit: 2, gap: 8 });
 
 	const sectionProps = <K extends RenameSection>(section: K): RenameSectionPanelProps<K> => ({
 		value: options[section],
@@ -48,7 +52,7 @@ export function RenameOptionsPanels({
 	return (
 		<div className="rename-options">
 			{/* Opções roláveis; as ações ficam numa coluna fixa à direita, sempre visíveis. */}
-			<div className="panels">
+			<div ref={panelsRef} className="panels">
 				<RegexOptionsPanel {...sectionProps("regex")} />
 				<NameOptionsPanel {...sectionProps("name")} />
 				<ReplaceOptionsPanel {...sectionProps("replace")} />

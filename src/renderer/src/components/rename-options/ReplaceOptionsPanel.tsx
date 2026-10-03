@@ -1,7 +1,7 @@
 import { CheckField, OptionPanel, TextField } from "@components/common";
 import type { RenameSectionPanelProps } from "./renameSectionPanelShared";
 
-/** Substituição de texto literal (3). */
+/** Substituição de texto literal. */
 export function ReplaceOptionsPanel({
 	value,
 	onChange,
@@ -9,7 +9,7 @@ export function ReplaceOptionsPanel({
 	onReset,
 }: RenameSectionPanelProps<"replace">) {
 	return (
-		<OptionPanel number={3} title="Substituir" active={active} onReset={onReset}>
+		<OptionPanel title="Substituir" active={active} onReset={onReset}>
 			<TextField label="Buscar" value={value.find} onChange={(find) => onChange({ find })} />
 			<TextField label="Por" value={value.with} onChange={(text) => onChange({ with: text })} />
 			<CheckField

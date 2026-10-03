@@ -1,7 +1,7 @@
 import { OptionPanel, SelectField, TextField } from "@components/common";
 import type { RenameSectionPanelProps } from "./renameSectionPanelShared";
 
-/** Tratamento da extensão (10). */
+/** Tratamento da extensão. */
 export function ExtensionOptionsPanel({
 	value,
 	onChange,
@@ -9,7 +9,7 @@ export function ExtensionOptionsPanel({
 	onReset,
 }: RenameSectionPanelProps<"extension">) {
 	return (
-		<OptionPanel number={10} title="Extensão" active={active} onReset={onReset}>
+		<OptionPanel title="Extensão" active={active} onReset={onReset}>
 			<SelectField
 				label="Extensão"
 				value={value.mode}

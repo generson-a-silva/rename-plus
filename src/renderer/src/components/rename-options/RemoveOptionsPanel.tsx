@@ -1,7 +1,7 @@
 import { CheckField, NumberField, OptionPanel, SelectField, TextField } from "@components/common";
 import type { RenameSectionPanelProps } from "./renameSectionPanelShared";
 
-/** Remoção de caracteres, palavras e trechos (5). */
+/** Remoção de caracteres, palavras e trechos. */
 export function RemoveOptionsPanel({
 	value,
 	onChange,
@@ -9,7 +9,7 @@ export function RemoveOptionsPanel({
 	onReset,
 }: RenameSectionPanelProps<"remove">) {
 	return (
-		<OptionPanel number={5} title="Remover" active={active} onReset={onReset}>
+		<OptionPanel title="Remover" active={active} onReset={onReset}>
 			<div className="grid-2">
 				<NumberField
 					label="Primeiros"

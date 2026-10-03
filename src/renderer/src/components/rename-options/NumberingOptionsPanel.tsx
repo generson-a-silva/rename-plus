@@ -1,7 +1,7 @@
 import { CheckField, NumberField, OptionPanel, SelectField, TextField } from "@components/common";
 import type { RenameSectionPanelProps } from "./renameSectionPanelShared";
 
-/** Numeração sequencial (9). */
+/** Numeração sequencial. */
 export function NumberingOptionsPanel({
 	value,
 	onChange,
@@ -9,7 +9,7 @@ export function NumberingOptionsPanel({
 	onReset,
 }: RenameSectionPanelProps<"numbering">) {
 	return (
-		<OptionPanel number={9} title="Numeração" className="wide" active={active} onReset={onReset}>
+		<OptionPanel title="Numeração" className="wide" active={active} onReset={onReset}>
 			<div className="grid-4">
 				<SelectField
 					label="Modo"

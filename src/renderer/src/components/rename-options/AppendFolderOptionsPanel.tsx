@@ -1,7 +1,7 @@
 import { NumberField, OptionPanel, SelectField, TextField } from "@components/common";
 import { PLACEMENT_SELECT_OPTIONS, type RenameSectionPanelProps } from "./renameSectionPanelShared";
 
-/** Nome da(s) pasta(s) no nome do arquivo (8). */
+/** Nome da(s) pasta(s) no nome do arquivo. */
 export function AppendFolderOptionsPanel({
 	value,
 	onChange,
@@ -9,7 +9,7 @@ export function AppendFolderOptionsPanel({
 	onReset,
 }: RenameSectionPanelProps<"appendFolder">) {
 	return (
-		<OptionPanel number={8} title="Nome da pasta" active={active} onReset={onReset}>
+		<OptionPanel title="Nome da pasta" active={active} onReset={onReset}>
 			<SelectField
 				label="Modo"
 				value={value.mode}

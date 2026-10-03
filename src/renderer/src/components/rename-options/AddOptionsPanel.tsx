@@ -1,7 +1,7 @@
 import { CheckField, NumberField, OptionPanel, TextField } from "@components/common";
 import type { RenameSectionPanelProps } from "./renameSectionPanelShared";
 
-/** Prefixo, sufixo e inserção de texto (6). */
+/** Prefixo, sufixo e inserção de texto. */
 export function AddOptionsPanel({
 	value,
 	onChange,
@@ -9,7 +9,7 @@ export function AddOptionsPanel({
 	onReset,
 }: RenameSectionPanelProps<"add">) {
 	return (
-		<OptionPanel number={6} title="Adicionar" active={active} onReset={onReset}>
+		<OptionPanel title="Adicionar" active={active} onReset={onReset}>
 			<TextField label="Prefixo" value={value.prefix} onChange={(prefix) => onChange({ prefix })} />
 			<div className="grid-2">
 				<TextField

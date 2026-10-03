@@ -1,7 +1,7 @@
 import { OptionPanel, SelectField, TextField } from "@components/common";
 import type { RenameSectionPanelProps } from "./renameSectionPanelShared";
 
-/** Manter, remover, fixar ou inverter o nome original (2). */
+/** Manter, remover, fixar ou inverter o nome original. */
 export function NameOptionsPanel({
 	value,
 	onChange,
@@ -9,7 +9,7 @@ export function NameOptionsPanel({
 	onReset,
 }: RenameSectionPanelProps<"name">) {
 	return (
-		<OptionPanel number={2} title="Nome" active={active} onReset={onReset}>
+		<OptionPanel title="Nome" active={active} onReset={onReset}>
 			<SelectField
 				label="Nome"
 				value={value.mode}

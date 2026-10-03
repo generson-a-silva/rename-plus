@@ -10,6 +10,7 @@ import {
 } from "@components";
 import {
 	type FileChange,
+	useElementHeight,
 	useFileCommands,
 	useFileOperations,
 	useFolderTreeState,
@@ -53,6 +54,10 @@ interface Listing {
 }
 
 const EMPTY_LISTING: Listing = { entries: [], truncated: false, loading: false, error: null };
+
+/** Altura mínima da área de filtros e fração máxima da área de trabalho que ela pode ocupar. */
+const MIN_PANELS_HEIGHT = 120;
+const MAX_PANELS_FRACTION = 0.5;
 
 /** Sistema em que o app roda: define regras de nome e comparação de caminhos na pré-visualização. */
 const PREVIEW_CONTEXT = { platform: window.api.platform };
@@ -362,11 +367,21 @@ export function RenamePlusApp() {
 		max: 600,
 		onChange: (treeWidth) => setLayout((prev) => ({ ...prev, treeWidth })),
 	});
+	// A área de filtros pode ocupar até metade da área de trabalho. O valor salvo é
+	// preservado: se a janela encolher, a área encolhe junto e volta ao crescer.
+	const workspaceRef = useRef<HTMLDivElement>(null);
+	const workspaceHeight = useElementHeight(workspaceRef);
+	const maxPanelsHeight = Math.max(
+		MIN_PANELS_HEIGHT,
+		Math.floor(workspaceHeight * MAX_PANELS_FRACTION),
+	);
+	const panelsHeight = Math.min(Math.max(layout.panelsHeight, MIN_PANELS_HEIGHT), maxPanelsHeight);
+
 	const startPanelsResize = useResizableSplitter({
 		axis: "y",
-		value: layout.panelsHeight,
-		min: 120,
-		max: Math.max(200, window.innerHeight - 260),
+		value: panelsHeight,
+		min: MIN_PANELS_HEIGHT,
+		max: maxPanelsHeight,
 		direction: -1,
 		onChange: (panelsHeight) => setLayout((prev) => ({ ...prev, panelsHeight })),
 	});
@@ -397,8 +412,9 @@ export function RenamePlusApp() {
 			/>
 
 			<div
+				ref={workspaceRef}
 				className="workspace"
-				style={{ gridTemplateRows: `minmax(0, 1fr) 5px ${layout.panelsHeight}px` }}
+				style={{ gridTemplateRows: `minmax(0, 1fr) 5px ${panelsHeight}px` }}
 			>
 				<div
 					className="browser"
@@ -429,7 +445,11 @@ export function RenamePlusApp() {
 						onContextMenu={commands.openListMenu}
 					/>
 				</div>
-				<div className="splitter horizontal" onPointerDown={startPanelsResize} />
+				<div
+					className="splitter horizontal"
+					title="Arraste para redimensionar (até metade da área)"
+					onPointerDown={startPanelsResize}
+				/>
 				<RenameOptionsPanels
 					options={options}
 					onChange={changeOption}

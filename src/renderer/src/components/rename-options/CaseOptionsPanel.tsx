@@ -1,7 +1,7 @@
 import { OptionPanel, SelectField, TextField } from "@components/common";
 import type { RenameSectionPanelProps } from "./renameSectionPanelShared";
 
-/** Maiúsculas/minúsculas com exceções (4). */
+/** Maiúsculas/minúsculas com exceções. */
 export function CaseOptionsPanel({
 	value,
 	onChange,
@@ -9,7 +9,7 @@ export function CaseOptionsPanel({
 	onReset,
 }: RenameSectionPanelProps<"case">) {
 	return (
-		<OptionPanel number={4} title="Maiúsc./Minúsc." active={active} onReset={onReset}>
+		<OptionPanel title="Maiúsc./Minúsc." active={active} onReset={onReset}>
 			<SelectField
 				label="Caixa"
 				value={value.mode}

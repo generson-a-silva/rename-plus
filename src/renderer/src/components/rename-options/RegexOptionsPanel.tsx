@@ -1,7 +1,7 @@
 import { CheckField, OptionPanel, TextField } from "@components/common";
 import type { RenameSectionPanelProps } from "./renameSectionPanelShared";
 
-/** Expressão regular aplicada ao nome (1). */
+/** Expressão regular aplicada ao nome. */
 export function RegexOptionsPanel({
 	value,
 	onChange,
@@ -9,7 +9,7 @@ export function RegexOptionsPanel({
 	onReset,
 }: RenameSectionPanelProps<"regex">) {
 	return (
-		<OptionPanel number={1} title="RegEx" active={active} onReset={onReset}>
+		<OptionPanel title="RegEx" active={active} onReset={onReset}>
 			<TextField
 				label="Buscar"
 				mono
