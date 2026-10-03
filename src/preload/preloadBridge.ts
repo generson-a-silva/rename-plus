@@ -4,7 +4,7 @@ import type { ElectronApi, IpcChannel } from "../shared/ipc";
 // Preload roda em sandbox: só pode importar "electron" em runtime. Por isso os
 // canais são repetidos aqui; o `satisfies` garante que batem com ../shared/ipc/ipcChannels.ts.
 const C = {
-	GetAppVersion: "app:get-version",
+	GetAppInfo: "app:get-info",
 	SetTheme: "app:set-theme",
 	GetHomeDir: "fs:get-home-dir",
 	ListDirectories: "fs:list-directories",
@@ -29,7 +29,7 @@ const C = {
 
 const api: ElectronApi = {
 	platform: process.platform,
-	getAppVersion: () => ipcRenderer.invoke(C.GetAppVersion),
+	getAppInfo: () => ipcRenderer.invoke(C.GetAppInfo),
 	setTheme: (mode) => ipcRenderer.invoke(C.SetTheme, mode),
 	getHomeDir: () => ipcRenderer.invoke(C.GetHomeDir),
 	listDirectories: (dir, showHidden) => ipcRenderer.invoke(C.ListDirectories, dir, showHidden),

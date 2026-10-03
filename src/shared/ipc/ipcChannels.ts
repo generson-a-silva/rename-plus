@@ -1,6 +1,6 @@
 /** Canais IPC compartilhados entre main, preload e renderer. */
 export const IpcChannel = {
-	GetAppVersion: "app:get-version",
+	GetAppInfo: "app:get-info",
 	SetTheme: "app:set-theme",
 	GetHomeDir: "fs:get-home-dir",
 	ListDirectories: "fs:list-directories",

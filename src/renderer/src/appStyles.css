@@ -782,6 +782,7 @@ button.header-cell:hover {
 	padding-left: 12px;
 	border-left: 1px solid var(--border);
 	font-variant-numeric: tabular-nums;
+	cursor: pointer;
 }
 
 .status-message + .status-version {

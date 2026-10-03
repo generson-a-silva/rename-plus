@@ -1,7 +1,8 @@
 import os from "node:os";
-import { app, BrowserWindow, dialog, ipcMain } from "electron";
+import { BrowserWindow, dialog, ipcMain } from "electron";
 import type { ConfirmRequest, ContextMenuItem, ListOptions, RenameOperation } from "../shared/ipc";
 import { IpcChannel } from "../shared/ipc";
+import { getAppInfo } from "./appInfo";
 import { canUndo, renameBatch, undoLastBatch } from "./batchRenamer";
 import { listDirectories, listEntries, listRoots, resolveDirectory } from "./fileSystemService";
 import { copyItems, createFolder, deleteItems, moveItems } from "./fileTransferService";
@@ -15,7 +16,7 @@ import {
 import { setTheme } from "./themeSettings";
 
 export function registerIpcHandlers(): void {
-	ipcMain.handle(IpcChannel.GetAppVersion, () => app.getVersion());
+	ipcMain.handle(IpcChannel.GetAppInfo, () => getAppInfo());
 	ipcMain.handle(IpcChannel.SetTheme, (_event, mode: unknown) => setTheme(mode));
 	ipcMain.handle(IpcChannel.GetHomeDir, () => os.homedir());
 

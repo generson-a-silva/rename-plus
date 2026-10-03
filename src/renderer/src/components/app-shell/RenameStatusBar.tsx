@@ -1,4 +1,5 @@
 import { pluralize } from "@lib";
+import type { AppInfo } from "@shared/ipc";
 
 export interface StatusMessage {
 	kind: "info" | "success" | "error";
@@ -12,8 +13,14 @@ interface RenameStatusBarProps {
 	errors: number;
 	truncated: boolean;
 	message: StatusMessage | null;
-	/** Versão do app, exibida no canto direito ("" enquanto não carregou). */
-	appVersion: string;
+	/** Nome, versão e autor do app (`null` enquanto não carregou). */
+	appInfo: AppInfo | null;
+}
+
+/** Dica exibida ao passar o mouse sobre a versão. */
+function versionTooltip({ productName, version, author }: AppInfo): string {
+	const title = `${productName} ${version}`;
+	return author ? `${title}\nDesenvolvido por ${author}` : title;
 }
 
 /**
@@ -27,7 +34,7 @@ export function RenameStatusBar({
 	errors,
 	truncated,
 	message,
-	appVersion,
+	appInfo,
 }: RenameStatusBarProps) {
 	return (
 		<footer className="status-bar">
@@ -45,9 +52,9 @@ export function RenameStatusBar({
 					{message.text}
 				</span>
 			)}
-			{appVersion && (
-				<span className="status-version" title="Versão do Rename Plus">
-					v{appVersion}
+			{appInfo && (
+				<span className="status-version" title={versionTooltip(appInfo)}>
+					v{appInfo.version}
 				</span>
 			)}
 		</footer>

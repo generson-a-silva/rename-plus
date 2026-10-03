@@ -1,3 +1,4 @@
+export type { AppInfo } from "./appInfoTypes";
 export type { RenameFailure, RenameOperation, RenameResult } from "./batchRenameTypes";
 export type { ContextMenuItem } from "./contextMenuTypes";
 export type { ConfirmRequest } from "./dialogTypes";

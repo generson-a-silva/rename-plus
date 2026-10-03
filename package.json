@@ -2,6 +2,9 @@
 	"name": "rename-plus",
 	"version": "1.1.0",
 	"description": "Renomeador de arquivos e pastas em lote",
+	"author": {
+		"name": "Generson Silva"
+	},
 	"main": "build-electron/main/mainProcess.js",
 	"desktopName": "rename-plus.desktop",
 	"scripts": {
@@ -45,6 +48,7 @@
 	"build": {
 		"appId": "com.renameplus.app",
 		"productName": "Rename Plus",
+		"copyright": "Copyright © 2026 Generson Silva",
 		"artifactName": "${name}-${version}-${os}-${arch}.${ext}",
 		"directories": {
 			"output": "build",
@@ -84,11 +88,12 @@
 		"nsis": {
 			"artifactName": "${name}-${version}-${os}-${arch}.${ext}",
 			"oneClick": false,
-			"perMachine": false,
+			"perMachine": true,
 			"allowToChangeInstallationDirectory": true,
 			"createDesktopShortcut": true,
 			"createStartMenuShortcut": true,
-			"shortcutName": "Rename Plus"
+			"shortcutName": "Rename Plus",
+			"uninstallDisplayName": "Rename Plus"
 		},
 		"mac": {
 			"target": [

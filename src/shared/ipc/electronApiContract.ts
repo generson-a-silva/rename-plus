@@ -1,3 +1,4 @@
+import type { AppInfo } from "./appInfoTypes";
 import type { RenameOperation, RenameResult } from "./batchRenameTypes";
 import type { ContextMenuItem } from "./contextMenuTypes";
 import type { ConfirmRequest } from "./dialogTypes";
@@ -8,7 +9,7 @@ import type { ThemeMode } from "./themeModes";
 /** API exposta ao renderer via `contextBridge` (disponível em `window.api`). */
 export interface ElectronApi {
 	platform: string;
-	getAppVersion: () => Promise<string>;
+	getAppInfo: () => Promise<AppInfo>;
 	setTheme: (mode: ThemeMode) => Promise<void>;
 	getHomeDir: () => Promise<string>;
 	listDirectories: (dir: string, showHidden: boolean) => Promise<DirEntry[]>;
