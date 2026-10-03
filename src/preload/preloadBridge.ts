@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from "electron";
+import { contextBridge, ipcRenderer, webUtils } from "electron";
 import type { ElectronApi, IpcChannel } from "../shared/ipc";
 
 // Preload roda em sandbox: só pode importar "electron" em runtime. Por isso os
@@ -47,6 +47,8 @@ const api: ElectronApi = {
 	openPath: (path) => ipcRenderer.invoke(C.OpenPath, path),
 	showInFolder: (path) => ipcRenderer.invoke(C.ShowInFolder, path),
 	copyText: (text) => ipcRenderer.invoke(C.CopyText, text),
+	// `File.path` não existe mais no Electron; o caminho só pode ser obtido aqui no preload.
+	getPathForFile: (file) => webUtils.getPathForFile(file),
 	trashItems: (paths) => ipcRenderer.invoke(C.TrashItems, paths),
 	deleteItems: (paths) => ipcRenderer.invoke(C.DeleteItems, paths),
 	createFolder: (parentDir, name) => ipcRenderer.invoke(C.CreateFolder, parentDir, name),

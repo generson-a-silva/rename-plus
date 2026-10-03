@@ -41,6 +41,12 @@ function createWindow(): void {
 	});
 	trackWindowState(win, state);
 
+	// Soltar um arquivo fora das áreas tratadas faria a janela navegar até ele, trocando o
+	// app pelo arquivo. A interface já impede isso; aqui fica a garantia (recarregar continua valendo).
+	win.webContents.on("will-navigate", (event, url) => {
+		if (url !== win.webContents.getURL()) event.preventDefault();
+	});
+
 	// Links externos abrem no navegador padrão, nunca dentro do app.
 	win.webContents.setWindowOpenHandler(({ url }) => {
 		void shell.openExternal(url);

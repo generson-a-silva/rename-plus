@@ -213,6 +213,10 @@ export const es: Messages = {
 	"undo.confirm": "¿Deshacer el último renombrado?",
 	"undo.done": { one: "{count} elemento restaurado.", other: "{count} elementos restaurados." },
 	"navigation.notFound": "Carpeta no encontrada: {path}",
+	"drop.title": "Suelta para abrir",
+	"drop.hint":
+		"Las carpetas se abren directamente; los archivos abren su carpeta, ya seleccionados.",
+	"drop.failed": "No se pudo abrir el elemento arrastrado.",
 
 	// ---- Menús contextuales ---------------------------------------------
 	"menu.open": "Abrir",

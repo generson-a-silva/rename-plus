@@ -1,5 +1,6 @@
 export { useElementHeight } from "./useElementHeight";
 export { useFileCommands } from "./useFileCommands";
+export { useFileDrop } from "./useFileDrop";
 export {
 	type FileChange,
 	type FileClipboard,

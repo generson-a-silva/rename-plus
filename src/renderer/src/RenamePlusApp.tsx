@@ -1,4 +1,5 @@
 import {
+	DropOverlay,
 	FileListView,
 	FolderTreeView,
 	NavigationToolbar,
@@ -12,6 +13,7 @@ import {
 	type FileChange,
 	useElementHeight,
 	useFileCommands,
+	useFileDrop,
 	useFileOperations,
 	useFolderTreeState,
 	useI18n,
@@ -197,6 +199,34 @@ export function RenamePlusApp() {
 		[currentDir, home, setCurrentDir, t],
 	);
 
+	/**
+	 * Arrastar e soltar: uma pasta sozinha é aberta; arquivos (ou vários itens) abrem
+	 * a pasta onde estão, já selecionados.
+	 */
+	const openDroppedPaths = useCallback(
+		async (paths: string[]) => {
+			const [first] = paths;
+			if (!first) return;
+			const droppedFolder = paths.length === 1 ? await window.api.resolveDirectory(first) : null;
+			if (droppedFolder) {
+				await navigate(droppedFolder);
+				return;
+			}
+			const parent = await window.api.resolveDirectory(parentPath(first));
+			if (!parent) {
+				setMessage({ kind: "error", text: t("drop.failed") });
+				return;
+			}
+			const siblings = paths.filter((path) =>
+				platformPaths.equals(parentPath(path), parentPath(first)),
+			);
+			await navigate(parent);
+			// Monta os caminhos a partir da pasta canônica, igual aos da listagem.
+			setSelection(new Set(siblings.map((path) => joinPath(parent, baseName(path)))));
+		},
+		[navigate, t],
+	);
+
 	const refresh = useCallback(() => {
 		if (!currentDir) return;
 		void loadListing(currentDir);
@@ -367,6 +397,11 @@ export function RenamePlusApp() {
 	});
 
 	const rootPaths = useMemo(() => roots.map((root) => root.path), [roots]);
+	const draggingFiles = useFileDrop({
+		onDrop: openDroppedPaths,
+		enabled: prompt.request === null,
+	});
+
 	const commands = useFileCommands({
 		currentDir,
 		visibleEntries,
@@ -502,6 +537,7 @@ export function RenamePlusApp() {
 				message={message}
 			/>
 			<TextPromptDialog request={prompt.request} onClose={prompt.close} />
+			{draggingFiles && <DropOverlay />}
 		</div>
 	);
 }

@@ -955,3 +955,41 @@ button.header-cell:hover {
 	justify-content: flex-end;
 	gap: 8px;
 }
+
+/* ---- Arrastar e soltar ------------------------------------------------ */
+
+.drop-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 30;
+	display: grid;
+	place-items: center;
+	padding: 24px;
+	border: 3px dashed var(--accent);
+	background: color-mix(in srgb, var(--bg) 78%, transparent);
+	/* Só visual: os eventos de arrasto continuam chegando à janela. */
+	pointer-events: none;
+}
+
+.drop-overlay-card {
+	display: grid;
+	justify-items: center;
+	gap: 8px;
+	max-width: 420px;
+	padding: 24px 28px;
+	border: 1px solid var(--border-strong);
+	border-radius: 12px;
+	background: var(--surface);
+	box-shadow: 0 12px 40px rgb(0 0 0 / 0.25);
+	color: var(--muted);
+	text-align: center;
+}
+
+.drop-overlay-card .icon {
+	color: var(--accent);
+}
+
+.drop-overlay-card strong {
+	color: var(--fg);
+	font-size: 16px;
+}

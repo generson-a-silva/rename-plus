@@ -213,6 +213,9 @@ export const en: Messages = {
 	"undo.confirm": "Undo the last rename?",
 	"undo.done": { one: "{count} item restored.", other: "{count} items restored." },
 	"navigation.notFound": "Folder not found: {path}",
+	"drop.title": "Drop to open",
+	"drop.hint": "Folders open directly; files open their folder, already selected.",
+	"drop.failed": "Could not open the dropped item.",
 
 	// ---- Context menus --------------------------------------------------
 	"menu.open": "Open",

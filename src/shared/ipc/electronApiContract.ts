@@ -32,6 +32,11 @@ export interface ElectronApi {
 	/** Abre o gerenciador de arquivos com o item selecionado. */
 	showInFolder: (path: string) => Promise<void>;
 	copyText: (text: string) => Promise<void>;
+	/**
+	 * Caminho no disco de um arquivo/pasta solto na janela (arrastar e soltar).
+	 * Síncrono e resolvido no preload (`webUtils`); "" se não vier do disco.
+	 */
+	getPathForFile: (file: File) => string;
 	/** Move para a lixeira. Falhas com `trashUnavailable` indicam disco sem lixeira. */
 	trashItems: (paths: string[]) => Promise<FileOperationResult>;
 	/** Exclui permanentemente (sem lixeira). Só usar após confirmação explícita. */

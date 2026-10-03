@@ -219,6 +219,9 @@ export const ptBr = {
 	"undo.confirm": "Desfazer a última renomeação?",
 	"undo.done": { one: "{count} item restaurado.", other: "{count} itens restaurados." },
 	"navigation.notFound": "Pasta não encontrada: {path}",
+	"drop.title": "Solte para abrir",
+	"drop.hint": "Pastas abrem diretamente; arquivos abrem a pasta onde estão, já selecionados.",
+	"drop.failed": "Não foi possível abrir o item arrastado.",
 
 	// ---- Menus de contexto ----------------------------------------------
 	"menu.open": "Abrir",
