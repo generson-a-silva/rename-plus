@@ -93,7 +93,12 @@
 			"createDesktopShortcut": true,
 			"createStartMenuShortcut": true,
 			"shortcutName": "Rename Plus",
-			"uninstallDisplayName": "Rename Plus"
+			"uninstallDisplayName": "Rename Plus",
+			"installerLanguages": [
+				"pt_BR",
+				"en_US",
+				"es_ES"
+			]
 		},
 		"mac": {
 			"target": [

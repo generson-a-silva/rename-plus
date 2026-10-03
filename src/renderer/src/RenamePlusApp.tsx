@@ -5,6 +5,7 @@ import {
 	NavigationToolbar,
 	RenameOptionsPanels,
 	RenameStatusBar,
+	SettingsDialog,
 	type StatusMessage,
 	TextPromptDialog,
 	type TreeRoot,
@@ -44,6 +45,7 @@ import type {
 	AppInfo,
 	FileEntry,
 	FileSystemRoot,
+	LaunchMode,
 	RenameOperation,
 	RenameResult,
 } from "@shared/ipc";
@@ -104,6 +106,9 @@ export function RenamePlusApp() {
 	const [message, setMessage] = useState<StatusMessage | null>(null);
 	const [busy, setBusy] = useState(false);
 	const [canUndo, setCanUndo] = useState(false);
+	const [settingsOpen, setSettingsOpen] = useState(false);
+	/** A pasta inicial já foi definida: a partir daí, pedidos de fora podem trocá-la. */
+	const [initialized, setInitialized] = useState(false);
 
 	const { t, tr } = useI18n();
 	const theme = useThemeMode();
@@ -131,6 +136,7 @@ export function RenamePlusApp() {
 			const last = currentDirRef.current;
 			const resolved = last ? await window.api.resolveDirectory(last) : null;
 			setCurrentDir(resolved ?? homeDir);
+			setInitialized(true);
 		})();
 	}, [setCurrentDir]);
 
@@ -200,32 +206,67 @@ export function RenamePlusApp() {
 	);
 
 	/**
-	 * Arrastar e soltar: uma pasta sozinha é aberta; arquivos (ou vários itens) abrem
-	 * a pasta onde estão, já selecionados.
+	 * Abre itens vindos de fora (arrastar e soltar, menu de contexto do sistema).
+	 * `open` com uma pasta entra nela; nos demais casos, abre a pasta onde os itens
+	 * estão, com eles selecionados. Itens de outras pastas são ignorados.
 	 */
-	const openDroppedPaths = useCallback(
-		async (paths: string[]) => {
+	const openPaths = useCallback(
+		async (paths: string[], mode: LaunchMode) => {
 			const [first] = paths;
 			if (!first) return;
-			const droppedFolder = paths.length === 1 ? await window.api.resolveDirectory(first) : null;
-			if (droppedFolder) {
-				await navigate(droppedFolder);
-				return;
+			if (mode === "open" && paths.length === 1) {
+				const folder = await window.api.resolveDirectory(first);
+				if (folder) {
+					await navigate(folder);
+					return;
+				}
 			}
 			const parent = await window.api.resolveDirectory(parentPath(first));
 			if (!parent) {
-				setMessage({ kind: "error", text: t("drop.failed") });
+				setMessage({ kind: "error", text: t("launch.failed") });
 				return;
 			}
-			const siblings = paths.filter((path) =>
-				platformPaths.equals(parentPath(path), parentPath(first)),
-			);
-			await navigate(parent);
 			// Monta os caminhos a partir da pasta canônica, igual aos da listagem.
-			setSelection(new Set(siblings.map((path) => joinPath(parent, baseName(path)))));
+			const selected = paths
+				.filter((path) => platformPaths.equals(parentPath(path), parentPath(first)))
+				.map((path) => joinPath(parent, baseName(path)));
+
+			// Liga os filtros que esconderiam itens pedidos (pastas, ocultos com ponto).
+			const hasFolder = (
+				await Promise.all(selected.map((path) => window.api.resolveDirectory(path)))
+			).some(Boolean);
+			const hasDotFile =
+				window.api.platform !== "win32" && selected.some((path) => baseName(path).startsWith("."));
+			if ((hasFolder && !filters.folders) || (hasDotFile && !filters.hidden)) {
+				setFilters((prev) => ({
+					...prev,
+					folders: prev.folders || hasFolder,
+					hidden: prev.hidden || hasDotFile,
+				}));
+			}
+			await navigate(parent);
+			setSelection(new Set(selected));
 		},
-		[navigate, t],
+		[filters.folders, filters.hidden, navigate, setFilters, t],
 	);
+
+	const openDroppedPaths = useCallback((paths: string[]) => openPaths(paths, "open"), [openPaths]);
+
+	// Itens do menu de contexto do sistema / linha de comando: os que abriram o app e os
+	// que chegam com ele aberto. Espera a pasta inicial para não ser sobrescrito por ela.
+	const openPathsRef = useRef(openPaths);
+	openPathsRef.current = openPaths;
+	useEffect(() => {
+		if (!initialized) return;
+		const unsubscribe = window.api.onLaunchRequest(
+			(request) => void openPathsRef.current(request.paths, request.mode),
+		);
+		void window.api.takeLaunchRequests().then((requests) => {
+			const last = requests.at(-1);
+			if (last) void openPathsRef.current(last.paths, last.mode);
+		});
+		return unsubscribe;
+	}, [initialized]);
 
 	const refresh = useCallback(() => {
 		if (!currentDir) return;
@@ -399,7 +440,7 @@ export function RenamePlusApp() {
 	const rootPaths = useMemo(() => roots.map((root) => root.path), [roots]);
 	const draggingFiles = useFileDrop({
 		onDrop: openDroppedPaths,
-		enabled: prompt.request === null,
+		enabled: prompt.request === null && !settingsOpen,
 	});
 
 	const commands = useFileCommands({
@@ -415,7 +456,7 @@ export function RenamePlusApp() {
 		refresh,
 		refreshFolder,
 		operations,
-		shortcutsEnabled: prompt.request === null,
+		shortcutsEnabled: prompt.request === null && !settingsOpen,
 	});
 
 	// --- Layout --------------------------------------------------------------
@@ -461,8 +502,7 @@ export function RenamePlusApp() {
 				onSelectNone={() => setSelection(new Set())}
 				showHidden={filters.hidden}
 				onToggleHidden={toggleHidden}
-				theme={theme.mode}
-				onCycleTheme={theme.cycle}
+				onOpenSettings={() => setSettingsOpen(true)}
 				onInvert={() =>
 					setSelection(
 						new Set(visibleEntries.filter((e) => !selection.has(e.path)).map((e) => e.path)),
@@ -537,6 +577,12 @@ export function RenamePlusApp() {
 				message={message}
 			/>
 			<TextPromptDialog request={prompt.request} onClose={prompt.close} />
+			<SettingsDialog
+				open={settingsOpen}
+				onClose={() => setSettingsOpen(false)}
+				theme={theme.mode}
+				onThemeChange={theme.setMode}
+			/>
 			{draggingFiles && <DropOverlay />}
 		</div>
 	);

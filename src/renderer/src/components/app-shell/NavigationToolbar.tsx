@@ -1,8 +1,6 @@
 import { AppIcon, type AppIconName } from "@components/common";
 import { useI18n } from "@hooks";
 import { isRootPath } from "@lib";
-import type { MessageKey } from "@shared/i18n";
-import type { ThemeMode } from "@shared/ipc";
 import { useEffect, useState } from "react";
 
 interface NavigationToolbarProps {
@@ -15,17 +13,10 @@ interface NavigationToolbarProps {
 	onSelectAll: () => void;
 	onSelectNone: () => void;
 	onInvert: () => void;
-	theme: ThemeMode;
 	showHidden: boolean;
 	onToggleHidden: () => void;
-	onCycleTheme: () => void;
+	onOpenSettings: () => void;
 }
-
-const THEME_BUTTON: Record<ThemeMode, { icon: AppIconName; labelKey: MessageKey }> = {
-	system: { icon: "monitor", labelKey: "toolbar.themeSystem" },
-	light: { icon: "sun", labelKey: "toolbar.themeLight" },
-	dark: { icon: "moon", labelKey: "toolbar.themeDark" },
-};
 
 function ToolButton(props: {
 	icon: AppIconName;
@@ -50,7 +41,7 @@ function ToolButton(props: {
 	);
 }
 
-/** Barra superior: navegação entre pastas, seleção em massa, itens ocultos e tema. */
+/** Barra superior: navegação entre pastas, seleção em massa, itens ocultos e configurações. */
 export function NavigationToolbar(props: NavigationToolbarProps) {
 	const { currentDir } = props;
 	const { t } = useI18n();
@@ -111,11 +102,7 @@ export function NavigationToolbar(props: NavigationToolbarProps) {
 					pressed={props.showHidden}
 					onClick={props.onToggleHidden}
 				/>
-				<ToolButton
-					icon={THEME_BUTTON[props.theme].icon}
-					label={t(THEME_BUTTON[props.theme].labelKey)}
-					onClick={props.onCycleTheme}
-				/>
+				<ToolButton icon="settings" label={t("settings.button")} onClick={props.onOpenSettings} />
 			</div>
 		</header>
 	);

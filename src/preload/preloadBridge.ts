@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer, webUtils } from "electron";
-import type { ElectronApi, IpcChannel } from "../shared/ipc";
+import type { ElectronApi, IpcChannel, LaunchRequest } from "../shared/ipc";
 
 // Preload roda em sandbox: só pode importar "electron" em runtime. Por isso os
 // canais são repetidos aqui; o `satisfies` garante que batem com ../shared/ipc/ipcChannels.ts.
@@ -26,6 +26,10 @@ const C = {
 	CreateFolder: "file:create-folder",
 	CopyItems: "file:copy-items",
 	MoveItems: "file:move-items",
+	GetShellIntegration: "integration:get",
+	SetShellIntegration: "integration:set",
+	TakeLaunchRequests: "launch:take",
+	LaunchRequest: "launch:request",
 } as const satisfies typeof IpcChannel;
 
 const api: ElectronApi = {
@@ -54,6 +58,18 @@ const api: ElectronApi = {
 	createFolder: (parentDir, name) => ipcRenderer.invoke(C.CreateFolder, parentDir, name),
 	copyItems: (paths, targetDir) => ipcRenderer.invoke(C.CopyItems, paths, targetDir),
 	moveItems: (paths, targetDir) => ipcRenderer.invoke(C.MoveItems, paths, targetDir),
+	getShellIntegration: () => ipcRenderer.invoke(C.GetShellIntegration),
+	setShellIntegration: (targetId, enabled) =>
+		ipcRenderer.invoke(C.SetShellIntegration, targetId, enabled),
+	takeLaunchRequests: () => ipcRenderer.invoke(C.TakeLaunchRequests),
+	onLaunchRequest: (listener) => {
+		const handler = (_event: Electron.IpcRendererEvent, request: LaunchRequest) =>
+			listener(request);
+		ipcRenderer.on(C.LaunchRequest, handler);
+		return () => {
+			ipcRenderer.removeListener(C.LaunchRequest, handler);
+		};
+	},
 };
 
 contextBridge.exposeInMainWorld("api", api);

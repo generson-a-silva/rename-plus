@@ -5,6 +5,11 @@ import type { ContextMenuItem } from "./contextMenuTypes";
 import type { ConfirmRequest } from "./dialogTypes";
 import type { FileOperationResult } from "./fileOperationTypes";
 import type { DirEntry, FileSystemRoot, ListOptions, ListResult } from "./fileSystemTypes";
+import type {
+	LaunchRequest,
+	ShellIntegrationInfo,
+	ShellIntegrationUpdate,
+} from "./shellIntegrationTypes";
 import type { ThemeMode } from "./themeModes";
 
 /** API exposta ao renderer via `contextBridge` (disponível em `window.api`). */
@@ -45,4 +50,15 @@ export interface ElectronApi {
 	/** Copia para `targetDir`; nomes repetidos ganham sufixo " (2)", " (3)"… */
 	copyItems: (paths: string[], targetDir: string) => Promise<FileOperationResult>;
 	moveItems: (paths: string[], targetDir: string) => Promise<FileOperationResult>;
+	/** Ambiente e situação das entradas no menu de contexto dos gerenciadores de arquivos. */
+	getShellIntegration: () => Promise<ShellIntegrationInfo>;
+	/** Adiciona (`true`) ou remove as entradas de um gerenciador de arquivos. */
+	setShellIntegration: (targetId: string, enabled: boolean) => Promise<ShellIntegrationUpdate>;
+	/**
+	 * Itens pedidos antes de a interface ficar pronta (ex.: o app foi aberto pelo menu
+	 * de contexto). Depois disso, chegam por `onLaunchRequest`.
+	 */
+	takeLaunchRequests: () => Promise<LaunchRequest[]>;
+	/** Itens a abrir enviados com o app já aberto. Devolve a função que cancela a inscrição. */
+	onLaunchRequest: (listener: (request: LaunchRequest) => void) => () => void;
 }

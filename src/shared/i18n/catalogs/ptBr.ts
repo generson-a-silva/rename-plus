@@ -15,6 +15,54 @@ export const ptBr = {
 	"language.button": "Idioma: {language}",
 	"language.menu": "Idioma da interface",
 
+	// ---- Configurações --------------------------------------------------
+	"settings.button": "Configurações",
+	"settings.title": "Configurações",
+	"settings.close": "Fechar",
+	"settings.appearance": "Aparência",
+	"settings.appearanceHint":
+		"Cores da interface. “Sistema” acompanha o tema claro/escuro do sistema operacional.",
+	"theme.label": "Tema",
+	"theme.system": "Sistema",
+	"theme.light": "Claro",
+	"theme.dark": "Escuro",
+
+	// ---- Menu de contexto do sistema ------------------------------------
+	"shellMenu.open": "Abrir no Rename Plus",
+	"shellMenu.select": "Abrir selecionados no Rename Plus",
+	"integration.title": "Menu de contexto do sistema",
+	"integration.description": "Opções no menu do botão direito do gerenciador de arquivos:",
+	"integration.openItem": "abre a pasta, ou a pasta do arquivo com ele já selecionado.",
+	"integration.selectItem": "abre a pasta com todos os itens selecionados.",
+	"integration.loading": "Verificando…",
+	"integration.recommended": "Padrão do sistema",
+	"integration.notDetected": "Não encontrado",
+	"integration.statusInstalled": "Adicionado",
+	"integration.statusOutdated": "Desatualizado",
+	"integration.statusAbsent": "Não adicionado",
+	"integration.statusSystem": "Adicionado pelo instalador",
+	"integration.systemHint":
+		"O instalador adicionou as opções para todos os usuários. Para removê-las, reinstale o Rename Plus desmarcando a opção.",
+	"integration.add": "Adicionar",
+	"integration.remove": "Remover",
+	"integration.update": "Atualizar",
+	"integration.othersTitle": "Outros gerenciadores de arquivos",
+	"integration.othersHint": "Não encontrados neste sistema. Adicione apenas se for instalá-los.",
+	"integration.locations": "Criados em",
+	"integration.added": "Opções adicionadas ao menu de contexto ({name}).",
+	"integration.removed": "Opções removidas do menu de contexto ({name}).",
+	"integration.failed": "Não foi possível alterar o menu de contexto: {detail}",
+	"integration.noteScripts": "Aparecem no submenu “Scripts” do menu de contexto.",
+	"integration.noteThunar":
+		"Ficam em Editar › Configurar ações personalizadas; pode ser preciso reabrir o Thunar.",
+	"integration.noteWindows11": "No Windows 11, ficam em “Mostrar mais opções” (Shift+F10).",
+	"integration.explorer": "Explorador de Arquivos",
+	"integration.warningAppImage":
+		"As opções apontam para este AppImage. Se ele mudar de lugar ou de versão, abra o app uma vez para corrigi-las; antes de apagá-lo, remova-as aqui.",
+	"integration.warningDevelopment": "Modo de desenvolvimento: as opções vão executar {command}",
+	"integration.unsupported":
+		"O menu de contexto do sistema ainda não é suportado nesta plataforma.",
+
 	// ---- Árvore e raízes ------------------------------------------------
 	"roots.home": "Pasta pessoal",
 	"roots.filesystem": "Sistema de arquivos",
@@ -35,9 +83,6 @@ export const ptBr = {
 	"toolbar.invert": "Inverter seleção",
 	"toolbar.showHidden": "Mostrar itens ocultos (Ctrl+H)",
 	"toolbar.hideHidden": "Ocultar itens ocultos (Ctrl+H)",
-	"toolbar.themeSystem": "Tema: sistema (clique para claro)",
-	"toolbar.themeLight": "Tema: claro (clique para escuro)",
-	"toolbar.themeDark": "Tema: escuro (clique para seguir o sistema)",
 
 	// ---- Lista de arquivos ----------------------------------------------
 	"list.label": "Arquivos",
@@ -222,6 +267,7 @@ export const ptBr = {
 	"drop.title": "Solte para abrir",
 	"drop.hint": "Pastas abrem diretamente; arquivos abrem a pasta onde estão, já selecionados.",
 	"drop.failed": "Não foi possível abrir o item arrastado.",
+	"launch.failed": "Não foi possível abrir os itens recebidos.",
 
 	// ---- Menus de contexto ----------------------------------------------
 	"menu.open": "Abrir",

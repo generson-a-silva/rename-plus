@@ -1,5 +1,5 @@
 import { THEME_MODES, type ThemeMode } from "@shared/ipc";
-import { useCallback, useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import { usePersistentState } from "./usePersistentState";
 
 /**
@@ -17,12 +17,5 @@ export function useThemeMode() {
 		void window.api.setTheme(mode);
 	}, [mode]);
 
-	const cycle = useCallback(() => {
-		setMode((current) => {
-			const index = THEME_MODES.indexOf(current);
-			return THEME_MODES[(index + 1) % THEME_MODES.length] ?? "system";
-		});
-	}, [setMode]);
-
-	return { mode, cycle };
+	return { mode, setMode };
 }

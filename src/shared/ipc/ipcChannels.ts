@@ -22,6 +22,11 @@ export const IpcChannel = {
 	CreateFolder: "file:create-folder",
 	CopyItems: "file:copy-items",
 	MoveItems: "file:move-items",
+	GetShellIntegration: "integration:get",
+	SetShellIntegration: "integration:set",
+	TakeLaunchRequests: "launch:take",
+	/** Evento main → renderer: itens a abrir (menu de contexto do sistema, linha de comando). */
+	LaunchRequest: "launch:request",
 } as const;
 
 export type IpcChannel = (typeof IpcChannel)[keyof typeof IpcChannel];

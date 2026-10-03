@@ -9,6 +9,54 @@ export const es: Messages = {
 	"language.button": "Idioma: {language}",
 	"language.menu": "Idioma de la interfaz",
 
+	// ---- Configuración --------------------------------------------------
+	"settings.button": "Configuración",
+	"settings.title": "Configuración",
+	"settings.close": "Cerrar",
+	"settings.appearance": "Apariencia",
+	"settings.appearanceHint":
+		"Colores de la interfaz. «Sistema» sigue el tema claro/oscuro del sistema operativo.",
+	"theme.label": "Tema",
+	"theme.system": "Sistema",
+	"theme.light": "Claro",
+	"theme.dark": "Oscuro",
+
+	// ---- Menú contextual del sistema ------------------------------------
+	"shellMenu.open": "Abrir en Rename Plus",
+	"shellMenu.select": "Abrir seleccionados en Rename Plus",
+	"integration.title": "Menú contextual del sistema",
+	"integration.description": "Opciones en el menú del clic derecho del gestor de archivos:",
+	"integration.openItem": "abre la carpeta, o la carpeta del archivo con él ya seleccionado.",
+	"integration.selectItem": "abre la carpeta con todos los elementos seleccionados.",
+	"integration.loading": "Comprobando…",
+	"integration.recommended": "Predeterminado del sistema",
+	"integration.notDetected": "No encontrado",
+	"integration.statusInstalled": "Añadido",
+	"integration.statusOutdated": "Desactualizado",
+	"integration.statusAbsent": "No añadido",
+	"integration.statusSystem": "Añadido por el instalador",
+	"integration.systemHint":
+		"El instalador añadió las opciones para todos los usuarios. Para quitarlas, reinstale Rename Plus desmarcando la opción.",
+	"integration.add": "Añadir",
+	"integration.remove": "Quitar",
+	"integration.update": "Actualizar",
+	"integration.othersTitle": "Otros gestores de archivos",
+	"integration.othersHint": "No encontrados en este sistema. Añádalos solo si va a instalarlos.",
+	"integration.locations": "Creados en",
+	"integration.added": "Opciones añadidas al menú contextual ({name}).",
+	"integration.removed": "Opciones quitadas del menú contextual ({name}).",
+	"integration.failed": "No se pudo cambiar el menú contextual: {detail}",
+	"integration.noteScripts": "Aparecen en el submenú «Scripts» del menú contextual.",
+	"integration.noteThunar":
+		"Están en Editar › Configurar acciones personalizadas; puede que haya que reabrir Thunar.",
+	"integration.noteWindows11": "En Windows 11, están en «Mostrar más opciones» (Mayús+F10).",
+	"integration.explorer": "Explorador de archivos",
+	"integration.warningAppImage":
+		"Las opciones apuntan a este AppImage. Si cambia de lugar o de versión, abra la app una vez para corregirlas; antes de borrarlo, quítelas aquí.",
+	"integration.warningDevelopment": "Modo de desarrollo: las opciones ejecutarán {command}",
+	"integration.unsupported":
+		"El menú contextual del sistema aún no es compatible con esta plataforma.",
+
 	// ---- Árbol y raíces -------------------------------------------------
 	"roots.home": "Carpeta personal",
 	"roots.filesystem": "Sistema de archivos",
@@ -29,9 +77,6 @@ export const es: Messages = {
 	"toolbar.invert": "Invertir selección",
 	"toolbar.showHidden": "Mostrar elementos ocultos (Ctrl+H)",
 	"toolbar.hideHidden": "Ocultar elementos ocultos (Ctrl+H)",
-	"toolbar.themeSystem": "Tema: sistema (clic para claro)",
-	"toolbar.themeLight": "Tema: claro (clic para oscuro)",
-	"toolbar.themeDark": "Tema: oscuro (clic para seguir al sistema)",
 
 	// ---- Lista de archivos ----------------------------------------------
 	"list.label": "Archivos",
@@ -217,6 +262,7 @@ export const es: Messages = {
 	"drop.hint":
 		"Las carpetas se abren directamente; los archivos abren su carpeta, ya seleccionados.",
 	"drop.failed": "No se pudo abrir el elemento arrastrado.",
+	"launch.failed": "No se pudieron abrir los elementos recibidos.",
 
 	// ---- Menús contextuales ---------------------------------------------
 	"menu.open": "Abrir",

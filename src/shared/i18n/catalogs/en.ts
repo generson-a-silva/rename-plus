@@ -9,6 +9,53 @@ export const en: Messages = {
 	"language.button": "Language: {language}",
 	"language.menu": "Interface language",
 
+	// ---- Settings -------------------------------------------------------
+	"settings.button": "Settings",
+	"settings.title": "Settings",
+	"settings.close": "Close",
+	"settings.appearance": "Appearance",
+	"settings.appearanceHint":
+		"Interface colors. “System” follows the operating system's light/dark theme.",
+	"theme.label": "Theme",
+	"theme.system": "System",
+	"theme.light": "Light",
+	"theme.dark": "Dark",
+
+	// ---- System context menu -------------------------------------------
+	"shellMenu.open": "Open in Rename Plus",
+	"shellMenu.select": "Open selected in Rename Plus",
+	"integration.title": "System context menu",
+	"integration.description": "Options in the file manager's right-click menu:",
+	"integration.openItem": "opens the folder, or the file's folder with the file already selected.",
+	"integration.selectItem": "opens the folder with all the items selected.",
+	"integration.loading": "Checking…",
+	"integration.recommended": "System default",
+	"integration.notDetected": "Not found",
+	"integration.statusInstalled": "Added",
+	"integration.statusOutdated": "Outdated",
+	"integration.statusAbsent": "Not added",
+	"integration.statusSystem": "Added by the installer",
+	"integration.systemHint":
+		"The installer added the options for all users. To remove them, reinstall Rename Plus with the option unchecked.",
+	"integration.add": "Add",
+	"integration.remove": "Remove",
+	"integration.update": "Update",
+	"integration.othersTitle": "Other file managers",
+	"integration.othersHint": "Not found on this system. Only add them if you plan to install them.",
+	"integration.locations": "Created at",
+	"integration.added": "Options added to the context menu ({name}).",
+	"integration.removed": "Options removed from the context menu ({name}).",
+	"integration.failed": "Could not change the context menu: {detail}",
+	"integration.noteScripts": "They appear in the “Scripts” submenu of the context menu.",
+	"integration.noteThunar":
+		"They are under Edit › Configure custom actions; Thunar may need to be reopened.",
+	"integration.noteWindows11": "On Windows 11, they are under “Show more options” (Shift+F10).",
+	"integration.explorer": "File Explorer",
+	"integration.warningAppImage":
+		"The options point to this AppImage. If it moves or is updated, open the app once to fix them; before deleting it, remove them here.",
+	"integration.warningDevelopment": "Development mode: the options will run {command}",
+	"integration.unsupported": "The system context menu is not supported on this platform yet.",
+
 	// ---- Tree and roots -------------------------------------------------
 	"roots.home": "Home folder",
 	"roots.filesystem": "File system",
@@ -29,9 +76,6 @@ export const en: Messages = {
 	"toolbar.invert": "Invert selection",
 	"toolbar.showHidden": "Show hidden items (Ctrl+H)",
 	"toolbar.hideHidden": "Hide hidden items (Ctrl+H)",
-	"toolbar.themeSystem": "Theme: system (click for light)",
-	"toolbar.themeLight": "Theme: light (click for dark)",
-	"toolbar.themeDark": "Theme: dark (click to follow the system)",
 
 	// ---- File list ------------------------------------------------------
 	"list.label": "Files",
@@ -216,6 +260,7 @@ export const en: Messages = {
 	"drop.title": "Drop to open",
 	"drop.hint": "Folders open directly; files open their folder, already selected.",
 	"drop.failed": "Could not open the dropped item.",
+	"launch.failed": "Could not open the received items.",
 
 	// ---- Context menus --------------------------------------------------
 	"menu.open": "Open",

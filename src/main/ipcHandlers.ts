@@ -6,6 +6,7 @@ import { getAppInfo } from "./appInfo";
 import { canUndo, renameBatch, undoLastBatch } from "./batchRenamer";
 import { listDirectories, listEntries, listRoots, resolveDirectory } from "./fileSystemService";
 import { copyItems, createFolder, deleteItems, moveItems } from "./fileTransferService";
+import { takeLaunchRequests } from "./launchRequestQueue";
 import { setMainLocale, tMain } from "./mainLocale";
 import {
 	copyText,
@@ -14,12 +15,21 @@ import {
 	showInFolder,
 	trashItems,
 } from "./nativeShellService";
+import {
+	getShellIntegrationInfo,
+	refreshContextMenuIntegrations,
+	setContextMenuIntegration,
+} from "./shell-integration";
 import { setTheme } from "./themeSettings";
 
 export function registerIpcHandlers(): void {
 	ipcMain.handle(IpcChannel.GetAppInfo, () => getAppInfo());
 	ipcMain.handle(IpcChannel.SetTheme, (_event, mode: unknown) => setTheme(mode));
-	ipcMain.handle(IpcChannel.SetLocale, (_event, locale: unknown) => setMainLocale(locale));
+	ipcMain.handle(IpcChannel.SetLocale, (_event, locale: unknown) => {
+		setMainLocale(locale);
+		// As entradas do menu de contexto do sistema seguem o idioma da interface.
+		void refreshContextMenuIntegrations();
+	});
 	ipcMain.handle(IpcChannel.GetHomeDir, () => os.homedir());
 
 	ipcMain.handle(IpcChannel.ListDirectories, (_event, dir: string, showHidden: boolean) =>
@@ -76,6 +86,12 @@ export function registerIpcHandlers(): void {
 	ipcMain.handle(IpcChannel.CopyItems, (_event, paths: string[], targetDir: string) =>
 		copyItems(paths, targetDir),
 	);
+	ipcMain.handle(IpcChannel.GetShellIntegration, () => getShellIntegrationInfo());
+	ipcMain.handle(IpcChannel.SetShellIntegration, (_event, targetId: string, enabled: boolean) =>
+		setContextMenuIntegration(targetId, enabled === true),
+	);
+	ipcMain.handle(IpcChannel.TakeLaunchRequests, (event) => takeLaunchRequests(event.sender));
+
 	ipcMain.handle(IpcChannel.MoveItems, (_event, paths: string[], targetDir: string) =>
 		moveItems(paths, targetDir),
 	);

@@ -12,4 +12,12 @@ export type {
 	ListResult,
 } from "./fileSystemTypes";
 export { IpcChannel } from "./ipcChannels";
+export type {
+	ContextMenuStatus,
+	ContextMenuTarget,
+	LaunchMode,
+	LaunchRequest,
+	ShellIntegrationInfo,
+	ShellIntegrationUpdate,
+} from "./shellIntegrationTypes";
 export { THEME_MODES, type ThemeMode } from "./themeModes";
