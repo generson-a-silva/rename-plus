@@ -1,0 +1,373 @@
+import {
+	FileListView,
+	FolderTreeView,
+	NavigationToolbar,
+	RenameOptionsPanels,
+	RenameStatusBar,
+	type StatusMessage,
+	type TreeRoot,
+} from "@components";
+import { useFolderTreeState, usePersistentState, useResizableSplitter, useThemeMode } from "@hooks";
+import {
+	baseName,
+	createMaskFilter,
+	DEFAULT_FILTERS,
+	DEFAULT_SORT,
+	describePreview,
+	describeRenameFailure,
+	joinPath,
+	type ListFilters,
+	normalizeTypedPath,
+	parentPath,
+	pluralize,
+	type SortState,
+	sortEntries,
+	toListOptions,
+	treeRootFor,
+} from "@lib";
+import type { FileEntry, RenameOperation, RenameResult } from "@shared/ipc";
+import {
+	buildPreview,
+	createDefaultOptions,
+	type RenameOptions,
+	type RenameSection,
+} from "@shared/rename";
+import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+
+interface Listing {
+	entries: FileEntry[];
+	truncated: boolean;
+	loading: boolean;
+	error: string | null;
+}
+
+const EMPTY_LISTING: Listing = { entries: [], truncated: false, loading: false, error: null };
+
+/** Janela principal: árvore de pastas, lista de arquivos, painéis de opções e barra de status. */
+export function RenamePlusApp() {
+	const [home, setHome] = useState<string | null>(null);
+	const [currentDir, setCurrentDir] = usePersistentState<string>("lastDir", "");
+	const [filters, setFilters] = usePersistentState<ListFilters>("filters", DEFAULT_FILTERS);
+	const [options, setOptions] = usePersistentState<RenameOptions>(
+		"options",
+		createDefaultOptions(),
+	);
+	const [sort, setSort] = usePersistentState<SortState>("sort", DEFAULT_SORT);
+	const [layout, setLayout] = usePersistentState("layout", { treeWidth: 260, panelsHeight: 340 });
+
+	const [listing, setListing] = useState<Listing>(EMPTY_LISTING);
+	const [selection, setSelection] = useState<Set<string>>(() => new Set());
+	const [message, setMessage] = useState<StatusMessage | null>(null);
+	const [busy, setBusy] = useState(false);
+	const [canUndo, setCanUndo] = useState(false);
+
+	const theme = useThemeMode();
+	const tree = useFolderTreeState(filters.hidden);
+	const { reveal, refresh: refreshTree } = tree;
+
+	const roots = useMemo<TreeRoot[]>(
+		() => [
+			...(home ? [{ label: "Pasta pessoal", path: home, icon: "home" as const }] : []),
+			{ label: "Sistema de arquivos", path: "/", icon: "drive" },
+		],
+		[home],
+	);
+
+	// --- Inicialização -------------------------------------------------------
+	const currentDirRef = useRef(currentDir);
+	useEffect(() => {
+		void (async () => {
+			const homeDir = await window.api.getHomeDir();
+			setHome(homeDir);
+			const last = currentDirRef.current;
+			if (!last || !(await window.api.pathExists(last))) setCurrentDir(homeDir);
+		})();
+	}, [setCurrentDir]);
+
+	useEffect(() => {
+		document.title = currentDir ? `${currentDir} — Rename Plus` : "Rename Plus";
+		if (!home || !currentDir) return;
+		void reveal(treeRootFor(currentDir, home), currentDir);
+	}, [currentDir, home, reveal]);
+
+	// --- Listagem ------------------------------------------------------------
+	const { subfolders, hidden, files, folders } = filters;
+	const listOptions = useMemo(
+		() => toListOptions({ subfolders, hidden, files, folders }),
+		[subfolders, hidden, files, folders],
+	);
+
+	const requestRef = useRef(0);
+	const loadListing = useCallback(
+		async (dir: string, nextSelection?: Set<string>) => {
+			const request = ++requestRef.current;
+			setListing((prev) => ({ ...prev, loading: true, error: null }));
+			try {
+				const result = await window.api.listEntries(dir, listOptions);
+				if (request !== requestRef.current) return;
+				setListing({ ...result, loading: false, error: null });
+				const existing = new Set(result.entries.map((entry) => entry.path));
+				setSelection(
+					(prev) => new Set([...(nextSelection ?? prev)].filter((p) => existing.has(p))),
+				);
+			} catch (error) {
+				if (request !== requestRef.current) return;
+				setListing({ ...EMPTY_LISTING, error: `Erro ao listar: ${(error as Error).message}` });
+			}
+		},
+		[listOptions],
+	);
+
+	useEffect(() => {
+		if (currentDir) void loadListing(currentDir);
+	}, [currentDir, loadListing]);
+
+	const refreshUndo = useCallback(async () => setCanUndo(await window.api.canUndo()), []);
+
+	// --- Navegação -----------------------------------------------------------
+	const navigate = useCallback(
+		async (input: string) => {
+			const path = normalizeTypedPath(input, home);
+			if (path === currentDir) return;
+			if (!path.startsWith("/") || !(await window.api.pathExists(path))) {
+				setMessage({ kind: "error", text: `Pasta não encontrada: ${input}` });
+				return;
+			}
+			setMessage(null);
+			setSelection(new Set());
+			setListing(EMPTY_LISTING);
+			setCurrentDir(path);
+		},
+		[currentDir, home, setCurrentDir],
+	);
+
+	const refresh = useCallback(() => {
+		if (!currentDir) return;
+		void loadListing(currentDir);
+		void refreshTree([currentDir]);
+	}, [currentDir, loadListing, refreshTree]);
+
+	useEffect(() => {
+		const onKeyDown = (event: KeyboardEvent) => {
+			if (event.key === "F5") {
+				event.preventDefault();
+				refresh();
+			}
+		};
+		window.addEventListener("keydown", onKeyDown);
+		return () => window.removeEventListener("keydown", onKeyDown);
+	}, [refresh]);
+
+	// --- Lista visível e pré-visualização ------------------------------------
+	const visibleEntries = useMemo(() => {
+		const matches = createMaskFilter(filters.mask);
+		return sortEntries(
+			listing.entries.filter((entry) => matches(entry.name)),
+			sort,
+		);
+	}, [listing.entries, filters.mask, sort]);
+
+	const selectedEntries = useMemo(
+		() => visibleEntries.filter((entry) => selection.has(entry.path)),
+		[visibleEntries, selection],
+	);
+
+	const deferredOptions = useDeferredValue(options);
+	const preview = useMemo(
+		() => buildPreview(selectedEntries, listing.entries, deferredOptions),
+		[selectedEntries, listing.entries, deferredOptions],
+	);
+
+	// --- Ações ---------------------------------------------------------------
+	const applyResult = useCallback(
+		async (result: RenameResult, successText: (count: number) => string) => {
+			if (!result.ok) {
+				setMessage({ kind: "error", text: describeRenameFailure(result) });
+				return;
+			}
+			const moved = new Map(result.renamed.map((op) => [op.from, op.to]));
+			const nextSelection = new Set([...selection].map((path) => moved.get(path) ?? path));
+			setMessage({ kind: "success", text: successText(result.renamed.length) });
+			if (currentDir) await loadListing(currentDir, nextSelection);
+			await refreshTree(result.renamed.map((op) => parentPath(op.to)));
+		},
+		[selection, currentDir, loadListing, refreshTree],
+	);
+
+	const rename = useCallback(async () => {
+		// Recalcula com as opções atuais (a pré-visualização pode estar adiada).
+		const fresh = buildPreview(selectedEntries, listing.entries, options);
+		if (fresh.configError) {
+			setMessage({ kind: "error", text: fresh.configError });
+			return;
+		}
+		if (fresh.errors > 0) {
+			setMessage({
+				kind: "error",
+				text: `Corrija ${pluralize(fresh.errors, "conflito", "conflitos")} antes de renomear (destacados em vermelho).`,
+			});
+			return;
+		}
+		const operations: RenameOperation[] = selectedEntries.flatMap((entry) => {
+			const item = fresh.items.get(entry.path);
+			return item?.status === "ok"
+				? [{ from: entry.path, to: joinPath(entry.dir, item.newName) }]
+				: [];
+		});
+		if (operations.length === 0) {
+			setMessage({ kind: "info", text: "Nenhum nome seria alterado." });
+			return;
+		}
+
+		const sample = operations
+			.slice(0, 6)
+			.map((op) => `${baseName(op.from)}  →  ${baseName(op.to)}`)
+			.join("\n");
+		const confirmed = await window.api.confirm({
+			message: `Renomear ${pluralize(operations.length, "item", "itens")}?`,
+			detail: operations.length > 6 ? `${sample}\n… e mais ${operations.length - 6}` : sample,
+			confirmLabel: "Renomear",
+		});
+		if (!confirmed) return;
+
+		setBusy(true);
+		try {
+			const result = await window.api.rename(operations);
+			await applyResult(result, (n) => `${pluralize(n, "item renomeado", "itens renomeados")}.`);
+		} finally {
+			setBusy(false);
+			await refreshUndo();
+		}
+	}, [selectedEntries, listing.entries, options, applyResult, refreshUndo]);
+
+	const undo = useCallback(async () => {
+		const confirmed = await window.api.confirm({
+			message: "Desfazer a última renomeação?",
+			confirmLabel: "Desfazer",
+		});
+		if (!confirmed) return;
+		setBusy(true);
+		try {
+			const result = await window.api.undo();
+			await applyResult(result, (n) => `${pluralize(n, "item restaurado", "itens restaurados")}.`);
+		} finally {
+			setBusy(false);
+			await refreshUndo();
+		}
+	}, [applyResult, refreshUndo]);
+
+	const changeOption = useCallback(
+		<K extends RenameSection>(section: K, patch: Partial<RenameOptions[K]>) => {
+			setOptions((prev) => ({ ...prev, [section]: { ...prev[section], ...patch } }));
+		},
+		[setOptions],
+	);
+
+	const resetOption = useCallback(
+		(section: RenameSection) => {
+			setOptions((prev) => ({ ...prev, [section]: createDefaultOptions()[section] }));
+		},
+		[setOptions],
+	);
+
+	const summary = describePreview(preview, selection.size);
+
+	// --- Layout --------------------------------------------------------------
+	const startTreeResize = useResizableSplitter({
+		axis: "x",
+		value: layout.treeWidth,
+		min: 160,
+		max: 600,
+		onChange: (treeWidth) => setLayout((prev) => ({ ...prev, treeWidth })),
+	});
+	const startPanelsResize = useResizableSplitter({
+		axis: "y",
+		value: layout.panelsHeight,
+		min: 120,
+		max: Math.max(200, window.innerHeight - 260),
+		direction: -1,
+		onChange: (panelsHeight) => setLayout((prev) => ({ ...prev, panelsHeight })),
+	});
+
+	return (
+		<div className="app">
+			<NavigationToolbar
+				currentDir={currentDir || null}
+				onNavigate={navigate}
+				onUp={() => currentDir && navigate(parentPath(currentDir))}
+				onHome={() => home && navigate(home)}
+				onRefresh={refresh}
+				onPickFolder={async () => {
+					const picked = await window.api.pickFolder(currentDir || home || "/");
+					if (picked) await navigate(picked);
+				}}
+				onSelectAll={() => setSelection(new Set(visibleEntries.map((entry) => entry.path)))}
+				onSelectNone={() => setSelection(new Set())}
+				theme={theme.mode}
+				onCycleTheme={theme.cycle}
+				onInvert={() =>
+					setSelection(
+						new Set(visibleEntries.filter((e) => !selection.has(e.path)).map((e) => e.path)),
+					)
+				}
+			/>
+
+			<div
+				className="workspace"
+				style={{ gridTemplateRows: `minmax(0, 1fr) 5px ${layout.panelsHeight}px` }}
+			>
+				<div
+					className="browser"
+					style={{ gridTemplateColumns: `${layout.treeWidth}px 5px minmax(0, 1fr)` }}
+				>
+					<FolderTreeView
+						roots={roots}
+						tree={tree}
+						currentDir={currentDir || null}
+						onSelect={navigate}
+					/>
+					<div className="splitter vertical" onPointerDown={startTreeResize} />
+					<FileListView
+						entries={visibleEntries}
+						selection={selection}
+						preview={preview}
+						rootDir={currentDir}
+						showDirColumn={filters.subfolders}
+						sort={sort}
+						loading={listing.loading}
+						error={listing.error}
+						onSortChange={setSort}
+						onSelectionChange={setSelection}
+						onOpen={(entry) => entry.isDir && navigate(entry.path)}
+					/>
+				</div>
+				<div className="splitter horizontal" onPointerDown={startPanelsResize} />
+				<RenameOptionsPanels
+					options={options}
+					onChange={changeOption}
+					onReset={resetOption}
+					filters={filters}
+					onFiltersChange={(patch) => setFilters((prev) => ({ ...prev, ...patch }))}
+					actions={{
+						canRename: preview.changed > 0 && preview.errors === 0 && !preview.configError,
+						canUndo,
+						busy,
+						summary,
+						onRename: rename,
+						onUndo: undo,
+						onResetAll: () => setOptions(createDefaultOptions()),
+					}}
+				/>
+			</div>
+
+			<RenameStatusBar
+				total={visibleEntries.length}
+				selected={selectedEntries.length}
+				changed={preview.changed}
+				errors={preview.errors}
+				truncated={listing.truncated}
+				message={message}
+			/>
+		</div>
+	);
+}

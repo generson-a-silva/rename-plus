@@ -1,0 +1,6 @@
+node_modules/
+build/
+build-react/
+build-electron/
+*.log
+.DS_Store

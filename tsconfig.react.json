@@ -1,0 +1,20 @@
+{
+	"extends": "./tsconfig.base.json",
+	"compilerOptions": {
+		"lib": ["ES2023", "DOM", "DOM.Iterable"],
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"jsx": "react-jsx",
+		"types": ["vite/client"],
+		"noEmit": true,
+		"paths": {
+			"@components": ["./src/renderer/src/components/index.ts"],
+			"@components/*": ["./src/renderer/src/components/*/index.ts"],
+			"@hooks": ["./src/renderer/src/hooks/index.ts"],
+			"@lib": ["./src/renderer/src/lib/index.ts"],
+			"@shared/*": ["./src/shared/*/index.ts"]
+		}
+	},
+	"include": ["src/renderer/**/*", "src/shared/**/*"],
+	"exclude": ["src/**/*.test.ts"]
+}
