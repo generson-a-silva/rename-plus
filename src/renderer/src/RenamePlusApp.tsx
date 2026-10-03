@@ -15,9 +15,9 @@ import {
 	DEFAULT_SORT,
 	describePreview,
 	describeRenameFailure,
+	expandHomeShortcut,
 	joinPath,
 	type ListFilters,
-	normalizeTypedPath,
 	parentPath,
 	pluralize,
 	type SortState,
@@ -25,7 +25,7 @@ import {
 	toListOptions,
 	treeRootFor,
 } from "@lib";
-import type { FileEntry, RenameOperation, RenameResult } from "@shared/ipc";
+import type { FileEntry, FileSystemRoot, RenameOperation, RenameResult } from "@shared/ipc";
 import {
 	buildPreview,
 	createDefaultOptions,
@@ -42,6 +42,20 @@ interface Listing {
 }
 
 const EMPTY_LISTING: Listing = { entries: [], truncated: false, loading: false, error: null };
+
+/** Sistema em que o app roda: define regras de nome e comparação de caminhos na pré-visualização. */
+const PREVIEW_CONTEXT = { platform: window.api.platform };
+
+function toTreeRoot(root: FileSystemRoot): TreeRoot {
+	switch (root.kind) {
+		case "home":
+			return { label: "Pasta pessoal", path: root.path, icon: "home" };
+		case "filesystem":
+			return { label: "Sistema de arquivos", path: root.path, icon: "drive" };
+		case "drive":
+			return { label: `Unidade ${root.path.slice(0, 2)}`, path: root.path, icon: "drive" };
+	}
+}
 
 /** Janela principal: árvore de pastas, lista de arquivos, painéis de opções e barra de status. */
 export function RenamePlusApp() {
@@ -65,30 +79,34 @@ export function RenamePlusApp() {
 	const tree = useFolderTreeState(filters.hidden);
 	const { reveal, refresh: refreshTree } = tree;
 
-	const roots = useMemo<TreeRoot[]>(
-		() => [
-			...(home ? [{ label: "Pasta pessoal", path: home, icon: "home" as const }] : []),
-			{ label: "Sistema de arquivos", path: "/", icon: "drive" },
-		],
-		[home],
-	);
+	const [fileSystemRoots, setFileSystemRoots] = useState<FileSystemRoot[]>([]);
+	const roots = useMemo(() => fileSystemRoots.map(toTreeRoot), [fileSystemRoots]);
 
 	// --- Inicialização -------------------------------------------------------
 	const currentDirRef = useRef(currentDir);
 	useEffect(() => {
 		void (async () => {
-			const homeDir = await window.api.getHomeDir();
+			const [homeDir, rootList] = await Promise.all([
+				window.api.getHomeDir(),
+				window.api.listRoots(),
+			]);
 			setHome(homeDir);
+			setFileSystemRoots(rootList);
 			const last = currentDirRef.current;
-			if (!last || !(await window.api.pathExists(last))) setCurrentDir(homeDir);
+			const resolved = last ? await window.api.resolveDirectory(last) : null;
+			setCurrentDir(resolved ?? homeDir);
 		})();
 	}, [setCurrentDir]);
 
 	useEffect(() => {
 		document.title = currentDir ? `${currentDir} — Rename Plus` : "Rename Plus";
-		if (!home || !currentDir) return;
-		void reveal(treeRootFor(currentDir, home), currentDir);
-	}, [currentDir, home, reveal]);
+		if (!currentDir) return;
+		const root = treeRootFor(
+			currentDir,
+			roots.map((item) => item.path),
+		);
+		if (root) void reveal(root, currentDir);
+	}, [currentDir, roots, reveal]);
 
 	// --- Listagem ------------------------------------------------------------
 	const { subfolders, hidden, files, folders } = filters;
@@ -127,12 +145,13 @@ export function RenamePlusApp() {
 	// --- Navegação -----------------------------------------------------------
 	const navigate = useCallback(
 		async (input: string) => {
-			const path = normalizeTypedPath(input, home);
-			if (path === currentDir) return;
-			if (!path.startsWith("/") || !(await window.api.pathExists(path))) {
+			// O processo principal valida e devolve o caminho canônico ("c:/users" → "C:\Users").
+			const path = await window.api.resolveDirectory(expandHomeShortcut(input, home));
+			if (!path) {
 				setMessage({ kind: "error", text: `Pasta não encontrada: ${input}` });
 				return;
 			}
+			if (path === currentDir) return;
 			setMessage(null);
 			setSelection(new Set());
 			setListing(EMPTY_LISTING);
@@ -174,7 +193,7 @@ export function RenamePlusApp() {
 
 	const deferredOptions = useDeferredValue(options);
 	const preview = useMemo(
-		() => buildPreview(selectedEntries, listing.entries, deferredOptions),
+		() => buildPreview(selectedEntries, listing.entries, deferredOptions, PREVIEW_CONTEXT),
 		[selectedEntries, listing.entries, deferredOptions],
 	);
 
@@ -196,7 +215,7 @@ export function RenamePlusApp() {
 
 	const rename = useCallback(async () => {
 		// Recalcula com as opções atuais (a pré-visualização pode estar adiada).
-		const fresh = buildPreview(selectedEntries, listing.entries, options);
+		const fresh = buildPreview(selectedEntries, listing.entries, options, PREVIEW_CONTEXT);
 		if (fresh.configError) {
 			setMessage({ kind: "error", text: fresh.configError });
 			return;
@@ -298,7 +317,7 @@ export function RenamePlusApp() {
 				onHome={() => home && navigate(home)}
 				onRefresh={refresh}
 				onPickFolder={async () => {
-					const picked = await window.api.pickFolder(currentDir || home || "/");
+					const picked = await window.api.pickFolder(currentDir || home || "");
 					if (picked) await navigate(picked);
 				}}
 				onSelectAll={() => setSelection(new Set(visibleEntries.map((entry) => entry.path)))}

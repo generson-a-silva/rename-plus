@@ -12,6 +12,15 @@ export interface FileEntry {
 	birthtimeMs: number;
 }
 
+/**
+ * Raiz da árvore de pastas: a pasta pessoal, a raiz "/" (Linux) ou uma unidade
+ * ("C:\", Windows).
+ */
+export interface FileSystemRoot {
+	kind: "home" | "filesystem" | "drive";
+	path: string;
+}
+
 /** Pasta exibida na árvore da esquerda. */
 export interface DirEntry {
 	name: string;

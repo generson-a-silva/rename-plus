@@ -207,3 +207,72 @@ describe("validateFileName", () => {
 		expect(validateFileName("válido.txt")).toBeNull();
 	});
 });
+
+describe("Windows", () => {
+	const winEntry = (name: string, dir = "C:\\Users\\Ana\\Fotos") =>
+		entry(name, { dir, path: `${dir}\\${name}` });
+
+	it("rejeita caracteres, nomes reservados e ponto/espaço no final", () => {
+		expect(validateFileName("a:b.txt", "win32")).toMatch(/não permitido/);
+		expect(validateFileName("a\\b", "win32")).toMatch(/não permitido/);
+		expect(validateFileName("CON", "win32")).toMatch(/reservado/);
+		expect(validateFileName("nul.txt", "win32")).toMatch(/reservado/);
+		expect(validateFileName("console.txt", "win32")).toBeNull();
+		expect(validateFileName("arquivo.", "win32")).toMatch(/ponto ou espaço/);
+		expect(validateFileName("arquivo ", "win32")).toMatch(/ponto ou espaço/);
+		expect(validateFileName("a:b.txt", "linux")).toBeNull();
+	});
+
+	it("trata nomes que diferem só em maiúsculas como conflito", () => {
+		const a = winEntry("a.txt");
+		const b = winEntry("b.txt");
+		const fixedA = options({ name: { mode: "fixed", fixed: "A" } });
+
+		const duplicate = buildPreview([a, b], [a, b], fixedA, { platform: "win32" });
+		expect(duplicate.items.get(b.path)?.message).toBe("Nome duplicado no lote");
+
+		const existing = winEntry("FOTO.txt");
+		const collision = buildPreview(
+			[b],
+			[b, existing],
+			options({ name: { mode: "fixed", fixed: "foto" } }),
+			{ platform: "win32" },
+		);
+		expect(collision.items.get(b.path)?.message).toBe("Já existe um item com esse nome");
+
+		// No Linux são arquivos diferentes.
+		const linux = buildPreview(
+			[b],
+			[b, existing],
+			options({ name: { mode: "fixed", fixed: "foto" } }),
+		);
+		expect(linux.errors).toBe(0);
+	});
+
+	it("permite renomear só a caixa do próprio arquivo", () => {
+		const a = winEntry("foto.txt");
+		const preview = buildPreview([a], [a], options({ case: { mode: "upper" } }), {
+			platform: "win32",
+		});
+		expect(preview.items.get(a.path)).toMatchObject({ newName: "FOTO.txt", status: "ok" });
+	});
+
+	it("usa as pastas do caminho Windows no painel Nome da pasta", () => {
+		const renamer = createRenamer(
+			options({ appendFolder: { mode: "prefix", levels: 5, separator: "-" } }),
+			"win32",
+		);
+		expect(renamer(winEntry("a.txt"), ctx)).toBe("Users-Ana-Fotos-a.txt");
+	});
+
+	it("aponta caracteres inválidos gerados pelo formato de data", () => {
+		const a = winEntry("a.txt");
+		const preview = buildPreview(
+			[a],
+			[a],
+			options({ autoDate: { mode: "prefix", format: "HH:mm" } }),
+			{ platform: "win32" },
+		);
+		expect(preview.items.get(a.path)?.message).toMatch(/não permitido/);
+	});
+});

@@ -1,0 +1,7 @@
+# Mantém LF em todos os sistemas (o Biome exige "lineEnding": "lf"), mesmo com
+# core.autocrlf=true no Windows.
+* text=auto eol=lf
+
+*.png binary
+*.ico binary
+*.icns binary

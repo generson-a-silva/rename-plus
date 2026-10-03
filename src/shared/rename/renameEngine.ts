@@ -1,4 +1,5 @@
 import type { FileEntry } from "../ipc";
+import { getPlatformPaths, type PlatformPaths } from "../paths";
 import type {
 	AddOptions,
 	AutoDateOptions,
@@ -134,9 +135,10 @@ function applyAppendFolder(
 	text: string,
 	entry: FileEntry,
 	options: RenameOptions["appendFolder"],
+	paths: PlatformPaths,
 ): string {
 	if (options.mode === "none") return text;
-	const parts = entry.dir.split("/").filter(Boolean);
+	const parts = paths.segments(entry.dir);
 	const folder = parts.slice(-Math.max(options.levels, 1)).join(options.separator);
 	if (!folder) return text;
 	return place(text, folder, options.mode, options.separator);
@@ -192,7 +194,8 @@ function applyExtension(ext: string, options: ExtensionOptions): string {
  * mesma ordem do Bulk Rename Utility. Lança `RenameConfigError` se as opções
  * forem inválidas (ex.: RegEx malformada).
  */
-export function createRenamer(options: RenameOptions): Renamer {
+export function createRenamer(options: RenameOptions, platform = "linux"): Renamer {
+	const paths = getPlatformPaths(platform);
 	const regex = compileRegex(options.regex);
 	const replaceRegex = options.replace.find
 		? new RegExp(escapeRegExp(options.replace.find), options.replace.matchCase ? "g" : "gi")
@@ -234,7 +237,7 @@ export function createRenamer(options: RenameOptions): Renamer {
 		base = applyRemove(base, options.remove); // (5)
 		base = applyAdd(base, options.add); // (6)
 		base = applyAutoDate(base, entry, options.autoDate, context.now); // (7)
-		base = applyAppendFolder(base, entry, options.appendFolder); // (8)
+		base = applyAppendFolder(base, entry, options.appendFolder, paths); // (8)
 		base = applyNumbering(base, options.numbering, context); // (9)
 		if (!entry.isDir) ext = applyExtension(ext, options.extension); // (10)
 

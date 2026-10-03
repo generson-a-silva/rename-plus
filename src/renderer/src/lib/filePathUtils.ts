@@ -1,33 +1,50 @@
+import { getPlatformPaths } from "@shared/paths";
+
+/** Regras de caminho do sistema em que o app está rodando ("/" no Linux, "\" no Windows). */
+export const platformPaths = getPlatformPaths(window.api.platform);
+
 /** Caminho de `target` relativo a `base`, ou "." quando forem iguais. */
 export function relativePath(base: string, target: string): string {
-	if (target === base) return ".";
-	const prefix = base.endsWith("/") ? base : `${base}/`;
-	return target.startsWith(prefix) ? target.slice(prefix.length) : target;
+	return platformPaths.relative(base, target);
 }
 
+/** Pasta-mãe; a raiz ("/", "C:\") é a mãe de si mesma. */
 export function parentPath(path: string): string {
-	if (path === "/") return "/";
-	const index = path.replace(/\/+$/, "").lastIndexOf("/");
-	return index <= 0 ? "/" : path.slice(0, index);
+	return platformPaths.dirname(path);
 }
 
 export function joinPath(dir: string, name: string): string {
-	return dir === "/" ? `/${name}` : `${dir}/${name}`;
+	return platformPaths.join(dir, name);
 }
 
 export function baseName(path: string): string {
-	return path.split("/").pop() ?? path;
+	return platformPaths.basename(path);
 }
 
-/** Normaliza um caminho digitado: expande `~`, remove barras duplicadas e a barra final. */
-export function normalizeTypedPath(input: string, home: string | null): string {
-	let path = input.trim();
-	if (home && (path === "~" || path.startsWith("~/"))) path = home + path.slice(1);
-	path = path.replace(/\/+/g, "/");
-	return path.length > 1 ? path.replace(/\/$/, "") : path;
+export function isRootPath(path: string): boolean {
+	return platformPaths.dirname(path) === path;
 }
 
-/** Pasta-raiz da árvore onde `path` deve aparecer: a pasta pessoal ou "/". */
-export function treeRootFor(path: string, home: string): string {
-	return path === home || path.startsWith(`${home}/`) ? home : "/";
+/**
+ * Expande "~" para a pasta pessoal em um caminho digitado. O restante da
+ * normalização (barras, maiúsculas no Windows) é feito pelo processo principal.
+ */
+export function expandHomeShortcut(input: string, home: string | null): string {
+	const path = input.trim();
+	if (!home || !path.startsWith("~")) return path;
+	const rest = path.slice(1);
+	if (rest === "") return home;
+	return /^[\\/]/.test(rest) ? joinPath(home, rest.replace(/^[\\/]+/, "")) : path;
+}
+
+/**
+ * Raiz da árvore onde `path` deve aparecer: a mais específica que o contém
+ * (a pasta pessoal tem prioridade sobre "/" ou "C:\"), ou `null`.
+ */
+export function treeRootFor(path: string, roots: readonly string[]): string | null {
+	let best: string | null = null;
+	for (const root of roots) {
+		if (platformPaths.contains(root, path) && (!best || root.length > best.length)) best = root;
+	}
+	return best;
 }

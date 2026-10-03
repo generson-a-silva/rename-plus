@@ -10,7 +10,8 @@ async function tree(dir = root): Promise<string[]> {
 	const result: string[] = [];
 	for (const dirent of await fs.readdir(dir, { withFileTypes: true })) {
 		const full = path.join(dir, dirent.name);
-		result.push(path.relative(root, full));
+		// Separador "/" em qualquer sistema, para comparar com as listas esperadas.
+		result.push(path.relative(root, full).split(path.sep).join("/"));
 		if (dirent.isDirectory()) result.push(...(await tree(full)));
 	}
 	return result.sort();
@@ -99,19 +100,38 @@ describe("renameBatch", () => {
 		expect(await tree()).toEqual(["a.txt", "b.txt"]);
 	});
 
-	it.skipIf(process.getuid?.() === 0)("desfaz o que já foi feito se falhar no meio", async () => {
-		// O item mais fundo (w/f.txt) é renomeado primeiro; o da raiz falha por permissão.
-		await touch("a.txt", "w/f.txt");
-		await fs.chmod(root, 0o555);
-		try {
-			const result = await renameBatch([
-				{ from: p("a.txt"), to: p("b.txt") },
-				{ from: p("w/f.txt"), to: p("w/g.txt") },
-			]);
-			expect(result.ok).toBe(false);
-			expect(await tree()).toEqual(["a.txt", "w", "w/f.txt"]);
-		} finally {
-			await fs.chmod(root, 0o755);
-		}
+	// chmod não bloqueia escrita em pastas no Windows; como root, não bloqueia em lugar nenhum.
+	it.skipIf(process.platform === "win32" || process.getuid?.() === 0)(
+		"desfaz o que já foi feito se falhar no meio",
+		async () => {
+			// O item mais fundo (w/f.txt) é renomeado primeiro; o da raiz falha por permissão.
+			await touch("a.txt", "w/f.txt");
+			await fs.chmod(root, 0o555);
+			try {
+				const result = await renameBatch([
+					{ from: p("a.txt"), to: p("b.txt") },
+					{ from: p("w/f.txt"), to: p("w/g.txt") },
+				]);
+				expect(result.ok).toBe(false);
+				expect(await tree()).toEqual(["a.txt", "w", "w/f.txt"]);
+			} finally {
+				await fs.chmod(root, 0o755);
+			}
+		},
+	);
+});
+
+describe("renameBatch no Windows", () => {
+	it.runIf(process.platform === "win32")("rejeita caracteres proibidos no Windows", async () => {
+		await touch("a.txt");
+		const result = await renameBatch([{ from: p("a.txt"), to: p("a?.txt") }]);
+		expect(result.ok).toBe(false);
+	});
+
+	it.runIf(process.platform === "win32")("renomeia só a caixa no Windows", async () => {
+		await touch("foto.txt");
+		const result = await renameBatch([{ from: p("foto.txt"), to: p("FOTO.txt") }]);
+		expect(result.ok).toBe(true);
+		expect(await tree()).toEqual(["FOTO.txt"]);
 	});
 });

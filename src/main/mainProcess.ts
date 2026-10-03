@@ -42,6 +42,10 @@ function createWindow(): void {
 	}
 }
 
+// No Windows, associa a janela ao atalho/instalador (ícone e agrupamento na barra de tarefas).
+// Deve ser igual a `build.appId` no package.json.
+if (process.platform === "win32") app.setAppUserModelId("com.renameplus.app");
+
 app.whenReady().then(() => {
 	loadTheme();
 	registerIpcHandlers();

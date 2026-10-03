@@ -1,4 +1,5 @@
 import type { FileEntry } from "../ipc";
+import { getPlatformPaths } from "../paths";
 import { validateFileName } from "./fileNameValidation";
 import { createRenamer, RenameConfigError } from "./renameEngine";
 import type { RenameOptions } from "./renameOptions";
@@ -20,25 +21,29 @@ export interface Preview {
 	errors: number;
 }
 
-function joinPath(dir: string, name: string): string {
-	return dir === "/" ? `/${name}` : `${dir}/${name}`;
+export interface PreviewContext {
+	/** Valor de `process.platform`: define as regras de nome e se maiúsculas importam. */
+	platform?: string;
+	now?: Date;
 }
 
 /**
  * Calcula os novos nomes de `selected` (na ordem recebida) e detecta conflitos:
  * nomes inválidos, nomes duplicados no lote e colisões com itens existentes
- * em `all` que não fazem parte do lote.
+ * em `all` que não fazem parte do lote. No Windows, nomes que diferem só em
+ * maiúsculas/minúsculas contam como o mesmo arquivo.
  */
 export function buildPreview(
 	selected: readonly FileEntry[],
 	all: readonly FileEntry[],
 	options: RenameOptions,
-	now: Date = new Date(),
+	{ platform = "linux", now = new Date() }: PreviewContext = {},
 ): Preview {
+	const paths = getPlatformPaths(platform);
 	const items = new Map<string, PreviewItem>();
 	let renamer: ReturnType<typeof createRenamer>;
 	try {
-		renamer = createRenamer(options);
+		renamer = createRenamer(options, platform);
 	} catch (error) {
 		if (error instanceof RenameConfigError) {
 			return { items, configError: error.message, changed: 0, errors: 0 };
@@ -48,7 +53,8 @@ export function buildPreview(
 
 	const folderCounters = new Map<string, number>();
 	const targets = new Map<string, number>();
-	const batch = new Set(selected.map((entry) => entry.path));
+	const targetKey = (entry: FileEntry, name: string) => paths.key(paths.join(entry.dir, name));
+	const batch = new Set(selected.map((entry) => paths.key(entry.path)));
 
 	selected.forEach((entry, index) => {
 		const folderIndex = folderCounters.get(entry.dir) ?? 0;
@@ -58,19 +64,21 @@ export function buildPreview(
 		const status: PreviewStatus = newName === entry.name ? "unchanged" : "ok";
 		items.set(entry.path, { newName, status, message: null });
 
-		const target = joinPath(entry.dir, newName);
+		const target = targetKey(entry, newName);
 		targets.set(target, (targets.get(target) ?? 0) + 1);
 	});
 
-	const existing = new Set(all.filter((entry) => !batch.has(entry.path)).map((e) => e.path));
+	const existing = new Set(
+		all.map((entry) => paths.key(entry.path)).filter((key) => !batch.has(key)),
+	);
 	let changed = 0;
 	let errors = 0;
 
 	for (const entry of selected) {
 		const item = items.get(entry.path);
 		if (!item) continue;
-		const target = joinPath(entry.dir, item.newName);
-		const invalid = validateFileName(item.newName);
+		const target = targetKey(entry, item.newName);
+		const invalid = validateFileName(item.newName, platform);
 
 		if (invalid) {
 			item.message = invalid;

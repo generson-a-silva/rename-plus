@@ -1,3 +1,4 @@
+import { platformPaths } from "@lib";
 import type { DirEntry } from "@shared/ipc";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -5,17 +6,17 @@ export type ChildrenState = DirEntry[] | "loading";
 
 /** Caminhos de cada ancestral de `target` abaixo de `root` (inclusive `root`, exclusive `target`). */
 function ancestorsBetween(root: string, target: string): string[] {
-	if (target === root) return [];
-	const prefix = root === "/" ? "/" : `${root}/`;
-	if (!target.startsWith(prefix)) return [];
-	const parts = target.slice(prefix.length).split("/").filter(Boolean);
-	const result = [root];
-	let current = root;
-	for (const part of parts.slice(0, -1)) {
-		current = current === "/" ? `/${part}` : `${current}/${part}`;
-		result.push(current);
+	if (platformPaths.equals(root, target) || !platformPaths.contains(root, target)) return [];
+	const result: string[] = [];
+	let current = platformPaths.dirname(target);
+	while (!platformPaths.equals(current, root)) {
+		result.unshift(current);
+		const parent = platformPaths.dirname(current);
+		if (parent === current) return [];
+		current = parent;
 	}
-	return result;
+	// Usa o texto da raiz como está na árvore ("C:\", não "c:\").
+	return [root, ...result];
 }
 
 /** Estado da árvore de pastas: subpastas carregadas sob demanda e nós expandidos. */

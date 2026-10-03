@@ -4,9 +4,11 @@ export { DEFAULT_SORT, type SortKey, type SortState, sortEntries } from "./fileL
 export { createMaskFilter } from "./fileNameMask";
 export {
 	baseName,
+	expandHomeShortcut,
+	isRootPath,
 	joinPath,
-	normalizeTypedPath,
 	parentPath,
+	platformPaths,
 	relativePath,
 	treeRootFor,
 } from "./filePathUtils";

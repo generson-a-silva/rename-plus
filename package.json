@@ -65,11 +65,22 @@
 		},
 		"win": {
 			"target": [
-				"nsis"
+				{
+					"target": "nsis",
+					"arch": [
+						"x64"
+					]
+				}
 			]
 		},
 		"nsis": {
-			"artifactName": "${name}-${version}-${os}-${arch}.${ext}"
+			"artifactName": "${name}-${version}-${os}-${arch}.${ext}",
+			"oneClick": false,
+			"perMachine": false,
+			"allowToChangeInstallationDirectory": true,
+			"createDesktopShortcut": true,
+			"createStartMenuShortcut": true,
+			"shortcutName": "Rename Plus"
 		},
 		"mac": {
 			"target": [

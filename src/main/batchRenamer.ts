@@ -2,13 +2,33 @@ import type { Stats } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import type { RenameFailure, RenameOperation, RenameResult } from "../shared/ipc";
+import { getPlatformPaths } from "../shared/paths";
 import { validateFileName } from "../shared/rename";
 
 interface PlannedOperation extends RenameOperation {
 	isDir: boolean;
 }
 
-const depth = (p: string) => p.split("/").length;
+/** Regras de caminho do sistema atual (no Windows, comparação sem diferenciar maiúsculas). */
+const platformPaths = getPlatformPaths(process.platform);
+const depth = (p: string) => p.split(path.sep).length;
+
+/** Mensagens legíveis para os erros mais comuns de `fs.rename`. */
+const ERROR_MESSAGES: Record<string, string> = {
+	EBUSY: "O item está em uso por outro programa",
+	EPERM: "Sem permissão (o item pode estar em uso, protegido ou ser somente leitura)",
+	EACCES: "Sem permissão para renomear",
+	ENOENT: "O item não foi encontrado",
+	ENAMETOOLONG: "O caminho ficou longo demais",
+	EEXIST: "Já existe um item com esse nome",
+	ENOTEMPTY: "Já existe uma pasta com esse nome",
+	EROFS: "O disco é somente leitura",
+};
+
+function describeError(error: unknown): string {
+	const { code, message } = error as NodeJS.ErrnoException;
+	return (code && ERROR_MESSAGES[code]) || message;
+}
 
 async function exists(target: string): Promise<boolean> {
 	try {
@@ -40,24 +60,30 @@ function failure(op: RenameOperation, error: string): RenameResult {
 async function plan(
 	operations: readonly RenameOperation[],
 ): Promise<{ planned: PlannedOperation[] } | { error: RenameResult }> {
-	const ops = operations.filter((op) => op.from !== op.to);
+	const { key } = platformPaths;
 	const sources = new Set<string>();
 	const targets = new Set<string>();
+	const ops: RenameOperation[] = [];
 	const planned: PlannedOperation[] = [];
 
-	for (const op of ops) {
-		if (!path.isAbsolute(op.from) || !path.isAbsolute(op.to)) {
-			return { error: failure(op, "Caminho não absoluto") };
+	for (const original of operations) {
+		if (!path.isAbsolute(original.from) || !path.isAbsolute(original.to)) {
+			return { error: failure(original, "Caminho não absoluto") };
 		}
-		if (path.dirname(op.from) !== path.dirname(op.to)) {
+		// Normaliza separadores e barras repetidas ("C:/a//b" → "C:\a\b" no Windows).
+		const op = { from: path.resolve(original.from), to: path.resolve(original.to) };
+		// Mudar só maiúsculas/minúsculas ("a.txt" → "A.txt") é uma operação válida.
+		if (op.from === op.to) continue;
+		if (!platformPaths.equals(path.dirname(op.from), path.dirname(op.to))) {
 			return { error: failure(op, "O destino deve ficar na mesma pasta") };
 		}
-		const invalid = validateFileName(path.basename(op.to));
+		const invalid = validateFileName(path.basename(op.to), process.platform);
 		if (invalid) return { error: failure(op, invalid) };
-		if (sources.has(op.from)) return { error: failure(op, "Item repetido no lote") };
-		if (targets.has(op.to)) return { error: failure(op, "Nome duplicado no lote") };
-		sources.add(op.from);
-		targets.add(op.to);
+		if (sources.has(key(op.from))) return { error: failure(op, "Item repetido no lote") };
+		if (targets.has(key(op.to))) return { error: failure(op, "Nome duplicado no lote") };
+		sources.add(key(op.from));
+		targets.add(key(op.to));
+		ops.push(op);
 	}
 
 	for (const op of ops) {
@@ -67,7 +93,8 @@ async function plan(
 		} catch {
 			return { error: failure(op, "O item original não existe mais") };
 		}
-		if (!sources.has(op.to) && (await occupiedByOther(op.to, source))) {
+		const sameItem = key(op.to) === key(op.from);
+		if (!sameItem && !sources.has(key(op.to)) && (await occupiedByOther(op.to, source))) {
 			return { error: failure(op, "Já existe um item com esse nome") };
 		}
 		planned.push({ ...op, isDir: source.isDirectory() });
@@ -111,7 +138,7 @@ async function execute(planned: readonly PlannedOperation[]): Promise<RenameResu
 			}
 			for (const [i, op] of ops.entries()) {
 				current = op;
-				// fs.rename sobrescreve destinos existentes no Linux; verifica antes.
+				// fs.rename pode sobrescrever destinos existentes; verifica antes.
 				if (await exists(op.to)) throw new Error("Já existe um item com esse nome");
 				await move(temps[i] as string, op.to);
 			}
@@ -122,10 +149,10 @@ async function execute(planned: readonly PlannedOperation[]): Promise<RenameResu
 			try {
 				await fs.rename(to, from);
 			} catch (rollbackError) {
-				rollbackErrors.push(`${to}: ${(rollbackError as Error).message}`);
+				rollbackErrors.push(`${to}: ${describeError(rollbackError)}`);
 			}
 		}
-		const message = (error as NodeJS.ErrnoException).message;
+		const message = describeError(error);
 		const failed: RenameFailure[] = [
 			{
 				from: current?.from ?? "",
@@ -145,7 +172,7 @@ async function execute(planned: readonly PlannedOperation[]): Promise<RenameResu
 function resolveFinalPath(target: string, folders: readonly PlannedOperation[]): string {
 	let result = target;
 	for (const folder of folders) {
-		if (result.startsWith(`${folder.from}/`)) {
+		if (result.startsWith(`${folder.from}${path.sep}`)) {
 			result = folder.to + result.slice(folder.from.length);
 		}
 	}

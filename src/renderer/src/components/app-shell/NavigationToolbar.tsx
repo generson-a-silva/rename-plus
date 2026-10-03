@@ -1,4 +1,5 @@
 import { AppIcon, type AppIconName } from "@components/common";
+import { isRootPath } from "@lib";
 import type { ThemeMode } from "@shared/ipc";
 import { useEffect, useState } from "react";
 
@@ -54,7 +55,7 @@ export function NavigationToolbar(props: NavigationToolbarProps) {
 			<ToolButton
 				icon="up"
 				label="Pasta acima"
-				disabled={!currentDir || currentDir === "/"}
+				disabled={!currentDir || isRootPath(currentDir)}
 				onClick={props.onUp}
 			/>
 			<ToolButton icon="home" label="Pasta pessoal" onClick={props.onHome} />

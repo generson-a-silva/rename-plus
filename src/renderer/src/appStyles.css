@@ -3,7 +3,7 @@
 	font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans", Roboto, sans-serif;
 	font-size: 13px;
 	line-height: 1.4;
-	--mono: ui-monospace, "JetBrains Mono", "DejaVu Sans Mono", monospace;
+	--mono: ui-monospace, "Cascadia Mono", Consolas, "JetBrains Mono", "DejaVu Sans Mono", monospace;
 
 	/* Tema claro (padrão) */
 	--bg: #f4f5f7;

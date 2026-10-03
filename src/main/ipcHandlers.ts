@@ -3,7 +3,7 @@ import { app, BrowserWindow, dialog, ipcMain } from "electron";
 import type { ConfirmRequest, ListOptions, RenameOperation } from "../shared/ipc";
 import { IpcChannel } from "../shared/ipc";
 import { canUndo, renameBatch, undoLastBatch } from "./batchRenamer";
-import { listDirectories, listEntries, pathExists } from "./fileSystemService";
+import { listDirectories, listEntries, listRoots, resolveDirectory } from "./fileSystemService";
 import { setTheme } from "./themeSettings";
 
 export function registerIpcHandlers(): void {
@@ -17,7 +17,8 @@ export function registerIpcHandlers(): void {
 	ipcMain.handle(IpcChannel.ListEntries, (_event, dir: string, options: ListOptions) =>
 		listEntries(dir, options),
 	);
-	ipcMain.handle(IpcChannel.PathExists, (_event, target: string) => pathExists(target));
+	ipcMain.handle(IpcChannel.ListRoots, () => listRoots());
+	ipcMain.handle(IpcChannel.ResolveDirectory, (_event, target: string) => resolveDirectory(target));
 
 	ipcMain.handle(IpcChannel.Rename, (_event, operations: RenameOperation[]) =>
 		renameBatch(operations),
