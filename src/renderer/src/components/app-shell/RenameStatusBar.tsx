@@ -12,9 +12,14 @@ interface RenameStatusBarProps {
 	errors: number;
 	truncated: boolean;
 	message: StatusMessage | null;
+	/** Versão do app, exibida no canto direito ("" enquanto não carregou). */
+	appVersion: string;
 }
 
-/** Barra inferior: contagens da listagem/pré-visualização e a mensagem da última ação. */
+/**
+ * Barra inferior: contagens da listagem/pré-visualização, a mensagem da última ação
+ * e, sempre no canto direito, a versão do app.
+ */
 export function RenameStatusBar({
 	total,
 	selected,
@@ -22,6 +27,7 @@ export function RenameStatusBar({
 	errors,
 	truncated,
 	message,
+	appVersion,
 }: RenameStatusBarProps) {
 	return (
 		<footer className="status-bar">
@@ -37,6 +43,11 @@ export function RenameStatusBar({
 			{message && (
 				<span className={`status-message ${message.kind}`} role="status">
 					{message.text}
+				</span>
+			)}
+			{appVersion && (
+				<span className="status-version" title="Versão do Rename Plus">
+					v{appVersion}
 				</span>
 			)}
 		</footer>

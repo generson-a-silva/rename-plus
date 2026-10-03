@@ -770,8 +770,22 @@ button.header-cell:hover {
 
 .status-message {
 	margin-left: auto;
+	min-width: 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+/* Versão: sempre o último item, colada à direita (mesmo sem mensagem antes dela). */
+.status-version {
+	flex: none;
+	margin-left: auto;
+	padding-left: 12px;
+	border-left: 1px solid var(--border);
+	font-variant-numeric: tabular-nums;
+}
+
+.status-message + .status-version {
+	margin-left: 0;
 }
 
 .status-message.success {

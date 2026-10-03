@@ -76,6 +76,7 @@ function toTreeRoot(root: FileSystemRoot): TreeRoot {
 /** Janela principal: árvore de pastas, lista de arquivos, painéis de opções e barra de status. */
 export function RenamePlusApp() {
 	const [home, setHome] = useState<string | null>(null);
+	const [appVersion, setAppVersion] = useState("");
 	const [currentDir, setCurrentDir] = usePersistentState<string>("lastDir", "");
 	const [filters, setFilters] = usePersistentState<ListFilters>("filters", DEFAULT_FILTERS);
 	const [options, setOptions] = usePersistentState<RenameOptions>(
@@ -102,11 +103,13 @@ export function RenamePlusApp() {
 	const currentDirRef = useRef(currentDir);
 	useEffect(() => {
 		void (async () => {
-			const [homeDir, rootList] = await Promise.all([
+			const [homeDir, rootList, version] = await Promise.all([
 				window.api.getHomeDir(),
 				window.api.listRoots(),
+				window.api.getAppVersion(),
 			]);
 			setHome(homeDir);
+			setAppVersion(version);
 			setFileSystemRoots(rootList);
 			const last = currentDirRef.current;
 			const resolved = last ? await window.api.resolveDirectory(last) : null;
@@ -469,6 +472,7 @@ export function RenamePlusApp() {
 			</div>
 
 			<RenameStatusBar
+				appVersion={appVersion}
 				total={visibleEntries.length}
 				selected={selectedEntries.length}
 				changed={preview.changed}
