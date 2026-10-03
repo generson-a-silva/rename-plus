@@ -5,18 +5,23 @@ import type { LaunchMode, LaunchRequest } from "../shared/ipc";
 /** Opções aceitas na linha de comando: `rename-plus [--open | --select] [--] caminhos…`. */
 export const LAUNCH_FLAGS = { open: "--open", select: "--select" } as const;
 
+/** Regras de caminho: as do sistema atual; os testes escolhem uma explicitamente. */
+export type PathPlatform = "posix" | "win32";
+
+const CURRENT_PLATFORM: PathPlatform = process.platform === "win32" ? "win32" : "posix";
+
 /** `file:///home/x/a%20b` → `/home/x/a b` (Nautilus/Caja informam a pasta atual assim). */
-function toPath(arg: string, cwd: string): string | null {
+function toPath(arg: string, cwd: string, platform: PathPlatform): string | null {
 	if (/^file:\/\//i.test(arg)) {
 		try {
-			return fileURLToPath(arg);
+			return fileURLToPath(arg, { windows: platform === "win32" });
 		} catch {
 			return null;
 		}
 	}
 	// Outros esquemas (smb://, sftp://…) não são caminhos locais.
 	if (/^[a-z][a-z0-9+.-]+:\/\//i.test(arg)) return null;
-	return path.resolve(cwd, arg);
+	return path[platform].resolve(cwd, arg);
 }
 
 /**
@@ -26,7 +31,11 @@ function toPath(arg: string, cwd: string): string | null {
  *
  * Sem `--select`, um único caminho é aberto (`open`); vários viram seleção.
  */
-export function parseLaunchArguments(args: readonly string[], cwd: string): LaunchRequest | null {
+export function parseLaunchArguments(
+	args: readonly string[],
+	cwd: string,
+	platform: PathPlatform = CURRENT_PLATFORM,
+): LaunchRequest | null {
 	let mode: LaunchMode = "open";
 	const paths: string[] = [];
 	let onlyPaths = false;
@@ -37,7 +46,7 @@ export function parseLaunchArguments(args: readonly string[], cwd: string): Laun
 			else if (arg === LAUNCH_FLAGS.open) mode = "open";
 			continue;
 		}
-		const resolved = arg ? toPath(arg, cwd) : null;
+		const resolved = arg ? toPath(arg, cwd, platform) : null;
 		if (resolved && !paths.includes(resolved)) paths.push(resolved);
 	}
 	if (paths.length === 0) return null;

@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img alt="Versão 1.3.1" src="https://img.shields.io/badge/vers%C3%A3o-1.3.1-2f6fe4">
+  <img alt="Versão 1.3.2" src="https://img.shields.io/badge/vers%C3%A3o-1.3.2-2f6fe4">
   <img alt="Linux" src="https://img.shields.io/badge/Linux-suportado-1a7f37?logo=linux&logoColor=white">
   <img alt="Windows" src="https://img.shields.io/badge/Windows-suportado-1a7f37?logo=windows&logoColor=white">
   <img alt="macOS" src="https://img.shields.io/badge/macOS-planejado-8d96a0?logo=apple&logoColor=white">
