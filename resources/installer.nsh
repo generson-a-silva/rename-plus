@@ -10,12 +10,19 @@
 ; Página "Pastas monitoradas": inicia o app com o Windows, sem janela (--background),
 ; para todos os usuários (...\CurrentVersion\Run). Cada usuário pode desativar em
 ; Configurações; nome e argumento precisam bater com src/main/backgroundLaunch.ts.
+;
+; Desinstalação: remove também as entradas que o app criou em HKCU (Configurações) para
+; cada usuário do computador, não só para quem desinstala; senão sobrariam entradas
+; apontando para um .exe que não existe mais.
 
 !define RP_OPEN_KEY "RenamePlus.Open"
 !define RP_SELECT_KEY "RenamePlus.OpenSelection"
 !define RP_RUN_KEY "Software\Microsoft\Windows\CurrentVersion\Run"
 !define RP_RUN_VALUE "Rename Plus"
 !define RP_BACKGROUND_FLAG "--background"
+!define RP_PROFILE_LIST "SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList"
+; Onde o registro de um usuário sem sessão aberta é montado durante a desinstalação.
+!define RP_TEMP_HIVE "RenamePlusUninstall"
 
 ; Uma entrada do menu de contexto: KEY é relativo a Software\Classes.
 !macro rpWriteVerb ROOT KEY LABEL ARGS MULTI
@@ -38,13 +45,18 @@
   !insertmacro rpWriteVerb SHCTX "Directory\shell\${RP_SELECT_KEY}" "$(rpSelectLabel)" '--select -- "%1"' "Player"
 !macroend
 
+; CLASSES: chave equivalente a Software\Classes (ex.: a raiz de um UsrClass.dat montado).
+!macro rpDeleteContextMenuAt ROOT CLASSES
+  DeleteRegKey ${ROOT} "${CLASSES}\*\shell\${RP_OPEN_KEY}"
+  DeleteRegKey ${ROOT} "${CLASSES}\Directory\shell\${RP_OPEN_KEY}"
+  DeleteRegKey ${ROOT} "${CLASSES}\Directory\Background\shell\${RP_OPEN_KEY}"
+  DeleteRegKey ${ROOT} "${CLASSES}\Drive\shell\${RP_OPEN_KEY}"
+  DeleteRegKey ${ROOT} "${CLASSES}\*\shell\${RP_SELECT_KEY}"
+  DeleteRegKey ${ROOT} "${CLASSES}\Directory\shell\${RP_SELECT_KEY}"
+!macroend
+
 !macro rpDeleteContextMenu ROOT
-  DeleteRegKey ${ROOT} "Software\Classes\*\shell\${RP_OPEN_KEY}"
-  DeleteRegKey ${ROOT} "Software\Classes\Directory\shell\${RP_OPEN_KEY}"
-  DeleteRegKey ${ROOT} "Software\Classes\Directory\Background\shell\${RP_OPEN_KEY}"
-  DeleteRegKey ${ROOT} "Software\Classes\Drive\shell\${RP_OPEN_KEY}"
-  DeleteRegKey ${ROOT} "Software\Classes\*\shell\${RP_SELECT_KEY}"
-  DeleteRegKey ${ROOT} "Software\Classes\Directory\shell\${RP_SELECT_KEY}"
+  !insertmacro rpDeleteContextMenuAt ${ROOT} "Software\Classes"
 !macroend
 
 !macro rpWriteBackground
@@ -99,6 +111,70 @@
     LangString rpBgCheckbox ${LANG_PORTUGUESEBR} "Monitorar pastas em segundo plano (iniciar com o Windows)"
     LangString rpBgCheckbox ${LANG_ENGLISH} "Watch folders in the background (start with Windows)"
     LangString rpBgCheckbox ${LANG_SPANISHINTERNATIONAL} "Vigilar carpetas en segundo plano (iniciar con Windows)"
+  !else
+    ; Remove as entradas por usuário (Configurações) de todos os perfis do computador.
+    ; Com sessão aberta, o registro do usuário já está em HKEY_USERS\<SID> (e os tipos de
+    ; arquivo em <SID>_Classes); sem sessão, NTUSER.DAT e UsrClass.dat são montados com
+    ; `reg load` só para isso. O desinstalador roda como administrador (instalação por máquina).
+    Function un.rpCleanAllUsers
+      Push $R0
+      Push $R1
+      Push $R2
+      Push $R3
+      StrCpy $R0 0
+      ${do}
+        EnumRegKey $R1 HKLM "${RP_PROFILE_LIST}" $R0
+        ${if} $R1 == ""
+          ${break}
+        ${endif}
+        IntOp $R0 $R0 + 1
+        ; SYSTEM, LOCAL SERVICE e NETWORK SERVICE não usam o app.
+        ${if} $R1 == "S-1-5-18"
+        ${orIf} $R1 == "S-1-5-19"
+        ${orIf} $R1 == "S-1-5-20"
+          ${continue}
+        ${endif}
+
+        ClearErrors
+        EnumRegKey $R2 HKU "$R1" 0
+        ${ifNot} ${Errors}
+          DeleteRegValue HKU "$R1\${RP_RUN_KEY}" "${RP_RUN_VALUE}"
+          StrCpy $R3 "_Classes"
+          !insertmacro rpDeleteContextMenuAt HKU "$R1$R3"
+          ${continue}
+        ${endif}
+
+        ReadRegStr $R2 HKLM "${RP_PROFILE_LIST}\$R1" "ProfileImagePath"
+        ExpandEnvStrings $R2 $R2
+        ${if} $R2 == ""
+          ${continue}
+        ${endif}
+
+        ${if} ${FileExists} "$R2\NTUSER.DAT"
+          nsExec::Exec '"$SYSDIR\reg.exe" load "HKU\${RP_TEMP_HIVE}" "$R2\NTUSER.DAT"'
+          Pop $R3
+          ${if} $R3 == 0
+            DeleteRegValue HKU "${RP_TEMP_HIVE}\${RP_RUN_KEY}" "${RP_RUN_VALUE}"
+            nsExec::Exec '"$SYSDIR\reg.exe" unload "HKU\${RP_TEMP_HIVE}"'
+            Pop $R3
+          ${endif}
+        ${endif}
+
+        ${if} ${FileExists} "$R2\AppData\Local\Microsoft\Windows\UsrClass.dat"
+          nsExec::Exec '"$SYSDIR\reg.exe" load "HKU\${RP_TEMP_HIVE}" "$R2\AppData\Local\Microsoft\Windows\UsrClass.dat"'
+          Pop $R3
+          ${if} $R3 == 0
+            !insertmacro rpDeleteContextMenuAt HKU "${RP_TEMP_HIVE}"
+            nsExec::Exec '"$SYSDIR\reg.exe" unload "HKU\${RP_TEMP_HIVE}"'
+            Pop $R3
+          ${endif}
+        ${endif}
+      ${loop}
+      Pop $R3
+      Pop $R2
+      Pop $R1
+      Pop $R0
+    FunctionEnd
   !endif
 !macroend
 
@@ -208,9 +284,11 @@
   ; Na atualização, o desinstalador da versão anterior roda antes: as entradas ficam.
   ${ifNot} ${isUpdated}
     !insertmacro rpDeleteContextMenu SHCTX
-    ; Entradas criadas pelo próprio app (Configurações), só para o usuário atual.
-    !insertmacro rpDeleteContextMenu HKCU
     DeleteRegValue SHCTX "${RP_RUN_KEY}" "${RP_RUN_VALUE}"
+    ; Entradas criadas pelo próprio app (Configurações): quem desinstala (pode ser outra
+    ; conta, a do administrador que autorizou) e todos os demais usuários.
+    !insertmacro rpDeleteContextMenu HKCU
     DeleteRegValue HKCU "${RP_RUN_KEY}" "${RP_RUN_VALUE}"
+    Call un.rpCleanAllUsers
   ${endif}
 !macroend
