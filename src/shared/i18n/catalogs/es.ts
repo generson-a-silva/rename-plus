@@ -57,6 +57,34 @@ export const es: Messages = {
 	"integration.unsupported":
 		"El menú contextual del sistema aún no es compatible con esta plataforma.",
 
+	// ---- Actualizaciones ------------------------------------------------
+	"updates.title": "Actualizaciones",
+	"updates.description":
+		"Rename Plus consulta las versiones publicadas en GitHub y avisa cuando sale una nueva. Nada se descarga ni se instala sin ti.",
+	"updates.installed": "Versión instalada: {version}",
+	"updates.checking": "Comprobando…",
+	"updates.upToDate": "Tienes la versión más reciente (comprobado el {time}).",
+	"updates.available": "Nueva versión disponible: {version}",
+	"updates.skippedVersion": "Versión {version} omitida: no se anunciará.",
+	"updates.checkNow": "Comprobar ahora",
+	"updates.download": "Ver y descargar en GitHub",
+	"updates.skip": "Omitir esta versión",
+	"updates.skipHint": "Deja de avisar de esta versión; las siguientes se siguen anunciando.",
+	"updates.unskip": "Volver a avisar",
+	"updates.autoCheck": "Comprobar automáticamente (al abrir y cada 12 horas)",
+	"updates.privacy":
+		"La comprobación solo lee la lista pública de versiones; no se envía ningún dato tuyo.",
+	"updates.allReleases": "Todas las versiones",
+	"updates.statusBar": "Nueva versión {version}",
+	"updates.statusBarHint": "Abrir la página de la nueva versión en GitHub",
+	"updates.notificationTitle": "Actualización de Rename Plus",
+	"updates.notificationBody":
+		"La versión {version} está disponible (usas la {current}). Haz clic para verla en GitHub.",
+	"updates.failed": "No se pudo comprobar: {detail}",
+	"updates.timeout": "GitHub no respondió a tiempo",
+	"updates.rateLimited": "se alcanzó el límite de consultas de GitHub; inténtalo más tarde",
+	"updates.invalidResponse": "respuesta inesperada de GitHub",
+
 	// ---- Árbol y raíces -------------------------------------------------
 	"roots.home": "Carpeta personal",
 	"roots.filesystem": "Sistema de archivos",

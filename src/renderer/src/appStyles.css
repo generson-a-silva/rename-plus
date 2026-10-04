@@ -821,6 +821,16 @@ button.header-cell:hover {
 	height: 36px;
 }
 
+/* Links com aparência de botão (ex.: baixar a nova versão). */
+a.button {
+	color: inherit;
+	text-decoration: none;
+}
+
+a.button.primary {
+	color: var(--accent-fg);
+}
+
 /* ---- Barra de status ------------------------------------------------- */
 
 .status-bar {
@@ -863,6 +873,30 @@ button.header-cell:hover {
 }
 
 .status-message + .status-version {
+	margin-left: 0;
+}
+
+/* Aviso de nova versão: link para a página da release no GitHub. */
+.status-update {
+	display: inline-flex;
+	flex: none;
+	align-items: center;
+	gap: 4px;
+	margin-left: auto;
+	padding: 1px 8px;
+	border-radius: 999px;
+	background: var(--accent-soft);
+	color: var(--accent);
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.status-update:hover {
+	filter: brightness(1.1);
+}
+
+.status-message + .status-update,
+.status-update + .status-version {
 	margin-left: 0;
 }
 
@@ -1382,4 +1416,46 @@ button.header-cell:hover {
 
 .integration-notice.error {
 	color: var(--error);
+}
+
+/* ---- Atualizações ----------------------------------------------------- */
+
+.update-summary {
+	display: grid;
+	gap: 2px;
+	min-width: 0;
+}
+
+.update-state {
+	color: var(--muted);
+	font-size: 12px;
+}
+
+.update-state.ok {
+	color: var(--changed);
+}
+
+.update-state.error {
+	color: var(--error);
+}
+
+.update-state.available {
+	color: var(--accent);
+	font-weight: 600;
+}
+
+.update-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.settings-section .settings-hint {
+	margin: 0;
+	color: var(--muted);
+	font-size: 12px;
+}
+
+.settings-hint a {
+	color: var(--accent);
 }

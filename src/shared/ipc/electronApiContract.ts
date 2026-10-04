@@ -11,6 +11,7 @@ import type {
 	ShellIntegrationUpdate,
 } from "./shellIntegrationTypes";
 import type { ThemeMode } from "./themeModes";
+import type { UpdateSettings, UpdateStatus } from "./updateTypes";
 
 /** API exposta ao renderer via `contextBridge` (disponível em `window.api`). */
 export interface ElectronApi {
@@ -61,4 +62,10 @@ export interface ElectronApi {
 	takeLaunchRequests: () => Promise<LaunchRequest[]>;
 	/** Itens a abrir enviados com o app já aberto. Devolve a função que cancela a inscrição. */
 	onLaunchRequest: (listener: (request: LaunchRequest) => void) => () => void;
+	/** Versão instalada, preferências e resultado da última verificação de atualizações. */
+	getUpdateStatus: () => Promise<UpdateStatus>;
+	/** Consulta agora as releases do GitHub (ignora a versão pulada: o usuário pediu). */
+	checkForUpdates: () => Promise<UpdateStatus>;
+	setUpdateSettings: (patch: Partial<UpdateSettings>) => Promise<UpdateStatus>;
+	onUpdateStatus: (listener: (status: UpdateStatus) => void) => () => void;
 }

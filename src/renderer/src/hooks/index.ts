@@ -15,3 +15,4 @@ export { usePersistentState } from "./usePersistentState";
 export { useResizableSplitter } from "./useResizableSplitter";
 export { type TextPromptRequest, useTextPrompt } from "./useTextPrompt";
 export { useThemeMode } from "./useThemeMode";
+export { type UpdateStatusState, useUpdateStatus } from "./useUpdateStatus";

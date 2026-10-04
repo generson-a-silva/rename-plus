@@ -21,3 +21,4 @@ export type {
 	ShellIntegrationUpdate,
 } from "./shellIntegrationTypes";
 export { THEME_MODES, type ThemeMode } from "./themeModes";
+export type { ReleaseInfo, UpdateCheckState, UpdateSettings, UpdateStatus } from "./updateTypes";

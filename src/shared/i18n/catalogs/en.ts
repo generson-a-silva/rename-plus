@@ -56,6 +56,33 @@ export const en: Messages = {
 	"integration.warningDevelopment": "Development mode: the options will run {command}",
 	"integration.unsupported": "The system context menu is not supported on this platform yet.",
 
+	// ---- Updates --------------------------------------------------------
+	"updates.title": "Updates",
+	"updates.description":
+		"Rename Plus checks the versions published on GitHub and lets you know when a new one comes out. Nothing is downloaded or installed without you.",
+	"updates.installed": "Installed version: {version}",
+	"updates.checking": "Checking…",
+	"updates.upToDate": "You're on the latest version (checked on {time}).",
+	"updates.available": "New version available: {version}",
+	"updates.skippedVersion": "Version {version} skipped: it won't be announced.",
+	"updates.checkNow": "Check now",
+	"updates.download": "View and download on GitHub",
+	"updates.skip": "Skip this version",
+	"updates.skipHint": "Stops announcing this version; later ones are still announced.",
+	"updates.unskip": "Announce again",
+	"updates.autoCheck": "Check automatically (on startup and every 12 hours)",
+	"updates.privacy": "The check only reads the public list of versions; none of your data is sent.",
+	"updates.allReleases": "All versions",
+	"updates.statusBar": "New version {version}",
+	"updates.statusBarHint": "Open the new version's page on GitHub",
+	"updates.notificationTitle": "Rename Plus update",
+	"updates.notificationBody":
+		"Version {version} is available (you're on {current}). Click to view it on GitHub.",
+	"updates.failed": "Couldn't check: {detail}",
+	"updates.timeout": "GitHub didn't respond in time",
+	"updates.rateLimited": "GitHub request limit reached; try again later",
+	"updates.invalidResponse": "unexpected response from GitHub",
+
 	// ---- Tree and roots -------------------------------------------------
 	"roots.home": "Home folder",
 	"roots.filesystem": "File system",

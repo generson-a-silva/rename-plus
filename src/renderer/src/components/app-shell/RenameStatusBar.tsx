@@ -1,5 +1,6 @@
+import { AppIcon } from "@components/common";
 import { type I18n, useI18n } from "@hooks";
-import type { AppInfo } from "@shared/ipc";
+import type { AppInfo, ReleaseInfo } from "@shared/ipc";
 
 export interface StatusMessage {
 	kind: "info" | "success" | "error";
@@ -15,6 +16,8 @@ interface RenameStatusBarProps {
 	message: StatusMessage | null;
 	/** Nome, versão e autor do app (`null` enquanto não carregou). */
 	appInfo: AppInfo | null;
+	/** Nova versão disponível no GitHub, ou `null`. */
+	update: ReleaseInfo | null;
 }
 
 /** Dica exibida ao passar o mouse sobre a versão. */
@@ -35,6 +38,7 @@ export function RenameStatusBar({
 	truncated,
 	message,
 	appInfo,
+	update,
 }: RenameStatusBarProps) {
 	const { t } = useI18n();
 	return (
@@ -54,6 +58,18 @@ export function RenameStatusBar({
 				<span className={`status-message ${message.kind}`} role="status">
 					{message.text}
 				</span>
+			)}
+			{update && (
+				<a
+					className="status-update"
+					href={update.url}
+					target="_blank"
+					rel="noreferrer"
+					title={t("updates.statusBarHint")}
+				>
+					<AppIcon name="download" size={13} />
+					{t("updates.statusBar", { version: update.version })}
+				</a>
 			)}
 			{appInfo && (
 				<span className="status-version" title={versionTooltip(appInfo, t)}>

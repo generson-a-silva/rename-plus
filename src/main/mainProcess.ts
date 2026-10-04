@@ -6,6 +6,7 @@ import { parseLaunchArguments } from "./launchArguments";
 import { asLaunchRequest, queueLaunchRequest } from "./launchRequestQueue";
 import { setMainLocale } from "./mainLocale";
 import { loadTheme, windowBackground } from "./themeSettings";
+import { startUpdateChecks } from "./updateChecker";
 import { loadWindowState, trackWindowState } from "./windowStateService";
 
 const devServerUrl = process.env.VITE_DEV_SERVER_URL;
@@ -111,6 +112,7 @@ function startApp(): void {
 		loadTheme();
 		registerIpcHandlers();
 		createWindow();
+		startUpdateChecks();
 
 		app.on("activate", () => {
 			if (BrowserWindow.getAllWindows().length === 0) createWindow();

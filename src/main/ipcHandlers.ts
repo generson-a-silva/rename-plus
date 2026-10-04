@@ -21,6 +21,7 @@ import {
 	setContextMenuIntegration,
 } from "./shell-integration";
 import { setTheme } from "./themeSettings";
+import { checkForUpdates, getUpdateStatus, setUpdateSettings } from "./updateChecker";
 
 export function registerIpcHandlers(): void {
 	ipcMain.handle(IpcChannel.GetAppInfo, () => getAppInfo());
@@ -94,5 +95,11 @@ export function registerIpcHandlers(): void {
 
 	ipcMain.handle(IpcChannel.MoveItems, (_event, paths: string[], targetDir: string) =>
 		moveItems(paths, targetDir),
+	);
+
+	ipcMain.handle(IpcChannel.GetUpdateStatus, () => getUpdateStatus());
+	ipcMain.handle(IpcChannel.CheckForUpdates, () => checkForUpdates(true));
+	ipcMain.handle(IpcChannel.SetUpdateSettings, (_event, patch: unknown) =>
+		setUpdateSettings(patch),
 	);
 }

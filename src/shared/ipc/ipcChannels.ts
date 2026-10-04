@@ -25,8 +25,13 @@ export const IpcChannel = {
 	GetShellIntegration: "integration:get",
 	SetShellIntegration: "integration:set",
 	TakeLaunchRequests: "launch:take",
+	GetUpdateStatus: "update:get-status",
+	CheckForUpdates: "update:check",
+	SetUpdateSettings: "update:set-settings",
 	/** Evento main → renderer: itens a abrir (menu de contexto do sistema, linha de comando). */
 	LaunchRequest: "launch:request",
+	/** Evento main → renderer: a situação da verificação de atualizações mudou. */
+	UpdateStatus: "update:status",
 } as const;
 
 export type IpcChannel = (typeof IpcChannel)[keyof typeof IpcChannel];

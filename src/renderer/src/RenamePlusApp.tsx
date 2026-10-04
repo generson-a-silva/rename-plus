@@ -22,6 +22,7 @@ import {
 	useResizableSplitter,
 	useTextPrompt,
 	useThemeMode,
+	useUpdateStatus,
 } from "@hooks";
 import {
 	baseName,
@@ -112,6 +113,7 @@ export function RenamePlusApp() {
 
 	const { t, tr } = useI18n();
 	const theme = useThemeMode();
+	const updates = useUpdateStatus();
 	const tree = useFolderTreeState(filters.hidden);
 	const { reveal, refresh: refreshTree } = tree;
 
@@ -575,6 +577,7 @@ export function RenamePlusApp() {
 				errors={preview.errors}
 				truncated={listing.truncated}
 				message={message}
+				update={updates.announced}
 			/>
 			<TextPromptDialog request={prompt.request} onClose={prompt.close} />
 			<SettingsDialog
@@ -582,6 +585,7 @@ export function RenamePlusApp() {
 				onClose={() => setSettingsOpen(false)}
 				theme={theme.mode}
 				onThemeChange={theme.setMode}
+				updates={updates}
 			/>
 			{draggingFiles && <DropOverlay />}
 		</div>

@@ -1,19 +1,30 @@
 import { AppIcon } from "@components/common";
-import { useI18n } from "@hooks";
+import { type UpdateStatusState, useI18n } from "@hooks";
 import type { ThemeMode } from "@shared/ipc";
 import { useEffect, useId, useRef } from "react";
 import { AppearanceSection } from "./AppearanceSection";
 import { ContextMenuIntegrationSection } from "./ContextMenuIntegrationSection";
+import { UpdatesSection } from "./UpdatesSection";
 
 interface SettingsDialogProps {
 	open: boolean;
 	onClose: () => void;
 	theme: ThemeMode;
 	onThemeChange: (mode: ThemeMode) => void;
+	updates: UpdateStatusState;
 }
 
-/** Janela modal de configurações, organizada em seções (aparência, menu de contexto do sistema). */
-export function SettingsDialog({ open, onClose, theme, onThemeChange }: SettingsDialogProps) {
+/**
+ * Janela modal de configurações, organizada em seções (aparência, atualizações, menu de
+ * contexto do sistema).
+ */
+export function SettingsDialog({
+	open,
+	onClose,
+	theme,
+	onThemeChange,
+	updates,
+}: SettingsDialogProps) {
 	const { t } = useI18n();
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const titleId = useId();
@@ -51,6 +62,7 @@ export function SettingsDialog({ open, onClose, theme, onThemeChange }: Settings
 					</header>
 					<div className="settings-body">
 						<AppearanceSection theme={theme} onThemeChange={onThemeChange} />
+						<UpdatesSection updates={updates} />
 						<ContextMenuIntegrationSection />
 					</div>
 					<footer className="settings-footer">

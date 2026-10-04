@@ -114,6 +114,10 @@ Se você usa Windows e precisa de recursos avançados como metadados EXIF/ID3, s
 | **Extensão** | Manter, minúsculas, MAIÚSCULAS, Título, remover, trocar por uma fixa ou acrescentar uma extra. |
 | **Filtros** | Máscara de nomes (`*.jpg; *.png`), arquivos e/ou pastas, itens ocultos e conteúdo das subpastas (modo recursivo). |
 
+### Atualizações
+
+O app consulta as [releases do GitHub](https://github.com/generson-a-silva/rename-plus/releases) ao abrir e a cada 12 horas e avisa quando há versão nova (notificação do sistema e aviso na barra de status). Nada é baixado nem instalado automaticamente. Em **Configurações › Atualizações** dá para verificar na hora, ignorar uma versão ou desligar a verificação.
+
 ### Pré-visualização e segurança
 
 - **Pré-visualização ao vivo:** o novo nome é calculado enquanto você digita, e só para os itens selecionados.
@@ -168,6 +172,7 @@ Para deixar claro o escopo atual:
 - **Não move nem copia partes do nome** de uma posição para outra (o painel "Mover/Copiar" do Bulk Rename Utility).
 - **Não altera datas, atributos nem permissões** dos arquivos; só os nomes.
 - **Não move arquivos para outra pasta ao renomear:** o novo nome fica sempre na mesma pasta. Para mover, use recortar e colar.
+- **Não instala atualizações sozinho:** apenas avisa e abre a página da versão no GitHub.
 - **Não renomeia pela linha de comando:** ela só abre pastas e arquivos no app; também não há agendamento.
 - **O "Desfazer" vale só para o último lote** e só enquanto o app está aberto.
 - **Limite de listagem:** mostra até 50.000 itens por vez; acima disso a lista é truncada, com aviso.
@@ -255,7 +260,7 @@ O motor de renomeação (`src/shared/rename`) é TypeScript puro, sem dependênc
 
 ## Onde ficam as preferências
 
-Tema, idioma, regras, filtros, ordenação, larguras e última pasta aberta ficam salvos na pasta de dados do app:
+Tema, idioma, regras, filtros, ordenação, larguras e última pasta aberta ficam salvos na pasta de dados do app (as preferências de atualização em `updates.json`):
 
 - **Linux:** `~/.config/rename-plus/`
 - **Windows:** `%APPDATA%\rename-plus\`
