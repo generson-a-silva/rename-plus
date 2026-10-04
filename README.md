@@ -1,292 +1,298 @@
 <p align="center">
-  <img src="resources/icon.png" alt="Ícone do Rename Plus" width="128" height="128">
+  <img src="resources/icon.png" alt="Rename Plus icon" width="128" height="128">
 </p>
 
 <h1 align="center">Rename Plus</h1>
 
 <p align="center">
-  Renomeador de arquivos e pastas em lote, com pré-visualização ao vivo, para Linux e Windows.
+  Batch file and folder renamer with a live preview, for Linux and Windows.
 </p>
 
 <p align="center">
-  <a href="https://github.com/generson-a-silva/rename-plus/releases/latest"><img alt="Última versão" src="https://img.shields.io/github/v/release/generson-a-silva/rename-plus?label=vers%C3%A3o&color=2f6fe4"></a>
-  <img alt="Linux" src="https://img.shields.io/badge/Linux-suportado-1a7f37?logo=linux&logoColor=white">
-  <img alt="Windows" src="https://img.shields.io/badge/Windows-suportado-1a7f37?logo=windows&logoColor=white">
-  <img alt="macOS" src="https://img.shields.io/badge/macOS-planejado-8d96a0?logo=apple&logoColor=white">
-  <img alt="Idiomas" src="https://img.shields.io/badge/idiomas-PT%20%C2%B7%20EN%20%C2%B7%20ES-2f6fe4">
+  <b>English</b> · <a href="README.pt-BR.md">Português (Brasil)</a> · <a href="README.es-ES.md">Español</a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/generson-a-silva/rename-plus/releases/latest"><img alt="Baixar a última versão" src="https://img.shields.io/badge/%E2%AC%87%20Baixar-%C3%BAltima%20vers%C3%A3o-1a7f37?style=for-the-badge"></a>
+  <a href="https://github.com/generson-a-silva/rename-plus/releases/latest"><img alt="Latest version" src="https://img.shields.io/github/v/release/generson-a-silva/rename-plus?label=version&color=2f6fe4"></a>
+  <img alt="Linux" src="https://img.shields.io/badge/Linux-supported-1a7f37?logo=linux&logoColor=white">
+  <img alt="Windows" src="https://img.shields.io/badge/Windows-supported-1a7f37?logo=windows&logoColor=white">
+  <img alt="macOS" src="https://img.shields.io/badge/macOS-planned-8d96a0?logo=apple&logoColor=white">
+  <img alt="Languages" src="https://img.shields.io/badge/languages-EN%20%C2%B7%20PT%20%C2%B7%20ES-2f6fe4">
 </p>
 
 <p align="center">
-  <img src="docs/screenshot.png" alt="Tela do Rename Plus: árvore de pastas à esquerda, lista de fotos com os novos nomes em verde à direita e os painéis de regras embaixo" width="900">
+  <a href="https://github.com/generson-a-silva/rename-plus/releases/latest"><img alt="Download the latest version" src="https://img.shields.io/badge/%E2%AC%87%20Download-latest%20version-1a7f37?style=for-the-badge"></a>
+</p>
+
+<p align="center">
+  <img src="docs/screenshot.png" alt="Rename Plus window: folder tree on the left, a list of photos with their new names in green on the right, and the rule panels at the bottom" width="900">
 </p>
 
 ---
 
-## Sumário
+## Contents
 
-- [Sobre](#sobre)
-- [Telas](#telas)
-- [Inspiração e créditos](#inspiração-e-créditos)
-- [Funcionalidades](#funcionalidades)
-- [Como as regras são aplicadas](#como-as-regras-são-aplicadas)
-- [O que o Rename Plus não faz](#o-que-o-rename-plus-não-faz)
-- [Plataformas suportadas](#plataformas-suportadas)
-- [Instalação](#instalação)
-- [Atalhos de teclado](#atalhos-de-teclado)
-- [Desenvolvimento](#desenvolvimento)
-- [Onde ficam as preferências](#onde-ficam-as-preferências)
-- [Autor](#autor)
+- [About](#about)
+- [Screenshots](#screenshots)
+- [Inspiration and credits](#inspiration-and-credits)
+- [Features](#features)
+- [How the rules are applied](#how-the-rules-are-applied)
+- [What Rename Plus doesn't do](#what-rename-plus-doesnt-do)
+- [Supported platforms](#supported-platforms)
+- [Installation](#installation)
+- [Keyboard shortcuts](#keyboard-shortcuts)
+- [Development](#development)
+- [Where settings are stored](#where-settings-are-stored)
+- [Author](#author)
 
-## Sobre
+## About
 
-O **Rename Plus** renomeia muitos arquivos e pastas de uma vez a partir de regras combináveis: expressão regular, substituição de texto, maiúsculas/minúsculas, remoção de trechos, prefixos e sufixos, data, nome da pasta, numeração e extensão.
+**Rename Plus** renames many files and folders at once using rules you can combine: regular expressions, text replacement, letter case, removing parts of the name, prefixes and suffixes, dates, folder names, numbering and extensions.
 
-Antes de qualquer alteração no disco, a coluna **Novo nome** mostra o resultado de cada item selecionado. Conflitos, como dois arquivos com o mesmo nome final ou caracteres proibidos pelo sistema, aparecem em vermelho e bloqueiam a operação. Depois de renomear, é possível **desfazer** o último lote.
+Nothing touches the disk until you confirm. The **New name** column shows the result for every selected item as you type. Conflicts, such as two files ending up with the same name or characters the system doesn't allow, are shown in red and block the operation. After renaming, you can **undo** the last batch.
 
-A interface segue o modelo de três áreas: árvore de pastas à esquerda, lista de arquivos à direita e painéis de regras embaixo, com os botões **Renomear**, **Desfazer** e **Redefinir** sempre visíveis.
+The window has three areas: the folder tree on the left, the file list on the right and the rule panels at the bottom, with the **Rename**, **Undo** and **Reset** buttons always in view.
 
-## Telas
+## Screenshots
+
+The screenshots show the Portuguese interface. The app is also available in English and Spanish.
 
 <table>
   <tr>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/subpastas.png"><img src="docs/screenshots/subpastas.png" alt="Tema claro com o modo Subpastas: faixas de dois CDs renomeadas para '01 - Opening Theme.mp3', com numeração reiniciando em cada pasta"></a>
-      <p><b>Várias regras e subpastas.</b> Remover, Substituir, Título, Numeração por pasta e extensão em minúsculas, aplicados às faixas de dois CDs de uma vez (tema claro).</p>
+      <a href="docs/screenshots/subpastas.png"><img src="docs/screenshots/subpastas.png" alt="Light theme in Subfolders mode: tracks from two CDs renamed to '01 - Opening Theme.mp3', with numbering restarting in each folder"></a>
+      <p><b>Several rules and subfolders.</b> Remove, Replace, Title case, per-folder Numbering and a lowercase extension, applied to the tracks of two CDs at once (light theme).</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/conflitos.png"><img src="docs/screenshots/conflitos.png" alt="Linhas em vermelho com o novo nome 'foto.jpg' repetido; a barra de status mostra 4 conflitos e o botão Renomear está bloqueado"></a>
-      <p><b>Conflitos.</b> Nomes repetidos no lote ou iguais a um arquivo que já existe ficam em vermelho, e o botão Renomear é bloqueado. O motivo aparece ao passar o mouse sobre a linha.</p>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" valign="top">
-      <a href="docs/screenshots/erros.png"><img src="docs/screenshots/erros.png" alt="Painel de ações mostrando 'RegEx inválida: Unterminated group' e barra de status com 'Pasta não encontrada'"></a>
-      <p><b>Mensagens de erro.</b> Uma RegEx inválida é explicada no painel de ações; caminhos inexistentes digitados na barra de endereço aparecem em vermelho na barra de status.</p>
-    </td>
-    <td width="50%" valign="top">
-      <a href="docs/screenshots/validacao.png"><img src="docs/screenshots/validacao.png" alt="Diálogo 'Renomear arquivo' com o campo em vermelho e a mensagem 'Contém o caractere /'"></a>
-      <p><b>Validação de nomes.</b> Ao renomear um item (F2) ou criar uma pasta, nomes inválidos para o sistema são apontados antes de confirmar.</p>
+      <a href="docs/screenshots/conflitos.png"><img src="docs/screenshots/conflitos.png" alt="Rows in red with the new name 'foto.jpg' repeated; the status bar shows 4 conflicts and the Rename button is disabled"></a>
+      <p><b>Conflicts.</b> Names repeated in the batch, or matching a file that already exists, turn red and the Rename button is disabled. Hover over a row to see why.</p>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/arrastar.png"><img src="docs/screenshots/arrastar.png" alt="Janela com borda tracejada e o aviso 'Solte para abrir'"></a>
-      <p><b>Arrastar e soltar.</b> Solte uma pasta para abri-la, ou arquivos para abrir a pasta deles já com eles selecionados.</p>
+      <a href="docs/screenshots/erros.png"><img src="docs/screenshots/erros.png" alt="Actions panel showing 'Invalid RegEx: Unterminated group' and the status bar with 'Folder not found' in the status bar"></a>
+      <p><b>Error messages.</b> An invalid RegEx is explained in the actions panel; a path typed in the address bar that doesn't exist is reported in red in the status bar.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Modal de Configurações com as seções Aparência e Menu de contexto do sistema, com o Dolphin adicionado"></a>
-      <p><b>Configurações.</b> Tema da interface e as opções "Abrir no Rename Plus" no menu de contexto do gerenciador de arquivos.</p>
+      <a href="docs/screenshots/validacao.png"><img src="docs/screenshots/validacao.png" alt="Rename file dialog with the field in red and the message 'Contains the "/" character'"></a>
+      <p><b>Name validation.</b> When renaming a single item (F2) or creating a folder, names the system won't accept are flagged before you confirm.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/arrastar.png"><img src="docs/screenshots/arrastar.png" alt="Window with a dashed border and the message 'Drop to open'"></a>
+      <p><b>Drag and drop.</b> Drop a folder to open it, or drop files to open their folder with them already selected.</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Settings dialog with the Appearance and System context menu sections, with Dolphin added"></a>
+      <p><b>Settings.</b> Interface theme and the "Open in Rename Plus" entries in the file manager's context menu.</p>
     </td>
   </tr>
 </table>
 
-## Inspiração e créditos
+## Inspiration and credits
 
-O Rename Plus é inspirado no **[Bulk Rename Utility](https://github.com/BulkRenameUtility/download)**, um renomeador em lote para Windows de código fechado. A organização dos painéis numerados e a ordem em que as regras são aplicadas seguem o modelo consagrado por ele.
+Rename Plus is inspired by **[Bulk Rename Utility](https://github.com/BulkRenameUtility/download)**, a closed-source batch renamer for Windows. The numbered panels and the order in which the rules are applied follow the model it made popular.
 
-O Rename Plus é um projeto independente, escrito do zero:
+Rename Plus is an independent project, written from scratch:
 
-- **não usa código** do Bulk Rename Utility;
-- **não é afiliado** aos seus autores nem endossado por eles;
-- **não é um substituto completo:** veja [o que o Rename Plus não faz](#o-que-o-rename-plus-não-faz).
+- it **uses no code** from Bulk Rename Utility;
+- it is **not affiliated with** or endorsed by its authors;
+- it is **not a full replacement**: see [what Rename Plus doesn't do](#what-rename-plus-doesnt-do).
 
-Se você usa Windows e precisa de recursos avançados como metadados EXIF/ID3, scripts em JavaScript ou importação de CSV, conheça o Bulk Rename Utility.
+If you're on Windows and need advanced features such as EXIF/ID3 metadata, JavaScript scripting or CSV import, take a look at Bulk Rename Utility.
 
-## Funcionalidades
+## Features
 
-### Regras de renomeação
+### Renaming rules
 
-| Painel | O que faz |
+| Panel | What it does |
 |---|---|
-| **RegEx** | Buscar e substituir com expressões regulares, com grupos de captura (`$1`, `$2`…), opção de incluir a extensão, substituição global e sem diferenciar maiúsculas. O **construtor visual** monta a expressão com blocos arrastáveis, sem digitar RegEx. |
-| **Nome** | Manter, remover, trocar por um nome fixo ou inverter o nome original. |
-| **Substituir** | Substituição de texto literal, com ou sem diferenciar maiúsculas. |
-| **Maiúsc./Minúsc.** | minúsculas, MAIÚSCULAS, Título e Frase, com lista de palavras de exceção. |
-| **Remover** | Primeiros/últimos N caracteres, intervalo por posição, caracteres e palavras específicos, cortar antes/depois de um texto, dígitos, acentos, símbolos, caracteres não ASCII, espaços duplos, espaços nas pontas e pontos iniciais. |
-| **Adicionar** | Prefixo, sufixo, inserção em uma posição (negativa conta do fim) e separação de palavras coladas (`MinhaFoto` → `Minha Foto`). |
-| **Data automática** | Data de modificação, criação ou atual, como prefixo ou sufixo, em formato livre (`YYYY-MM-DD`, `DD.MM.YY`…). |
-| **Nome da pasta** | Acrescenta o nome de uma ou mais pastas ancestrais. |
-| **Numeração** | Prefixo, sufixo, ambos ou em uma posição; início, incremento, zeros à esquerda; estilos `1, 2, 3`, `a, b, c`, `A, B, C` e `I, II, III`; reinício por pasta. |
-| **Extensão** | Manter, minúsculas, MAIÚSCULAS, Título, remover, trocar por uma fixa ou acrescentar uma extra. |
-| **Filtros** | Máscara de nomes (`*.jpg; *.png`), arquivos e/ou pastas, itens ocultos e conteúdo das subpastas (modo recursivo). |
+| **RegEx** | Find and replace with regular expressions, with capture groups (`$1`, `$2`…), an option to include the extension, global replacement and case-insensitive matching. The **Visual builder** lets you put the expression together from drag-and-drop blocks, without typing RegEx. |
+| **Name** | Keep, remove, replace with a fixed name or reverse the original name. |
+| **Replace** | Plain text replacement, case-sensitive or not. |
+| **Case** | lowercase, UPPERCASE, Title Case and Sentence case, with a list of words to leave untouched. |
+| **Remove** | First/last N characters, a range of positions, specific characters and words, crop before/after a piece of text, digits, accents, symbols, non-ASCII characters, double spaces, leading/trailing spaces and leading dots. |
+| **Add** | Prefix, suffix, insertion at a position (negative counts from the end) and splitting joined words (`MyPhoto` → `My Photo`). |
+| **Auto date** | Modified, created or current date, as a prefix or suffix, in any format (`YYYY-MM-DD`, `DD.MM.YY`…). |
+| **Folder name** | Adds the name of one or more parent folders. |
+| **Numbering** | Prefix, suffix, both or at a position; start, step, zero padding; `1, 2, 3`, `a, b, c`, `A, B, C` and `I, II, III` styles; restart in each folder. |
+| **Extension** | Keep, lowercase, UPPERCASE, Title, remove, replace with a fixed one or append an extra one. |
+| **Filters** | Name mask (`*.jpg; *.png`), files and/or folders, hidden items and subfolder contents (recursive mode). |
 
-### Construtor visual de RegEx
+### Visual RegEx builder
 
-Para quem não escreve expressões regulares: no painel **RegEx**, o botão **Construtor visual** abre uma tela em que a busca é montada com blocos, da esquerda para a direita ("Início do nome", "Texto exato", "Números", "Letras", "Separador", "Uma destas palavras"…), e a substituição também ("Texto", "Trecho guardado", "Trecho encontrado").
+For people who don't write regular expressions: in the **RegEx** panel, the **Visual builder** button opens a screen where you build the search from blocks, left to right ("Start of name", "Exact text", "Numbers", "Letters", "Separator", "One of these words"…), and the replacement too ("Text", "Kept match", "Whole match").
 
-- Arraste os blocos da paleta para a faixa (ou clique para acrescentar no fim) e arraste pelo título para reordenar; os botões ◀ ▶ fazem o mesmo pelo teclado.
-- Cada bloco define quantas vezes aparece (uma vez, opcional, uma ou mais, exatamente N, entre N e M) e se o trecho deve ser **guardado** para reaproveitar na substituição.
-- Exemplos prontos: espaços → `_`, `IMG_1234` → `Foto 1234`, remover números do início, inverter datas `2024-06-10` → `10-06-2024`, remover `(…)`.
-- Pré-visualização nos arquivos selecionados e num nome digitado; a expressão gerada fica visível para quem quiser conferi-la.
+- Drag blocks from the palette onto the strip (or click to add them at the end) and drag them by their title to reorder; the ◀ ▶ buttons do the same from the keyboard.
+- Each block sets how many times it appears (once, optional, one or more, exactly N, between N and M) and whether to **keep the match** so you can reuse it in the replacement.
+- Ready-made examples: spaces → `_`, `IMG_1234` → `Foto 1234`, remove leading numbers, swap dates `2024-06-10` → `10-06-2024`, remove `(…)`.
+- Preview on the selected files and on a name you type; the generated expression is visible if you want to check it.
 
-### Pastas monitoradas
+### Watch folders
 
-Em **Configurações › Pastas monitoradas**, escolha uma pasta (ex.: Downloads): todo arquivo novo que chegar nela é renomeado automaticamente e, se quiser, movido para outra pasta. Por padrão não há nenhuma pasta monitorada.
+In **Settings › Watch folders**, pick a folder (e.g. Downloads): every new file that lands there is renamed automatically and, if you want, moved to another folder. There are no watch folders by default.
 
-- As regras de renomeação são as da tela principal: monte-as com a pré-visualização e use **Copiar regras da tela principal**.
-- Filtro por máscara (`*.pdf; *.jpg`), pasta de destino opcional, teste com um nome de exemplo e notificação do sistema por arquivo.
-- Espera o arquivo terminar de ser escrito; ignora downloads em andamento (`.crdownload`, `.part`…), arquivos ocultos e subpastas. Nunca sobrescreve: nomes repetidos ganham ` (2)`.
-- Funciona enquanto o app estiver aberto e só com arquivos novos (o que já estava na pasta não muda). O registro de atividade mostra o que foi feito e as falhas.
+- The renaming rules are the ones from the main screen: set them up with the preview and use **Copy rules from the main screen**.
+- File mask (`*.pdf; *.jpg`), optional destination folder, a test with a sample name and a system notification for each file.
+- Waits for the file to finish being written and ignores downloads in progress (`.crdownload`, `.part`…), hidden files and subfolders. Never overwrites: repeated names get ` (2)`.
+- Works while the app is open and only for new files (what's already in the folder is left alone). The activity log shows what was done and any failures.
 
-### Atualizações
+### Updates
 
-O app consulta as [releases do GitHub](https://github.com/generson-a-silva/rename-plus/releases) ao abrir e a cada 12 horas e avisa quando há versão nova (notificação do sistema e aviso na barra de status). Nada é baixado nem instalado automaticamente. Em **Configurações › Atualizações** dá para verificar na hora, ignorar uma versão ou desligar a verificação.
+The app checks the [GitHub releases](https://github.com/generson-a-silva/rename-plus/releases) on startup and every 12 hours, and lets you know when a new version is out (a system notification and a notice in the status bar). Nothing is downloaded or installed automatically. In **Settings › Updates** you can check right away, skip a version or turn checking off.
 
-### Pré-visualização e segurança
+### Preview and safety
 
-- **Pré-visualização ao vivo:** o novo nome é calculado enquanto você digita, e só para os itens selecionados.
-- **Detecção de conflitos:** nomes duplicados no lote, colisão com arquivos existentes e nomes inválidos no sistema. Exemplos: `/` no Linux; `< > : " \ | ? *`, `CON`, `NUL` e ponto ou espaço no final no Windows. O motivo aparece ao passar o mouse sobre a linha.
-- **Renomeação "tudo ou nada":** o lote é validado antes de tocar no disco e executado em duas etapas, o que permite trocar nomes entre arquivos (`a ↔ b`). Se algo falhar no meio, o que já foi renomeado volta ao nome original.
-- **Nunca sobrescreve** arquivos existentes, inclusive ao copiar ou mover (nomes repetidos ganham sufixo ` (2)`, ` (3)`…).
-- **Desfazer** o último lote de renomeação, inclusive renomeações feitas pelo menu de contexto.
+- **Live preview:** the new name is worked out as you type, only for the selected items.
+- **Conflict detection:** duplicate names in the batch, clashes with existing files and names the system won't accept. For example: `/` on Linux; `< > : " \ | ? *`, `CON`, `NUL` and a trailing dot or space on Windows. Hover over the row to see the reason.
+- **All-or-nothing renaming:** the batch is validated before anything touches the disk and runs in two steps, so names can be swapped between files (`a ↔ b`). If something fails halfway, everything already renamed goes back to its original name.
+- **Never overwrites** existing files, including when copying or moving (repeated names get a ` (2)`, ` (3)`… suffix).
+- **Undo** the last batch, including renames made from the context menu.
 
-### Navegação e seleção
+### Browsing and selection
 
-- Árvore de pastas com carregamento sob demanda, com a pasta pessoal e as raízes do sistema (`/` no Linux, unidades `C:`, `D:`… no Windows).
-- Lista de arquivos rápida mesmo em pastas grandes (renderiza só as linhas visíveis), com ordenação por coluna e colunas redimensionáveis (duplo clique na divisória ajusta ao conteúdo).
-- Seleção como num gerenciador de arquivos: clique, Ctrl/Shift+clique, **arrastar para selecionar** um retângulo com rolagem automática, e clique na área livre para limpar.
-- Itens ocultos ficam escondidos por padrão e podem ser exibidos (aparecem esmaecidos).
+- Folder tree that loads on demand, with your home folder and the system roots (`/` on Linux, drives `C:`, `D:`… on Windows).
+- File list that stays fast in large folders (only visible rows are rendered), with column sorting and resizable columns (double-click the divider to fit the content).
+- Selection works like a file manager: click, Ctrl/Shift+click, **drag to select** a rectangle with auto-scroll, and click an empty area to clear.
+- Hidden items are hidden by default and can be shown (they appear dimmed).
 
-### Operações de arquivo (menu de contexto)
+### File operations (context menu)
 
-Botão direito na lista ou na árvore para abrir com o aplicativo padrão, mostrar no gerenciador de arquivos, renomear um item, recortar, copiar e colar, copiar o caminho, criar pasta e mover para a lixeira. Em discos sem lixeira, o app oferece excluir definitivamente, com confirmação.
+Right-click the list or the tree to open with the default app, show in the file manager, rename an item, cut, copy and paste, copy the path, create a folder and move to the trash. On drives without a trash, the app offers to delete permanently, after confirmation.
 
-### Abrir itens de fora do app
+### Opening items from outside the app
 
-- **Arrastar e soltar:** solte uma pasta na janela para abri-la, ou arquivos para abrir a pasta deles com eles já selecionados.
-- **Menu de contexto do sistema:** "Abrir no Rename Plus" (um item) e "Abrir selecionados no Rename Plus" (vários). No Windows, o instalador oferece a opção; no Linux, ela é ativada em **Configurações** para Dolphin, Nautilus, Nemo, Thunar, Caja ou PCManFM, com o gerenciador padrão do sistema em destaque.
-- **Linha de comando:** `rename-plus [--open | --select] [--] caminhos…`. Com o app já aberto, os itens vão para a janela existente.
+- **Drag and drop:** drop a folder on the window to open it, or drop files to open their folder with them already selected.
+- **System context menu:** "Open in Rename Plus" (one item) and "Open selected in Rename Plus" (several). On Windows the installer offers the option; on Linux you turn it on in **Settings** for Dolphin, Nautilus, Nemo, Thunar, Caja or PCManFM, with the system's default file manager highlighted.
+- **Command line:** `rename-plus [--open | --select] [--] paths…`. If the app is already open, the items go to the existing window.
 
 ### Interface
 
-- Tema **claro**, **escuro** ou **seguindo o sistema**, escolhido em **Configurações** (botão no canto direito da barra superior).
-- Idiomas **português**, **inglês** e **espanhol**, escolhidos pelo botão no canto inferior direito da área de ações. O idioma inicial segue o sistema.
-- Layout ajustável: largura da árvore, altura da área de regras (até metade da janela) e largura das colunas.
-- A janela lembra tamanho, posição e se estava maximizada. Na primeira execução abre maximizada.
+- **Light**, **dark** or **system** theme, chosen in **Settings** (button at the right of the top bar).
+- **English**, **Portuguese** and **Spanish**, chosen with the button at the bottom right of the actions area. The initial language follows the system.
+- Adjustable layout: tree width, height of the rules area (up to half the window) and column widths.
+- The window remembers its size, position and whether it was maximized. On the first run it opens maximized.
 
-## Como as regras são aplicadas
+## How the rules are applied
 
-As regras são aplicadas sempre nesta ordem, uma sobre o resultado da anterior:
+Rules are always applied in this order, each one on the result of the previous one:
 
 ```
-RegEx → Nome → Substituir → Maiúsc./Minúsc. → Remover → Adicionar
-      → Data automática → Nome da pasta → Numeração → Extensão
+RegEx → Name → Replace → Case → Remove → Add
+      → Auto date → Folder name → Numbering → Extension
 ```
 
-Exemplo do print principal (no topo): `IMG_2041.JPG` → RegEx troca `IMG_2041` por `Lisboa` → Data automática acrescenta `2024-06-10 ` → Numeração acrescenta ` - 01` → Extensão em minúsculas → **`2024-06-10 Lisboa - 01.jpg`**.
+Example from the main screenshot (at the top): `IMG_2041.JPG` → RegEx replaces `IMG_2041` with `Lisboa` → Auto date adds `2024-06-10 ` → Numbering adds ` - 01` → lowercase Extension → **`2024-06-10 Lisboa - 01.jpg`**.
 
-Em pastas, o ponto **não** é tratado como separador de extensão (`v1.2` continua sendo o nome inteiro), e o mesmo vale para arquivos ocultos como `.bashrc`.
+For folders, the dot is **not** treated as an extension separator (`v1.2` stays the whole name), and the same goes for hidden files such as `.bashrc`.
 
-## O que o Rename Plus não faz
+## What Rename Plus doesn't do
 
-Para deixar claro o escopo atual:
+To be clear about the current scope:
 
-- **Não lê metadados de arquivos:** não usa EXIF de fotos, ID3 de músicas nem propriedades de documentos para montar nomes.
-- **Não executa scripts** (ex.: JavaScript) nem importa listas de nomes de arquivos CSV.
-- **Não move nem copia partes do nome** de uma posição para outra (o painel "Mover/Copiar" do Bulk Rename Utility).
-- **Não altera datas, atributos nem permissões** dos arquivos; só os nomes.
-- **Não move arquivos para outra pasta ao renomear** na tela principal: o novo nome fica sempre na mesma pasta (para mover, use recortar e colar). Só as pastas monitoradas movem arquivos.
-- **Não instala atualizações sozinho:** apenas avisa e abre a página da versão no GitHub.
-- **Não renomeia pela linha de comando:** ela só abre pastas e arquivos no app; também não há agendamento. As pastas monitoradas só funcionam com o app aberto.
-- **O "Desfazer" vale só para o último lote** e só enquanto o app está aberto.
-- **Limite de listagem:** mostra até 50.000 itens por vez; acima disso a lista é truncada, com aviso.
-- **Não roda no macOS** por enquanto.
+- **Doesn't read file metadata:** no EXIF from photos, ID3 from music or document properties to build names.
+- **Doesn't run scripts** (e.g. JavaScript) or import lists of file names from CSV.
+- **Doesn't move or copy parts of the name** from one position to another (Bulk Rename Utility's "Move/Copy" panel).
+- **Doesn't change dates, attributes or permissions** of files; only names.
+- **Doesn't move files to another folder when renaming** from the main screen: the new name always stays in the same folder (to move files, use cut and paste). Only watch folders move files.
+- **Doesn't install updates by itself:** it only lets you know and opens the version's page on GitHub.
+- **Doesn't rename from the command line:** it only opens folders and files in the app, and there's no scheduling. Watch folders only work while the app is open.
+- **Undo only covers the last batch**, and only while the app is open.
+- **Listing limit:** shows up to 50,000 items at a time; beyond that the list is truncated, with a warning.
+- **Doesn't run on macOS** yet.
 
-## Plataformas suportadas
+## Supported platforms
 
-| Sistema | Situação | Pacote | Observações |
+| System | Status | Package | Notes |
 |---|---|---|---|
-| **Linux** (x64) | ✅ Suportado e testado | AppImage | Testado no KDE Plasma (Wayland). No Wayland, o sistema decide em qual monitor a janela abre, então o app restaura o tamanho da janela, mas não a posição. |
-| **Windows** (x64) | ✅ Suportado | Instalador NSIS | Instala para todos os usuários (pede permissão de administrador) e cria o atalho "Rename Plus" na área de trabalho e no Menu Iniciar. Ainda em validação em máquinas reais. |
-| **macOS** | 🕓 Planejado | — | Ainda não suportado. |
+| **Linux** (x64) | ✅ Supported and tested | AppImage | Tested on KDE Plasma (Wayland). On Wayland the system decides which monitor the window opens on, so the app restores the window size but not its position. |
+| **Windows** (x64) | ✅ Supported | NSIS installer | Installs for all users (asks for administrator permission) and creates a "Rename Plus" shortcut on the desktop and in the Start menu. Still being validated on real machines. |
+| **macOS** | 🕓 Planned | — | Not supported yet. |
 
-## Instalação
+## Installation
 
-Baixe o pacote do seu sistema na **[última release](https://github.com/generson-a-silva/rename-plus/releases/latest)**, em "Assets":
+Download the package for your system from the **[latest release](https://github.com/generson-a-silva/rename-plus/releases/latest)**, under "Assets":
 
-| Sistema | Arquivo |
+| System | File |
 |---|---|
-| Linux (x64) | `rename-plus-<versão>-linux-x86_64.AppImage` |
-| Windows (x64) | `rename-plus-<versão>-win-x64.exe` |
+| Linux (x64) | `rename-plus-<version>-linux-x86_64.AppImage` |
+| Windows (x64) | `rename-plus-<version>-win-x64.exe` |
 
-Versões anteriores ficam na [lista de releases](https://github.com/generson-a-silva/rename-plus/releases). Para gerar o pacote a partir do código, veja [Desenvolvimento](#desenvolvimento).
+Earlier versions are in the [list of releases](https://github.com/generson-a-silva/rename-plus/releases). To build the package from source, see [Development](#development).
 
 ### Linux (AppImage)
 
-1. Baixe o `rename-plus-<versão>-linux-x86_64.AppImage` da [última release](https://github.com/generson-a-silva/rename-plus/releases/latest).
-2. Dê permissão de execução e abra:
+1. Download `rename-plus-<version>-linux-x86_64.AppImage` from the [latest release](https://github.com/generson-a-silva/rename-plus/releases/latest).
+2. Make it executable and run it:
 
    ```bash
    chmod +x rename-plus-*.AppImage
    ./rename-plus-*.AppImage
    ```
 
-3. **Opcional:** integre ao menu de aplicativos com o [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher) ou outra ferramenta de integração de AppImage.
-4. **Opcional:** em **Configurações › Menu de contexto do sistema**, adicione as opções ao seu gerenciador de arquivos. Se o AppImage mudar de lugar ou de versão, basta abrir o app uma vez para corrigi-las.
+3. **Optional:** add it to your application menu with [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher) or another AppImage integration tool.
+4. **Optional:** in **Settings › System context menu**, add the entries to your file manager. If the AppImage is moved or updated, just open the app once to fix them.
 
 ### Windows
 
-Baixe o `rename-plus-<versão>-win-x64.exe` da [última release](https://github.com/generson-a-silva/rename-plus/releases/latest), execute o instalador e siga as etapas. Uma das etapas oferece adicionar "Abrir no Rename Plus" e "Abrir selecionados no Rename Plus" ao menu de contexto do Explorador de Arquivos (no Windows 11, em "Mostrar mais opções"). O app aparece em "Aplicativos instalados" com o editor **Generson Silva** e pode ser desinstalado por lá.
+Download `rename-plus-<version>-win-x64.exe` from the [latest release](https://github.com/generson-a-silva/rename-plus/releases/latest), run the installer and follow the steps. One of them offers to add "Open in Rename Plus" and "Open selected in Rename Plus" to the File Explorer context menu (on Windows 11, under "Show more options"). The app shows up in "Installed apps" with **Generson Silva** as the publisher and can be uninstalled from there.
 
-## Atalhos de teclado
+## Keyboard shortcuts
 
-| Atalho | Ação |
+| Shortcut | Action |
 |---|---|
-| `Ctrl+A` | Selecionar todos os itens da lista |
-| `Esc` | Limpar a seleção |
-| `F2` | Renomear o item selecionado |
-| `Delete` | Mover para a lixeira |
-| `Ctrl+C` / `Ctrl+X` / `Ctrl+V` | Copiar / recortar / colar |
-| `Ctrl+Shift+N` | Nova pasta |
-| `Ctrl+H` | Mostrar/ocultar itens ocultos |
-| `F5` | Atualizar |
-| `↑` `↓` `PgUp` `PgDn` `Home` `End` | Navegar pela lista (com `Shift` para estender a seleção) |
-| `Enter` / duplo clique | Abrir pasta ou arquivo |
+| `Ctrl+A` | Select all items in the list |
+| `Esc` | Clear the selection |
+| `F2` | Rename the selected item |
+| `Delete` | Move to the trash |
+| `Ctrl+C` / `Ctrl+X` / `Ctrl+V` | Copy / cut / paste |
+| `Ctrl+Shift+N` | New folder |
+| `Ctrl+H` | Show/hide hidden items |
+| `F5` | Refresh |
+| `↑` `↓` `PgUp` `PgDn` `Home` `End` | Move through the list (with `Shift` to extend the selection) |
+| `Enter` / double-click | Open folder or file |
 
-## Desenvolvimento
+## Development
 
-**Tecnologias:** Electron, React, TypeScript, Vite, Vitest, Biome (lint e formatação) e electron-builder.
+**Stack:** Electron, React, TypeScript, Vite, Vitest, Biome (linting and formatting) and electron-builder.
 
-**Requisitos:** Node.js 22.12 ou superior e npm.
+**Requirements:** Node.js 22.12 or later and npm.
 
 ```bash
-npm install          # instala as dependências
-npm run dev          # Vite + Electron com recarga automática
-npm test             # testes (Vitest)
-npm run ci           # lint (Biome) + checagem de tipos + testes
-npm run build        # compila para build-react/ e build-electron/
-npm run dist         # gera o pacote da plataforma atual em build/
+npm install          # install dependencies
+npm run dev          # Vite + Electron with live reload
+npm test             # tests (Vitest)
+npm run ci           # lint (Biome) + type checking + tests
+npm run build        # build into build-react/ and build-electron/
+npm run dist         # package for the current platform into build/
 ```
 
-Para gerar o instalador do Windows a partir do Linux, use `npx electron-builder --win`. A etapa final do instalador NSIS exige o [Wine](https://www.winehq.org/); sem ele, gere o instalador numa máquina Windows.
+To build the Windows installer from Linux, use `npx electron-builder --win`. The last step of the NSIS installer needs [Wine](https://www.winehq.org/); without it, build the installer on a Windows machine.
 
-### Estrutura do projeto
+### Project structure
 
 ```
 src/
-├── main/       Processo principal: janela, sistema de arquivos, renomeação em lote, menus nativos
-├── preload/    Ponte segura entre a interface e o processo principal (contextBridge)
-├── renderer/   Interface em React (componentes, hooks e utilitários)
-└── shared/     Código usado pelos dois lados: motor de renomeação, caminhos, idiomas e contrato IPC
+├── main/       Main process: window, file system, batch renaming, watch folders, updates, native menus
+├── preload/    Secure bridge between the interface and the main process (contextBridge)
+├── renderer/   React interface (components, hooks and utilities)
+└── shared/     Code used by both sides: renaming engine, RegEx builder, paths, languages and IPC contract
 ```
 
-O motor de renomeação (`src/shared/rename`) é TypeScript puro, sem dependência do Electron, e é coberto por testes. Os textos da interface ficam em `src/shared/i18n/catalogs`. O português é a referência, e o TypeScript acusa se faltar alguma tradução nos outros idiomas.
+The renaming engine (`src/shared/rename`) is plain TypeScript with no Electron dependency and is covered by tests. Interface text lives in `src/shared/i18n/catalogs`. Portuguese is the reference catalog, and TypeScript reports any translation missing from the other languages.
 
-## Onde ficam as preferências
+## Where settings are stored
 
-Tema, idioma, regras, filtros, ordenação, larguras e última pasta aberta ficam salvos na pasta de dados do app (as pastas monitoradas em `watch-folders.json` e as preferências de atualização em `updates.json`):
+Theme, language, rules, filters, sorting, column widths and the last folder opened are saved in the app's data folder (watch folders in `watch-folders.json` and update preferences in `updates.json`):
 
 - **Linux:** `~/.config/rename-plus/`
 - **Windows:** `%APPDATA%\rename-plus\`
 
-Apagar essa pasta volta o app às configurações iniciais.
+Deleting this folder resets the app to its initial settings.
 
-## Autor
+## Author
 
-Desenvolvido por **Generson Silva**.
+Developed by **Generson Silva**.
 
-Inspirado no [Bulk Rename Utility](https://github.com/BulkRenameUtility/download). Veja [Inspiração e créditos](#inspiração-e-créditos).
+Inspired by [Bulk Rename Utility](https://github.com/BulkRenameUtility/download). See [Inspiration and credits](#inspiration-and-credits).
