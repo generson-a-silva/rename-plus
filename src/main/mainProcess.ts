@@ -7,6 +7,7 @@ import { asLaunchRequest, queueLaunchRequest } from "./launchRequestQueue";
 import { setMainLocale } from "./mainLocale";
 import { loadTheme, windowBackground } from "./themeSettings";
 import { startUpdateChecks } from "./updateChecker";
+import { startWatchFolders, stopWatchFolders } from "./watchFolderService";
 import { loadWindowState, trackWindowState } from "./windowStateService";
 
 const devServerUrl = process.env.VITE_DEV_SERVER_URL;
@@ -112,12 +113,15 @@ function startApp(): void {
 		loadTheme();
 		registerIpcHandlers();
 		createWindow();
+		startWatchFolders();
 		startUpdateChecks();
 
 		app.on("activate", () => {
 			if (BrowserWindow.getAllWindows().length === 0) createWindow();
 		});
 	});
+
+	app.on("will-quit", stopWatchFolders);
 
 	app.on("window-all-closed", () => {
 		if (process.platform !== "darwin") app.quit();

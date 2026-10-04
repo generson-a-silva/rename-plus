@@ -586,6 +586,7 @@ export function RenamePlusApp() {
 				theme={theme.mode}
 				onThemeChange={theme.setMode}
 				updates={updates}
+				renameOptions={options}
 			/>
 			{draggingFiles && <DropOverlay />}
 		</div>

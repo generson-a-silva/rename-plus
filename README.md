@@ -114,6 +114,15 @@ Se você usa Windows e precisa de recursos avançados como metadados EXIF/ID3, s
 | **Extensão** | Manter, minúsculas, MAIÚSCULAS, Título, remover, trocar por uma fixa ou acrescentar uma extra. |
 | **Filtros** | Máscara de nomes (`*.jpg; *.png`), arquivos e/ou pastas, itens ocultos e conteúdo das subpastas (modo recursivo). |
 
+### Pastas monitoradas
+
+Em **Configurações › Pastas monitoradas**, escolha uma pasta (ex.: Downloads): todo arquivo novo que chegar nela é renomeado automaticamente e, se quiser, movido para outra pasta. Por padrão não há nenhuma pasta monitorada.
+
+- As regras de renomeação são as da tela principal: monte-as com a pré-visualização e use **Copiar regras da tela principal**.
+- Filtro por máscara (`*.pdf; *.jpg`), pasta de destino opcional, teste com um nome de exemplo e notificação do sistema por arquivo.
+- Espera o arquivo terminar de ser escrito; ignora downloads em andamento (`.crdownload`, `.part`…), arquivos ocultos e subpastas. Nunca sobrescreve: nomes repetidos ganham ` (2)`.
+- Funciona enquanto o app estiver aberto e só com arquivos novos (o que já estava na pasta não muda). O registro de atividade mostra o que foi feito e as falhas.
+
 ### Atualizações
 
 O app consulta as [releases do GitHub](https://github.com/generson-a-silva/rename-plus/releases) ao abrir e a cada 12 horas e avisa quando há versão nova (notificação do sistema e aviso na barra de status). Nada é baixado nem instalado automaticamente. Em **Configurações › Atualizações** dá para verificar na hora, ignorar uma versão ou desligar a verificação.
@@ -171,9 +180,9 @@ Para deixar claro o escopo atual:
 - **Não executa scripts** (ex.: JavaScript) nem importa listas de nomes de arquivos CSV.
 - **Não move nem copia partes do nome** de uma posição para outra (o painel "Mover/Copiar" do Bulk Rename Utility).
 - **Não altera datas, atributos nem permissões** dos arquivos; só os nomes.
-- **Não move arquivos para outra pasta ao renomear:** o novo nome fica sempre na mesma pasta. Para mover, use recortar e colar.
+- **Não move arquivos para outra pasta ao renomear** na tela principal: o novo nome fica sempre na mesma pasta (para mover, use recortar e colar). Só as pastas monitoradas movem arquivos.
 - **Não instala atualizações sozinho:** apenas avisa e abre a página da versão no GitHub.
-- **Não renomeia pela linha de comando:** ela só abre pastas e arquivos no app; também não há agendamento.
+- **Não renomeia pela linha de comando:** ela só abre pastas e arquivos no app; também não há agendamento. As pastas monitoradas só funcionam com o app aberto.
 - **O "Desfazer" vale só para o último lote** e só enquanto o app está aberto.
 - **Limite de listagem:** mostra até 50.000 itens por vez; acima disso a lista é truncada, com aviso.
 - **Não roda no macOS** por enquanto.
@@ -260,7 +269,7 @@ O motor de renomeação (`src/shared/rename`) é TypeScript puro, sem dependênc
 
 ## Onde ficam as preferências
 
-Tema, idioma, regras, filtros, ordenação, larguras e última pasta aberta ficam salvos na pasta de dados do app (as preferências de atualização em `updates.json`):
+Tema, idioma, regras, filtros, ordenação, larguras e última pasta aberta ficam salvos na pasta de dados do app (as pastas monitoradas em `watch-folders.json` e as preferências de atualização em `updates.json`):
 
 - **Linux:** `~/.config/rename-plus/`
 - **Windows:** `%APPDATA%\rename-plus\`

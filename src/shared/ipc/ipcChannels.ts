@@ -28,10 +28,15 @@ export const IpcChannel = {
 	GetUpdateStatus: "update:get-status",
 	CheckForUpdates: "update:check",
 	SetUpdateSettings: "update:set-settings",
+	GetWatchFolders: "watch:get",
+	SetWatchRules: "watch:set-rules",
+	ClearWatchActivity: "watch:clear-activity",
 	/** Evento main → renderer: itens a abrir (menu de contexto do sistema, linha de comando). */
 	LaunchRequest: "launch:request",
 	/** Evento main → renderer: a situação da verificação de atualizações mudou. */
 	UpdateStatus: "update:status",
+	/** Evento main → renderer: regras, situação ou atividade das pastas monitoradas mudaram. */
+	WatchFoldersChanged: "watch:changed",
 } as const;
 
 export type IpcChannel = (typeof IpcChannel)[keyof typeof IpcChannel];

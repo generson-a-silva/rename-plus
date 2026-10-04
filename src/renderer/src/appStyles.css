@@ -831,6 +831,16 @@ a.button.primary {
 	color: var(--accent-fg);
 }
 
+.button.icon-only {
+	width: 28px;
+	padding: 0;
+}
+
+.button.danger:hover:not(:disabled) {
+	border-color: var(--error);
+	color: var(--error);
+}
+
 /* ---- Barra de status ------------------------------------------------- */
 
 .status-bar {
@@ -1031,7 +1041,7 @@ a.button.primary {
 /* ---- Configurações ---------------------------------------------------- */
 
 .settings-dialog {
-	width: min(640px, calc(100vw - 32px));
+	width: min(720px, calc(100vw - 32px));
 	max-height: calc(100vh - 48px);
 	padding: 0;
 	border: 1px solid var(--border-strong);
@@ -1144,6 +1154,8 @@ a.button.primary {
 
 .settings-section-body {
 	display: grid;
+	/* Coluna limitada à largura do diálogo: caminhos longos não podem alargá-lo. */
+	grid-template-columns: minmax(0, 1fr);
 	gap: 10px;
 	padding-left: 44px;
 }
@@ -1458,4 +1470,206 @@ a.button.primary {
 
 .settings-hint a {
 	color: var(--accent);
+}
+
+/* ---- Pastas monitoradas ----------------------------------------------- */
+
+.watch-empty {
+	color: var(--muted);
+}
+
+.watch-rule {
+	border: 1px solid var(--border);
+	border-radius: 8px;
+}
+
+.watch-rule-summary {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 9px 12px;
+	border-radius: 8px;
+	list-style: none;
+	cursor: pointer;
+	user-select: none;
+}
+
+.watch-rule-summary::-webkit-details-marker {
+	display: none;
+}
+
+.watch-rule-summary:hover {
+	background: var(--row-hover);
+}
+
+.watch-rule-summary:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: -2px;
+}
+
+.watch-rule[open] .watch-rule-summary {
+	border-bottom: 1px solid var(--border);
+	border-radius: 8px 8px 0 0;
+}
+
+.watch-rule[open] .settings-subsection-chevron {
+	transform: rotate(90deg);
+}
+
+.watch-rule-toggle {
+	flex: none;
+	margin: 0;
+	accent-color: var(--accent);
+	cursor: pointer;
+}
+
+.watch-rule-title {
+	display: flex;
+	flex: 1;
+	align-items: baseline;
+	gap: 8px;
+	min-width: 0;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.watch-rule-title code {
+	overflow: hidden;
+	color: var(--muted);
+	font-family: var(--mono);
+	font-size: 11px;
+	text-overflow: ellipsis;
+}
+
+.watch-status {
+	flex: none;
+	max-width: 45%;
+	overflow: hidden;
+	color: var(--muted);
+	font-size: 12px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.watch-status::before {
+	content: "●";
+	margin-right: 4px;
+}
+
+.watch-status.watching {
+	color: var(--changed);
+}
+
+.watch-status.incomplete {
+	color: #d29922;
+}
+
+.watch-status.error {
+	color: var(--error);
+}
+
+.watch-rule-body {
+	display: grid;
+	gap: 10px;
+	padding: 12px;
+}
+
+.field-label {
+	font-size: 11px;
+	color: var(--muted);
+}
+
+.folder-field {
+	display: flex;
+	gap: 6px;
+}
+
+.folder-field input {
+	flex: 1;
+	min-width: 0;
+}
+
+.watch-rename {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+}
+
+.watch-sections {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	margin-right: auto;
+	color: var(--muted);
+}
+
+.watch-tester {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	align-items: end;
+	gap: 10px;
+	padding: 8px 10px;
+	border-radius: 6px;
+	background: var(--surface-2);
+}
+
+.settings-section .watch-test-result {
+	min-height: 26px;
+	margin: 0;
+	overflow-wrap: anywhere;
+	color: var(--muted);
+	line-height: 26px;
+}
+
+.watch-test-result.ok {
+	color: var(--changed);
+}
+
+.watch-test-result.error {
+	color: var(--error);
+}
+
+.watch-rule-footer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+}
+
+.watch-activity {
+	display: grid;
+	max-height: 220px;
+	margin: 0;
+	padding: 0;
+	overflow-y: auto;
+	list-style: none;
+	font-size: 12px;
+}
+
+.watch-activity li {
+	display: grid;
+	grid-template-columns: auto auto minmax(0, 1fr);
+	gap: 10px;
+	padding: 4px 0;
+}
+
+.watch-activity li + li {
+	border-top: 1px solid var(--border);
+}
+
+.watch-activity-time,
+.watch-activity-rule {
+	color: var(--muted);
+	white-space: nowrap;
+}
+
+.watch-activity-detail {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.watch-activity li.error .watch-activity-detail {
+	color: var(--error);
 }

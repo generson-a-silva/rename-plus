@@ -1,10 +1,12 @@
 import { AppIcon } from "@components/common";
 import { type UpdateStatusState, useI18n } from "@hooks";
 import type { ThemeMode } from "@shared/ipc";
+import type { RenameOptions } from "@shared/rename";
 import { useEffect, useId, useRef } from "react";
 import { AppearanceSection } from "./AppearanceSection";
 import { ContextMenuIntegrationSection } from "./ContextMenuIntegrationSection";
 import { UpdatesSection } from "./UpdatesSection";
+import { WatchFoldersSection } from "./WatchFoldersSection";
 
 interface SettingsDialogProps {
 	open: boolean;
@@ -12,11 +14,13 @@ interface SettingsDialogProps {
 	theme: ThemeMode;
 	onThemeChange: (mode: ThemeMode) => void;
 	updates: UpdateStatusState;
+	/** Regras da tela principal, para copiar para uma pasta monitorada. */
+	renameOptions: RenameOptions;
 }
 
 /**
- * Janela modal de configurações, organizada em seções (aparência, atualizações, menu de
- * contexto do sistema).
+ * Janela modal de configurações, organizada em seções (aparência, atualizações, pastas
+ * monitoradas, menu de contexto do sistema).
  */
 export function SettingsDialog({
 	open,
@@ -24,6 +28,7 @@ export function SettingsDialog({
 	theme,
 	onThemeChange,
 	updates,
+	renameOptions,
 }: SettingsDialogProps) {
 	const { t } = useI18n();
 	const dialogRef = useRef<HTMLDialogElement>(null);
@@ -63,6 +68,7 @@ export function SettingsDialog({
 					<div className="settings-body">
 						<AppearanceSection theme={theme} onThemeChange={onThemeChange} />
 						<UpdatesSection updates={updates} />
+						<WatchFoldersSection currentOptions={renameOptions} />
 						<ContextMenuIntegrationSection />
 					</div>
 					<footer className="settings-footer">

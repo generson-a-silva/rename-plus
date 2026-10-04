@@ -32,8 +32,12 @@ const C = {
 	GetUpdateStatus: "update:get-status",
 	CheckForUpdates: "update:check",
 	SetUpdateSettings: "update:set-settings",
+	GetWatchFolders: "watch:get",
+	SetWatchRules: "watch:set-rules",
+	ClearWatchActivity: "watch:clear-activity",
 	LaunchRequest: "launch:request",
 	UpdateStatus: "update:status",
+	WatchFoldersChanged: "watch:changed",
 } as const satisfies typeof IpcChannel;
 
 /** Inscreve `listener` num evento main → renderer; devolve a função que cancela a inscrição. */
@@ -80,6 +84,10 @@ const api: ElectronApi = {
 	checkForUpdates: () => ipcRenderer.invoke(C.CheckForUpdates),
 	setUpdateSettings: (patch) => ipcRenderer.invoke(C.SetUpdateSettings, patch),
 	onUpdateStatus: (listener) => subscribe(C.UpdateStatus, listener),
+	getWatchFolders: () => ipcRenderer.invoke(C.GetWatchFolders),
+	setWatchRules: (rules) => ipcRenderer.invoke(C.SetWatchRules, rules),
+	clearWatchActivity: () => ipcRenderer.invoke(C.ClearWatchActivity),
+	onWatchFoldersChanged: (listener) => subscribe(C.WatchFoldersChanged, listener),
 };
 
 contextBridge.exposeInMainWorld("api", api);

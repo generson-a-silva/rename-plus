@@ -28,6 +28,9 @@ const PATHS = {
 	eyeOff:
 		"M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.2M6.6 6.6A17 17 0 0 0 2 12s3.5 7 10 7a9.8 9.8 0 0 0 5.4-1.6M9.9 9.9a3 3 0 0 0 4.2 4.2",
 	download: "M12 4v11M7 10l5 5 5-5M5 20h14",
+	inbox: "M4 13h4l2 3h4l2-3h4M4 13l2-8h12l2 8v6H4z",
+	plus: "M12 5v14M5 12h14",
+	trash: "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13",
 } as const;
 
 export type AppIconName = keyof typeof PATHS;

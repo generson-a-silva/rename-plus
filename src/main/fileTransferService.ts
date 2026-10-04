@@ -64,7 +64,7 @@ const copy: Transfer = (source, target) =>
 	});
 
 /** Move com `rename`; entre discos diferentes (EXDEV), copia e depois apaga a origem. */
-const move: Transfer = async (source, target) => {
+export const move: Transfer = async (source, target) => {
 	try {
 		await fs.rename(source, target);
 	} catch (error) {

@@ -22,6 +22,7 @@ import {
 } from "./shell-integration";
 import { setTheme } from "./themeSettings";
 import { checkForUpdates, getUpdateStatus, setUpdateSettings } from "./updateChecker";
+import { clearWatchActivity, getWatchFoldersInfo, setWatchRules } from "./watchFolderService";
 
 export function registerIpcHandlers(): void {
 	ipcMain.handle(IpcChannel.GetAppInfo, () => getAppInfo());
@@ -102,4 +103,8 @@ export function registerIpcHandlers(): void {
 	ipcMain.handle(IpcChannel.SetUpdateSettings, (_event, patch: unknown) =>
 		setUpdateSettings(patch),
 	);
+
+	ipcMain.handle(IpcChannel.GetWatchFolders, () => getWatchFoldersInfo());
+	ipcMain.handle(IpcChannel.SetWatchRules, (_event, rules: unknown) => setWatchRules(rules));
+	ipcMain.handle(IpcChannel.ClearWatchActivity, () => clearWatchActivity());
 }

@@ -1,4 +1,5 @@
 import type { Locale } from "../i18n";
+import type { WatchRule } from "../watch";
 import type { AppInfo } from "./appInfoTypes";
 import type { RenameOperation, RenameResult } from "./batchRenameTypes";
 import type { ContextMenuItem } from "./contextMenuTypes";
@@ -12,6 +13,7 @@ import type {
 } from "./shellIntegrationTypes";
 import type { ThemeMode } from "./themeModes";
 import type { UpdateSettings, UpdateStatus } from "./updateTypes";
+import type { WatchFoldersInfo } from "./watchFolderTypes";
 
 /** API exposta ao renderer via `contextBridge` (disponível em `window.api`). */
 export interface ElectronApi {
@@ -68,4 +70,9 @@ export interface ElectronApi {
 	checkForUpdates: () => Promise<UpdateStatus>;
 	setUpdateSettings: (patch: Partial<UpdateSettings>) => Promise<UpdateStatus>;
 	onUpdateStatus: (listener: (status: UpdateStatus) => void) => () => void;
+	getWatchFolders: () => Promise<WatchFoldersInfo>;
+	/** Salva todas as regras e reinicia o monitoramento conforme elas. */
+	setWatchRules: (rules: WatchRule[]) => Promise<WatchFoldersInfo>;
+	clearWatchActivity: () => Promise<WatchFoldersInfo>;
+	onWatchFoldersChanged: (listener: (info: WatchFoldersInfo) => void) => () => void;
 }
