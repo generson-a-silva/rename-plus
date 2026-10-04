@@ -31,6 +31,8 @@ export const IpcChannel = {
 	GetWatchFolders: "watch:get",
 	SetWatchRules: "watch:set-rules",
 	ClearWatchActivity: "watch:clear-activity",
+	GetBackground: "background:get",
+	SetBackground: "background:set",
 	/** Evento main → renderer: itens a abrir (menu de contexto do sistema, linha de comando). */
 	LaunchRequest: "launch:request",
 	/** Evento main → renderer: a situação da verificação de atualizações mudou. */

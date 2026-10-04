@@ -1,6 +1,7 @@
 import type { Locale } from "../i18n";
 import type { WatchRule } from "../watch";
 import type { AppInfo } from "./appInfoTypes";
+import type { BackgroundInfo } from "./backgroundTypes";
 import type { RenameOperation, RenameResult } from "./batchRenameTypes";
 import type { ContextMenuItem } from "./contextMenuTypes";
 import type { ConfirmRequest } from "./dialogTypes";
@@ -75,4 +76,7 @@ export interface ElectronApi {
 	setWatchRules: (rules: WatchRule[]) => Promise<WatchFoldersInfo>;
 	clearWatchActivity: () => Promise<WatchFoldersInfo>;
 	onWatchFoldersChanged: (listener: (info: WatchFoldersInfo) => void) => () => void;
+	/** Pastas monitoradas com o app fechado (início com o sistema, sem janela). */
+	getBackground: () => Promise<BackgroundInfo>;
+	setBackground: (enabled: boolean) => Promise<BackgroundInfo>;
 }

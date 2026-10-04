@@ -136,7 +136,10 @@ In **Settings › Watch folders**, pick a folder (e.g. Downloads): every new fil
 - The renaming rules are the ones from the main screen: set them up with the preview and use **Copy rules from the main screen**.
 - File mask (`*.pdf; *.jpg`), optional destination folder, a test with a sample name and a system notification for each file.
 - Waits for the file to finish being written and ignores downloads in progress (`.crdownload`, `.part`…), hidden files and subfolders. Never overwrites: repeated names get ` (2)`.
-- Works while the app is open and only for new files (what's already in the folder is left alone). The activity log shows what was done and any failures.
+- Only new files are handled (what's already in the folder is left alone). The activity log shows what was done and any failures.
+- **Keeps working with the app closed:** with **Keep watching when the app is closed** turned on, Rename Plus starts with your session, without a window, and stays in the tray while there are active watch folders (tray menu: open, quit). Opening the app just shows the window in that same process. With no active watch folders it exits right away, so nothing keeps running for nothing.
+  - **Windows:** the installer has a "Watch folders" page to turn it on for all users (on by default; untick it to install without it). Each user can turn it off in Settings.
+  - **Linux (AppImage):** there's no install step, so turn it on in Settings. It adds `~/.config/autostart/rename-plus-background.desktop` (XDG Autostart, used by KDE, GNOME, Xfce, Cinnamon…). If you move or replace the AppImage, open it once to fix the entry; opening a new AppImage while the old one runs in the background hands over to the new one.
 
 ### Updates
 
@@ -196,8 +199,9 @@ To be clear about the current scope:
 - **Doesn't move or copy parts of the name** from one position to another (Bulk Rename Utility's "Move/Copy" panel).
 - **Doesn't change dates, attributes or permissions** of files; only names.
 - **Doesn't move files to another folder when renaming** from the main screen: the new name always stays in the same folder (to move files, use cut and paste). Only watch folders move files.
+- **Doesn't run as a system service:** background watching runs inside your user session (it starts when you log in), not before login or for other users.
 - **Doesn't install updates by itself:** it only lets you know and opens the version's page on GitHub.
-- **Doesn't rename from the command line:** it only opens folders and files in the app, and there's no scheduling. Watch folders only work while the app is open.
+- **Doesn't rename from the command line:** it only opens folders and files in the app, and there's no scheduling.
 - **Undo only covers the last batch**, and only while the app is open.
 - **Listing limit:** shows up to 50,000 items at a time; beyond that the list is truncated, with a warning.
 - **Doesn't run on macOS** yet.
@@ -284,7 +288,7 @@ The renaming engine (`src/shared/rename`) is plain TypeScript with no Electron d
 
 ## Where settings are stored
 
-Theme, language, rules, filters, sorting, column widths and the last folder opened are saved in the app's data folder (watch folders in `watch-folders.json` and update preferences in `updates.json`):
+Theme, language, rules, filters, sorting, column widths and the last folder opened are saved in the app's data folder (watch folders in `watch-folders.json`, background mode in `background.json` and update preferences in `updates.json`):
 
 - **Linux:** `~/.config/rename-plus/`
 - **Windows:** `%APPDATA%\rename-plus\`

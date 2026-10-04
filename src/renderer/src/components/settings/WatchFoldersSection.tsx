@@ -12,6 +12,7 @@ import {
 	watchRuleProblem,
 } from "@shared/watch";
 import { useId, useMemo, useState } from "react";
+import { BackgroundModeCard } from "./BackgroundModeCard";
 import { SettingsSection, SettingsSubsection } from "./SettingsSection";
 
 const SECTION_TITLES: Record<RenameSection, MessageKey> = {
@@ -357,6 +358,7 @@ export function WatchFoldersSection({ currentOptions }: WatchFoldersSectionProps
 				</>
 			}
 		>
+			<BackgroundModeCard />
 			{rules === null ? (
 				<p className="integration-loading">{t("integration.loading")}</p>
 			) : (

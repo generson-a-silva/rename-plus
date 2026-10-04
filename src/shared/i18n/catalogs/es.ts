@@ -90,8 +90,31 @@ export const es: Messages = {
 	"watch.description":
 		"Los archivos que lleguen a una carpeta vigilada (p. ej., Descargas) se renombran y, si quieres, se mueven a otra carpeta automáticamente.",
 	"watch.descriptionLimits":
-		"Funciona mientras Rename Plus está abierto y solo con archivos nuevos: lo que ya está en la carpeta no se modifica. Se ignoran subcarpetas, archivos ocultos y descargas en curso.",
+		"Solo archivos nuevos: lo que ya está en la carpeta no se modifica. Se ignoran subcarpetas, archivos ocultos y descargas en curso.",
 	"watch.empty": "Ninguna carpeta vigilada.",
+	"background.toggle": "Seguir vigilando con la aplicación cerrada",
+	"background.hint":
+		"Rename Plus se inicia con el sistema, sin ventana, y queda en la bandeja mientras haya carpetas vigiladas activas. Sin esta opción, las carpetas solo se vigilan con la aplicación abierta.",
+	"background.byInstaller":
+		"Activado por el instalador para todos los usuarios. Desmarcarlo lo desactiva solo para ti.",
+	"background.location": "Inicio con el sistema",
+	"background.warningAppImage":
+		"El inicio con el sistema apunta a este AppImage. Si cambia de lugar o de versión, abre la aplicación una vez para corregirlo.",
+	"background.warningDevelopment":
+		"Modo de desarrollo: el inicio con el sistema ejecutará {command}",
+	"background.failed": "No se pudo cambiar el inicio con el sistema: {detail}",
+	"background.autostartComment": "Carpetas vigiladas de Rename Plus en segundo plano",
+	"background.trayOpen": "Abrir Rename Plus",
+	"background.trayWatching": {
+		one: "Vigilando {count} carpeta",
+		other: "Vigilando {count} carpetas",
+	},
+	"background.trayQuit": "Salir (dejar de vigilar)",
+	"background.residentNotice": {
+		one: "Sigue vigilando {count} carpeta en segundo plano. Para salir, usa el icono de la bandeja.",
+		other:
+			"Sigue vigilando {count} carpetas en segundo plano. Para salir, usa el icono de la bandeja.",
+	},
 	"watch.add": "Añadir carpeta vigilada",
 	"watch.newRule": "Nueva carpeta vigilada",
 	"watch.name": "Nombre de la regla",

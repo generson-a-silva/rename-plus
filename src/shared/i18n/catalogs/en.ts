@@ -88,8 +88,29 @@ export const en: Messages = {
 	"watch.description":
 		"Files that land in a watch folder (e.g. Downloads) are renamed automatically and, if you want, moved to another folder.",
 	"watch.descriptionLimits":
-		"Works while Rename Plus is open and only for new files: what's already in the folder isn't changed. Subfolders, hidden files and downloads in progress are ignored.",
+		"New files only: what's already in the folder isn't changed. Subfolders, hidden files and downloads in progress are ignored.",
 	"watch.empty": "No watch folders.",
+	"background.toggle": "Keep watching when the app is closed",
+	"background.hint":
+		"Rename Plus starts with the system, without a window, and stays in the tray while there are active watch folders. Without this option, folders are only watched while the app is open.",
+	"background.byInstaller":
+		"Turned on by the installer for all users. Unticking it turns it off just for you.",
+	"background.location": "Start with the system",
+	"background.warningAppImage":
+		"Starting with the system points to this AppImage. If it's moved or updated, open the app once to fix it.",
+	"background.warningDevelopment": "Development mode: starting with the system will run {command}",
+	"background.failed": "Couldn't change starting with the system: {detail}",
+	"background.autostartComment": "Rename Plus watch folders in the background",
+	"background.trayOpen": "Open Rename Plus",
+	"background.trayWatching": {
+		one: "Watching {count} folder",
+		other: "Watching {count} folders",
+	},
+	"background.trayQuit": "Quit (stop watching)",
+	"background.residentNotice": {
+		one: "Still watching {count} folder in the background. To quit, use the tray icon.",
+		other: "Still watching {count} folders in the background. To quit, use the tray icon.",
+	},
 	"watch.add": "Add watch folder",
 	"watch.newRule": "New watch folder",
 	"watch.name": "Rule name",

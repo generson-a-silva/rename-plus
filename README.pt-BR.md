@@ -134,7 +134,10 @@ Em **Configurações › Pastas monitoradas**, escolha uma pasta (ex.: Downloads
 - As regras de renomeação são as da tela principal: monte-as com a pré-visualização e use **Copiar regras da tela principal**.
 - Filtro por máscara (`*.pdf; *.jpg`), pasta de destino opcional, teste com um nome de exemplo e notificação do sistema por arquivo.
 - Espera o arquivo terminar de ser escrito; ignora downloads em andamento (`.crdownload`, `.part`…), arquivos ocultos e subpastas. Nunca sobrescreve: nomes repetidos ganham ` (2)`.
-- Funciona enquanto o app estiver aberto e só com arquivos novos (o que já estava na pasta não muda). O registro de atividade mostra o que foi feito e as falhas.
+- Só arquivos novos (o que já estava na pasta não muda). O registro de atividade mostra o que foi feito e as falhas.
+- **Continua com o app fechado:** com **Continuar monitorando com o app fechado** ativado, o Rename Plus inicia com a sua sessão, sem janela, e fica no ícone da bandeja enquanto houver pastas monitoradas ativas (menu da bandeja: abrir, sair). Abrir o app só mostra a janela nesse mesmo processo. Sem pastas monitoradas ativas, ele encerra na hora e não fica rodando à toa.
+  - **Windows:** o instalador tem a página "Pastas monitoradas" para ativar para todos os usuários (marcada por padrão; desmarque para instalar sem). Cada usuário pode desativar em Configurações.
+  - **Linux (AppImage):** não há etapa de instalação, então ative em Configurações. É criado `~/.config/autostart/rename-plus-background.desktop` (XDG Autostart, usado por KDE, GNOME, Xfce, Cinnamon…). Se mover ou trocar o AppImage, abra-o uma vez para corrigir a entrada; abrir um AppImage novo com o antigo em segundo plano passa o controle para o novo.
 
 ### Atualizações
 
@@ -194,8 +197,9 @@ Para deixar claro o escopo atual:
 - **Não move nem copia partes do nome** de uma posição para outra (o painel "Mover/Copiar" do Bulk Rename Utility).
 - **Não altera datas, atributos nem permissões** dos arquivos; só os nomes.
 - **Não move arquivos para outra pasta ao renomear** na tela principal: o novo nome fica sempre na mesma pasta (para mover, use recortar e colar). Só as pastas monitoradas movem arquivos.
+- **Não roda como serviço do sistema:** o monitoramento em segundo plano roda na sua sessão de usuário (inicia quando você entra), não antes do login nem para outros usuários.
 - **Não instala atualizações sozinho:** apenas avisa e abre a página da versão no GitHub.
-- **Não renomeia pela linha de comando:** ela só abre pastas e arquivos no app; também não há agendamento. As pastas monitoradas só funcionam com o app aberto.
+- **Não renomeia pela linha de comando:** ela só abre pastas e arquivos no app; também não há agendamento.
 - **O "Desfazer" vale só para o último lote** e só enquanto o app está aberto.
 - **Limite de listagem:** mostra até 50.000 itens por vez; acima disso a lista é truncada, com aviso.
 - **Não roda no macOS** por enquanto.
@@ -282,7 +286,7 @@ O motor de renomeação (`src/shared/rename`) é TypeScript puro, sem dependênc
 
 ## Onde ficam as preferências
 
-Tema, idioma, regras, filtros, ordenação, larguras e última pasta aberta ficam salvos na pasta de dados do app (as pastas monitoradas em `watch-folders.json` e as preferências de atualização em `updates.json`):
+Tema, idioma, regras, filtros, ordenação, larguras e última pasta aberta ficam salvos na pasta de dados do app (as pastas monitoradas em `watch-folders.json`, o modo em segundo plano em `background.json` e as preferências de atualização em `updates.json`):
 
 - **Linux:** `~/.config/rename-plus/`
 - **Windows:** `%APPDATA%\rename-plus\`

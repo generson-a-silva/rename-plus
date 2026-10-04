@@ -95,8 +95,31 @@ export const ptBr = {
 	"watch.description":
 		"Arquivos que chegarem a uma pasta monitorada (ex.: Downloads) são renomeados e, se você quiser, movidos para outra pasta automaticamente.",
 	"watch.descriptionLimits":
-		"Funciona enquanto o Rename Plus estiver aberto e só para arquivos novos: o que já está na pasta não é alterado. Subpastas, arquivos ocultos e downloads em andamento são ignorados.",
+		"Só arquivos novos: o que já está na pasta não é alterado. Subpastas, arquivos ocultos e downloads em andamento são ignorados.",
 	"watch.empty": "Nenhuma pasta monitorada.",
+	"background.toggle": "Continuar monitorando com o app fechado",
+	"background.hint":
+		"O Rename Plus inicia com o sistema, sem janela, e fica no ícone da bandeja enquanto houver pastas monitoradas ativas. Sem esta opção, as pastas só são monitoradas com o app aberto.",
+	"background.byInstaller":
+		"Ativado pelo instalador para todos os usuários. Desmarcar desativa só para você.",
+	"background.location": "Início com o sistema",
+	"background.warningAppImage":
+		"O início com o sistema aponta para este AppImage. Se ele mudar de lugar ou de versão, abra o app uma vez para corrigir.",
+	"background.warningDevelopment":
+		"Modo de desenvolvimento: o início com o sistema vai executar {command}",
+	"background.failed": "Não foi possível alterar o início com o sistema: {detail}",
+	"background.autostartComment": "Pastas monitoradas do Rename Plus em segundo plano",
+	"background.trayOpen": "Abrir o Rename Plus",
+	"background.trayWatching": {
+		one: "Monitorando {count} pasta",
+		other: "Monitorando {count} pastas",
+	},
+	"background.trayQuit": "Sair (parar de monitorar)",
+	"background.residentNotice": {
+		one: "Continua monitorando {count} pasta em segundo plano. Para sair, use o ícone na bandeja.",
+		other:
+			"Continua monitorando {count} pastas em segundo plano. Para sair, use o ícone na bandeja.",
+	},
 	"watch.add": "Adicionar pasta monitorada",
 	"watch.newRule": "Nova pasta monitorada",
 	"watch.name": "Nome da regra",

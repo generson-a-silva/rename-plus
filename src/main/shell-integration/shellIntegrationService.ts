@@ -9,6 +9,7 @@ import {
 	type MessageRef,
 } from "../../shared/i18n";
 import type { LaunchMode, ShellIntegrationInfo, ShellIntegrationUpdate } from "../../shared/ipc";
+import { appLaunchCommand } from "../appLaunchCommand";
 import { tMain } from "../mainLocale";
 import { quotePosixArg, quoteWindowsArg } from "./commandQuoting";
 import type { MenuContext, MenuLabel } from "./contextMenuEntries";
@@ -30,17 +31,6 @@ const LABEL_KEYS: Record<LaunchMode, MessageKey> = {
 	select: "shellMenu.select",
 };
 
-/**
- * Como as entradas abrem o app: o AppImage (não o executável dentro dele, que só
- * existe enquanto o app roda), o executável instalado ou, em desenvolvimento, o
- * Electron com a pasta do projeto.
- */
-function launchCommand(): string[] {
-	if (process.env.APPIMAGE) return [process.env.APPIMAGE];
-	if (!app.isPackaged) return [process.execPath, app.getAppPath()];
-	return [process.execPath];
-}
-
 function menuLabel(key: MessageKey): MenuLabel {
 	const translations: Record<string, string> = {};
 	for (const locale of LOCALES) {
@@ -52,7 +42,7 @@ function menuLabel(key: MessageKey): MenuLabel {
 
 function menuContext(): MenuContext {
 	return {
-		command: launchCommand(),
+		command: appLaunchCommand(),
 		icon: process.platform === "win32" ? `${process.execPath},0` : ICON_NAME,
 		labels: { open: menuLabel(LABEL_KEYS.open), select: menuLabel(LABEL_KEYS.select) },
 	};
@@ -115,7 +105,7 @@ export async function getShellIntegrationInfo(): Promise<ShellIntegrationInfo> {
 	const loaded = await loadTargets();
 	const statuses = await Promise.all(loaded.targets.map((target) => target.status()));
 	const quote = process.platform === "win32" ? quoteWindowsArg : quotePosixArg;
-	const command = launchCommand().map(quote).join(" ");
+	const command = appLaunchCommand().map(quote).join(" ");
 	return {
 		command,
 		warnings: warnings(command),

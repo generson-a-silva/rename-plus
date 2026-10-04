@@ -136,7 +136,10 @@ En **Configuración › Carpetas vigiladas**, elige una carpeta (p. ej., Descarg
 - Las reglas de renombrado son las de la pantalla principal: configúralas con la vista previa y usa **Copiar reglas de la pantalla principal**.
 - Máscara de archivos (`*.pdf; *.jpg`), carpeta de destino opcional, prueba con un nombre de ejemplo y notificación del sistema por cada archivo.
 - Espera a que el archivo termine de escribirse e ignora descargas en curso (`.crdownload`, `.part`…), archivos ocultos y subcarpetas. Nunca sobrescribe: los nombres repetidos reciben ` (2)`.
-- Funciona mientras la aplicación está abierta y solo con archivos nuevos (lo que ya estaba en la carpeta no se toca). El registro de actividad muestra lo que se hizo y los fallos.
+- Solo archivos nuevos (lo que ya estaba en la carpeta no se toca). El registro de actividad muestra lo que se hizo y los fallos.
+- **Sigue funcionando con la aplicación cerrada:** con **Seguir vigilando con la aplicación cerrada** activado, Rename Plus se inicia con tu sesión, sin ventana, y queda en la bandeja mientras haya carpetas vigiladas activas (menú de la bandeja: abrir, salir). Abrir la aplicación solo muestra la ventana en ese mismo proceso. Sin carpetas vigiladas activas, se cierra al momento y no sigue ejecutándose sin motivo.
+  - **Windows:** el instalador tiene la página «Carpetas vigiladas» para activarlo para todos los usuarios (marcada por defecto; desmárcala para instalar sin ella). Cada usuario puede desactivarlo en Configuración.
+  - **Linux (AppImage):** no hay paso de instalación, así que actívalo en Configuración. Se crea `~/.config/autostart/rename-plus-background.desktop` (XDG Autostart, usado por KDE, GNOME, Xfce, Cinnamon…). Si mueves o sustituyes el AppImage, ábrelo una vez para corregir la entrada; abrir un AppImage nuevo con el antiguo en segundo plano cede el control al nuevo.
 
 ### Actualizaciones
 
@@ -196,8 +199,9 @@ Para dejar claro el alcance actual:
 - **No mueve ni copia partes del nombre** de una posición a otra (el panel «Mover/Copiar» de Bulk Rename Utility).
 - **No cambia fechas, atributos ni permisos** de los archivos; solo los nombres.
 - **No mueve archivos a otra carpeta al renombrar** desde la pantalla principal: el nuevo nombre se queda siempre en la misma carpeta (para mover, usa cortar y pegar). Solo las carpetas vigiladas mueven archivos.
+- **No funciona como servicio del sistema:** la vigilancia en segundo plano se ejecuta en tu sesión de usuario (se inicia al entrar), no antes del inicio de sesión ni para otros usuarios.
 - **No instala actualizaciones por sí sola:** solo avisa y abre la página de la versión en GitHub.
-- **No renombra desde la línea de comandos:** esta solo abre carpetas y archivos en la aplicación, y no hay programación de tareas. Las carpetas vigiladas solo funcionan con la aplicación abierta.
+- **No renombra desde la línea de comandos:** esta solo abre carpetas y archivos en la aplicación, y no hay programación de tareas.
 - **«Deshacer» solo cubre el último lote**, y solo mientras la aplicación está abierta.
 - **Límite de listado:** muestra hasta 50 000 elementos a la vez; por encima de eso la lista se trunca, con un aviso.
 - **No funciona en macOS** por ahora.
@@ -284,7 +288,7 @@ El motor de renombrado (`src/shared/rename`) es TypeScript puro, sin dependencia
 
 ## Dónde se guarda la configuración
 
-El tema, el idioma, las reglas, los filtros, la ordenación, los anchos y la última carpeta abierta se guardan en la carpeta de datos de la aplicación (las carpetas vigiladas en `watch-folders.json` y las preferencias de actualización en `updates.json`):
+El tema, el idioma, las reglas, los filtros, la ordenación, los anchos y la última carpeta abierta se guardan en la carpeta de datos de la aplicación (las carpetas vigiladas en `watch-folders.json`, el modo en segundo plano en `background.json` y las preferencias de actualización en `updates.json`):
 
 - **Linux:** `~/.config/rename-plus/`
 - **Windows:** `%APPDATA%\rename-plus\`

@@ -35,6 +35,8 @@ const C = {
 	GetWatchFolders: "watch:get",
 	SetWatchRules: "watch:set-rules",
 	ClearWatchActivity: "watch:clear-activity",
+	GetBackground: "background:get",
+	SetBackground: "background:set",
 	LaunchRequest: "launch:request",
 	UpdateStatus: "update:status",
 	WatchFoldersChanged: "watch:changed",
@@ -88,6 +90,8 @@ const api: ElectronApi = {
 	setWatchRules: (rules) => ipcRenderer.invoke(C.SetWatchRules, rules),
 	clearWatchActivity: () => ipcRenderer.invoke(C.ClearWatchActivity),
 	onWatchFoldersChanged: (listener) => subscribe(C.WatchFoldersChanged, listener),
+	getBackground: () => ipcRenderer.invoke(C.GetBackground),
+	setBackground: (enabled) => ipcRenderer.invoke(C.SetBackground, enabled),
 };
 
 contextBridge.exposeInMainWorld("api", api);

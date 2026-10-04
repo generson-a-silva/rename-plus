@@ -3,10 +3,12 @@ import { BrowserWindow, dialog, ipcMain } from "electron";
 import type { ConfirmRequest, ContextMenuItem, ListOptions, RenameOperation } from "../shared/ipc";
 import { IpcChannel } from "../shared/ipc";
 import { getAppInfo } from "./appInfo";
+import { getBackgroundInfo, setBackground } from "./backgroundService";
 import { canUndo, renameBatch, undoLastBatch } from "./batchRenamer";
 import { listDirectories, listEntries, listRoots, resolveDirectory } from "./fileSystemService";
 import { copyItems, createFolder, deleteItems, moveItems } from "./fileTransferService";
 import { takeLaunchRequests } from "./launchRequestQueue";
+import { saveLocale } from "./localePreference";
 import { setMainLocale, tMain } from "./mainLocale";
 import {
 	copyText,
@@ -29,6 +31,7 @@ export function registerIpcHandlers(): void {
 	ipcMain.handle(IpcChannel.SetTheme, (_event, mode: unknown) => setTheme(mode));
 	ipcMain.handle(IpcChannel.SetLocale, (_event, locale: unknown) => {
 		setMainLocale(locale);
+		saveLocale(locale);
 		// As entradas do menu de contexto do sistema seguem o idioma da interface.
 		void refreshContextMenuIntegrations();
 	});
@@ -107,4 +110,6 @@ export function registerIpcHandlers(): void {
 	ipcMain.handle(IpcChannel.GetWatchFolders, () => getWatchFoldersInfo());
 	ipcMain.handle(IpcChannel.SetWatchRules, (_event, rules: unknown) => setWatchRules(rules));
 	ipcMain.handle(IpcChannel.ClearWatchActivity, () => clearWatchActivity());
+	ipcMain.handle(IpcChannel.GetBackground, () => getBackgroundInfo());
+	ipcMain.handle(IpcChannel.SetBackground, (_event, enabled: unknown) => setBackground(enabled));
 }

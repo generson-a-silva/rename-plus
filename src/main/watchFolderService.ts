@@ -62,8 +62,22 @@ export function getWatchFoldersInfo(): WatchFoldersInfo {
 	return { rules, statuses: { ...statuses }, activity };
 }
 
+/** Quantas regras estão de fato monitorando uma pasta agora. */
+export function activeWatchCount(): number {
+	return watchers.size;
+}
+
+const watchingListeners = new Set<(count: number) => void>();
+
+/** Avisa quando a quantidade de pastas monitoradas muda (ex.: o modo em segundo plano). */
+export function onWatchingChanged(listener: (count: number) => void): () => void {
+	watchingListeners.add(listener);
+	return () => watchingListeners.delete(listener);
+}
+
 function notifyChanged(): void {
 	broadcast(IpcChannel.WatchFoldersChanged, getWatchFoldersInfo());
+	for (const listener of watchingListeners) listener(watchers.size);
 }
 
 const ruleLabel = (rule: WatchRule) =>
@@ -274,6 +288,7 @@ function loadRules(value: unknown): WatchRule[] {
 export function startWatchFolders(): void {
 	rules = loadRules(readSettingsFile(SETTINGS_FILE));
 	applyRules();
+	notifyChanged();
 }
 
 export function setWatchRules(value: unknown): WatchFoldersInfo {
