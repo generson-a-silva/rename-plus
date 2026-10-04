@@ -1,4 +1,4 @@
-import { escapeRegExp } from "@shared/rename";
+import { escapeRegExp } from "./textTransforms";
 
 /**
  * Converte uma máscara com curingas (ex.: "*.jpg; *.png; foto??.*") em um

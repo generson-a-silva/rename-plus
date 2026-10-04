@@ -1,3 +1,4 @@
+export { createMaskFilter } from "./fileNameMask";
 export { MAX_NAME_BYTES, MAX_WINDOWS_NAME_LENGTH, validateFileName } from "./fileNameValidation";
 export {
 	createRenamer,
