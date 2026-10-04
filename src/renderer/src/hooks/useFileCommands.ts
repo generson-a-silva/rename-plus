@@ -177,6 +177,8 @@ export function useFileCommands(options: FileCommandsOptions) {
 		if (!shortcutsEnabled) return;
 		const onKeyDown = (event: KeyboardEvent) => {
 			if (event.defaultPrevented || isEditableTarget(event.target)) return;
+			// Teclas dentro de um diálogo (ex.: Delete num botão) não agem nos arquivos por trás dele.
+			if (event.target instanceof Element && event.target.closest("dialog[open]")) return;
 			const command = matchFileShortcut(event);
 			if (!command) return;
 			event.preventDefault();

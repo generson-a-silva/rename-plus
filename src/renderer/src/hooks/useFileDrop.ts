@@ -19,6 +19,9 @@ function carriesFiles(event: DragEvent): boolean {
 	return event.dataTransfer?.types.includes("Files") ?? false;
 }
 
+/** Com um diálogo modal aberto, a janela por trás não recebe itens soltos. */
+const modalOpen = () => document.querySelector("dialog[open]") !== null;
+
 /**
  * Arrastar e soltar arquivos/pastas do sistema sobre a janela. Devolve `true`
  * enquanto um arrasto válido está sobre ela (para exibir a sobreposição).
@@ -53,13 +56,14 @@ export function useFileDrop({ onDrop, enabled }: FileDropOptions): boolean {
 			if (!carriesFiles(event)) return;
 			event.preventDefault();
 			depth++;
-			setDragging(enabledRef.current);
+			setDragging(enabledRef.current && !modalOpen());
 			keepAlive();
 		};
 		const onDragOver = (event: DragEvent) => {
 			if (!carriesFiles(event)) return;
 			event.preventDefault();
-			if (event.dataTransfer) event.dataTransfer.dropEffect = enabledRef.current ? "copy" : "none";
+			if (event.dataTransfer)
+				event.dataTransfer.dropEffect = enabledRef.current && !modalOpen() ? "copy" : "none";
 			keepAlive();
 		};
 		const onDragLeave = (event: DragEvent) => {
@@ -71,7 +75,7 @@ export function useFileDrop({ onDrop, enabled }: FileDropOptions): boolean {
 			if (!carriesFiles(event)) return;
 			event.preventDefault();
 			reset();
-			if (!enabledRef.current) return;
+			if (!enabledRef.current || modalOpen()) return;
 			const paths = [...(event.dataTransfer?.files ?? [])]
 				.map((file) => window.api.getPathForFile(file))
 				.filter(Boolean);
