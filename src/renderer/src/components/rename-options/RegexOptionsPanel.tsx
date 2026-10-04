@@ -1,17 +1,35 @@
-import { CheckField, OptionPanel, TextField } from "@components/common";
+import { AppIcon, CheckField, OptionPanel, TextField } from "@components/common";
+import { RegexBuilderDialog } from "@components/regex-builder";
 import { useI18n } from "@hooks";
+import { useState } from "react";
 import type { RenameSectionPanelProps } from "./renameSectionPanelShared";
 
-/** Expressão regular aplicada ao nome. */
+interface RegexOptionsPanelProps extends RenameSectionPanelProps<"regex"> {
+	/** Nomes para testar a expressão no construtor visual. */
+	sampleNames: readonly string[];
+}
+
+/** Expressão regular aplicada ao nome, digitada ou montada no construtor visual. */
 export function RegexOptionsPanel({
 	value,
 	onChange,
 	active,
 	onReset,
-}: RenameSectionPanelProps<"regex">) {
+	sampleNames,
+}: RegexOptionsPanelProps) {
 	const { t } = useI18n();
+	const [builderOpen, setBuilderOpen] = useState(false);
 	return (
 		<OptionPanel title={t("regex.title")} active={active} onReset={onReset}>
+			<button
+				type="button"
+				className="button regex-builder-button"
+				title={t("rxb.openHint")}
+				onClick={() => setBuilderOpen(true)}
+			>
+				<AppIcon name="blocks" size={14} />
+				{t("rxb.open")}
+			</button>
 			<TextField
 				label={t("field.find")}
 				mono
@@ -45,6 +63,13 @@ export function RegexOptionsPanel({
 					onChange={(ignoreCase) => onChange({ ignoreCase })}
 				/>
 			</div>
+			<RegexBuilderDialog
+				open={builderOpen}
+				value={value}
+				sampleNames={sampleNames}
+				onApply={onChange}
+				onClose={() => setBuilderOpen(false)}
+			/>
 		</OptionPanel>
 	);
 }

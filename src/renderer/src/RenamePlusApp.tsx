@@ -304,6 +304,15 @@ export function RenamePlusApp() {
 		[visibleEntries, selection],
 	);
 
+	/** Exemplos para o construtor de RegEx: os selecionados ou, sem seleção, os primeiros da lista. */
+	const sampleNames = useMemo(
+		() =>
+			(selectedEntries.length > 0 ? selectedEntries : visibleEntries)
+				.slice(0, 8)
+				.map((e) => e.name),
+		[selectedEntries, visibleEntries],
+	);
+
 	const deferredOptions = useDeferredValue(options);
 	const preview = useMemo(
 		() => buildPreview(selectedEntries, listing.entries, deferredOptions, PREVIEW_CONTEXT),
@@ -557,6 +566,7 @@ export function RenamePlusApp() {
 					onReset={resetOption}
 					filters={filters}
 					onFiltersChange={(patch) => setFilters((prev) => ({ ...prev, ...patch }))}
+					sampleNames={sampleNames}
 					actions={{
 						canRename: preview.changed > 0 && preview.errors === 0 && !preview.configError,
 						canUndo,

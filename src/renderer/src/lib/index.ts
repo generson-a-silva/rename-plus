@@ -19,5 +19,6 @@ export {
 	relativePath,
 	treeRootFor,
 } from "./filePathUtils";
+export { insertItem, moveItem } from "./listReorder";
 export { loadStored, mergeDefaults, saveStored } from "./localPreferencesStorage";
 export { describePreview, describeRenameFailure } from "./renameResultMessages";

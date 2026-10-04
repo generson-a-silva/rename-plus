@@ -1673,3 +1673,305 @@ a.button.primary {
 .watch-activity li.error .watch-activity-detail {
 	color: var(--error);
 }
+
+/* ---- Construtor visual de RegEx --------------------------------------- */
+
+.regex-builder-button {
+	justify-self: start;
+	height: 24px;
+	padding: 0 8px;
+	font-size: 12px;
+}
+
+.settings-dialog.rx-dialog {
+	width: min(1040px, calc(100vw - 32px));
+	height: calc(100vh - 48px);
+}
+
+.rx-dialog .settings-content {
+	flex: 1;
+}
+
+.rx-body {
+	display: grid;
+	align-content: start;
+	gap: 14px;
+	flex: 1;
+	min-height: 0;
+	padding: 16px 18px;
+	overflow-y: auto;
+}
+
+.rx-intro {
+	margin: 0;
+	color: var(--muted);
+}
+
+.rx-presets,
+.rx-palette {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+}
+
+.rx-palette-label {
+	min-width: 120px;
+	color: var(--muted);
+	font-size: 12px;
+}
+
+.rx-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	height: 26px;
+	padding: 0 10px;
+	border: 1px solid var(--border-strong);
+	border-radius: 999px;
+	background: var(--surface-2);
+	cursor: grab;
+}
+
+.rx-chip:hover {
+	border-color: var(--accent);
+	color: var(--accent);
+}
+
+.rx-chip:active {
+	cursor: grabbing;
+}
+
+.rx-chip.preset {
+	border-style: dashed;
+	cursor: pointer;
+}
+
+.rx-section {
+	display: grid;
+	gap: 8px;
+	padding: 12px;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+}
+
+.rx-section h3 {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+	font-size: 14px;
+}
+
+.rx-step {
+	display: grid;
+	place-items: center;
+	width: 22px;
+	height: 22px;
+	border-radius: 999px;
+	background: var(--accent);
+	color: var(--accent-fg);
+	font-size: 12px;
+}
+
+/* Faixa onde os blocos ficam em sequência (quebrando linha quando precisa). */
+.rx-strip {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	gap: 10px;
+	min-height: 96px;
+	padding: 10px;
+	border: 2px dashed var(--border);
+	border-radius: 8px;
+	background: var(--bg);
+}
+
+.rx-strip.dragging {
+	border-color: var(--accent);
+	background: color-mix(in srgb, var(--accent-soft) 40%, var(--bg));
+}
+
+/* Marcador no fim da faixa quando o bloco vai entrar depois do último. */
+.rx-strip.drop-end::after {
+	content: "";
+	align-self: stretch;
+	width: 3px;
+	border-radius: 2px;
+	background: var(--accent);
+}
+
+.rx-strip-empty {
+	align-self: center;
+	margin: 0 auto;
+	color: var(--muted);
+}
+
+.rx-block {
+	display: grid;
+	width: 210px;
+	border: 1px solid var(--border-strong);
+	border-radius: 8px;
+	background: var(--surface);
+	box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
+}
+
+/* Marcador de inserção à esquerda do bloco, sem mexer no layout durante o arrasto. */
+.rx-block.drop-before {
+	box-shadow: -7px 0 0 -4px var(--accent);
+}
+
+.rx-block.invalid {
+	border-color: var(--error);
+}
+
+.rx-block-head {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 5px 6px 5px 8px;
+	border-bottom: 1px solid var(--border);
+	border-radius: 8px 8px 0 0;
+	background: var(--surface-2);
+	cursor: grab;
+}
+
+.rx-block-head:active {
+	cursor: grabbing;
+}
+
+.rx-block-head > .icon {
+	flex: none;
+	color: var(--muted);
+}
+
+.rx-block-title {
+	display: flex;
+	flex: 1;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px;
+	min-width: 0;
+	font-weight: 600;
+}
+
+.rx-block-tools {
+	display: flex;
+	flex: none;
+}
+
+.rx-block-tools button {
+	display: grid;
+	place-items: center;
+	width: 20px;
+	height: 20px;
+	padding: 0;
+	border: 0;
+	border-radius: 4px;
+	background: none;
+	color: var(--muted);
+	cursor: pointer;
+}
+
+.rx-block-tools button:hover:not(:disabled) {
+	background: var(--row-hover);
+	color: var(--fg);
+}
+
+.rx-block-tools button:disabled {
+	opacity: 0.3;
+	cursor: default;
+}
+
+.rx-block-body {
+	display: grid;
+	gap: 6px;
+	padding: 8px;
+}
+
+.rx-block-note {
+	margin: 0;
+	color: var(--muted);
+	font-size: 12px;
+}
+
+.rx-block-note.error {
+	color: var(--error);
+}
+
+.rx-group-badge {
+	padding: 0 6px;
+	border-radius: 999px;
+	background: var(--accent-soft);
+	color: var(--accent);
+	font-size: 11px;
+	font-weight: 600;
+}
+
+.rx-preview {
+	display: grid;
+	gap: 8px;
+	max-width: 480px;
+}
+
+.rx-preview-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 12px;
+}
+
+.rx-preview-table th {
+	padding: 4px 8px;
+	color: var(--muted);
+	font-weight: 600;
+	text-align: left;
+}
+
+.rx-preview-table td {
+	padding: 4px 8px;
+	border-top: 1px solid var(--border);
+	overflow-wrap: anywhere;
+	user-select: text;
+}
+
+.rx-preview-table tr.changed td:last-child {
+	color: var(--changed);
+	font-weight: 600;
+}
+
+.rx-generated-summary {
+	color: var(--muted);
+	cursor: pointer;
+}
+
+.rx-generated dl {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
+	gap: 4px 12px;
+	margin: 8px 0 0;
+}
+
+.rx-generated dt {
+	color: var(--muted);
+}
+
+.rx-generated dd {
+	margin: 0;
+}
+
+.rx-generated code {
+	font-family: var(--mono);
+	overflow-wrap: anywhere;
+	user-select: text;
+}
+
+.rx-footer {
+	align-items: center;
+	gap: 8px;
+}
+
+.rx-warning {
+	margin: 0 auto 0 0;
+	color: #d29922;
+	font-size: 12px;
+}

@@ -102,7 +102,7 @@ Se você usa Windows e precisa de recursos avançados como metadados EXIF/ID3, s
 
 | Painel | O que faz |
 |---|---|
-| **RegEx** | Buscar e substituir com expressões regulares, com grupos de captura (`$1`, `$2`…), opção de incluir a extensão, substituição global e sem diferenciar maiúsculas. |
+| **RegEx** | Buscar e substituir com expressões regulares, com grupos de captura (`$1`, `$2`…), opção de incluir a extensão, substituição global e sem diferenciar maiúsculas. O **construtor visual** monta a expressão com blocos arrastáveis, sem digitar RegEx. |
 | **Nome** | Manter, remover, trocar por um nome fixo ou inverter o nome original. |
 | **Substituir** | Substituição de texto literal, com ou sem diferenciar maiúsculas. |
 | **Maiúsc./Minúsc.** | minúsculas, MAIÚSCULAS, Título e Frase, com lista de palavras de exceção. |
@@ -113,6 +113,15 @@ Se você usa Windows e precisa de recursos avançados como metadados EXIF/ID3, s
 | **Numeração** | Prefixo, sufixo, ambos ou em uma posição; início, incremento, zeros à esquerda; estilos `1, 2, 3`, `a, b, c`, `A, B, C` e `I, II, III`; reinício por pasta. |
 | **Extensão** | Manter, minúsculas, MAIÚSCULAS, Título, remover, trocar por uma fixa ou acrescentar uma extra. |
 | **Filtros** | Máscara de nomes (`*.jpg; *.png`), arquivos e/ou pastas, itens ocultos e conteúdo das subpastas (modo recursivo). |
+
+### Construtor visual de RegEx
+
+Para quem não escreve expressões regulares: no painel **RegEx**, o botão **Construtor visual** abre uma tela em que a busca é montada com blocos, da esquerda para a direita ("Início do nome", "Texto exato", "Números", "Letras", "Separador", "Uma destas palavras"…), e a substituição também ("Texto", "Trecho guardado", "Trecho encontrado").
+
+- Arraste os blocos da paleta para a faixa (ou clique para acrescentar no fim) e arraste pelo título para reordenar; os botões ◀ ▶ fazem o mesmo pelo teclado.
+- Cada bloco define quantas vezes aparece (uma vez, opcional, uma ou mais, exatamente N, entre N e M) e se o trecho deve ser **guardado** para reaproveitar na substituição.
+- Exemplos prontos: espaços → `_`, `IMG_1234` → `Foto 1234`, remover números do início, inverter datas `2024-06-10` → `10-06-2024`, remover `(…)`.
+- Pré-visualização nos arquivos selecionados e num nome digitado; a expressão gerada fica visível para quem quiser conferi-la.
 
 ### Pastas monitoradas
 

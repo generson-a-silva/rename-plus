@@ -23,6 +23,8 @@ interface RenameOptionsPanelsProps {
 	filters: ListFilters;
 	onFiltersChange: (patch: Partial<ListFilters>) => void;
 	actions: RenameActionsPanelProps;
+	/** Nomes de exemplo para o construtor visual de RegEx. */
+	sampleNames: readonly string[];
 }
 
 /**
@@ -36,6 +38,7 @@ export function RenameOptionsPanels({
 	filters,
 	onFiltersChange,
 	actions,
+	sampleNames,
 }: RenameOptionsPanelsProps) {
 	const { t } = useI18n();
 	const defaults = useMemo(createDefaultOptions, []);
@@ -54,7 +57,7 @@ export function RenameOptionsPanels({
 		<div className="rename-options">
 			{/* Opções roláveis; as ações ficam numa coluna fixa à direita, sempre visíveis. */}
 			<div ref={panelsRef} className="panels">
-				<RegexOptionsPanel {...sectionProps("regex")} />
+				<RegexOptionsPanel {...sectionProps("regex")} sampleNames={sampleNames} />
 				<NameOptionsPanel {...sectionProps("name")} />
 				<ReplaceOptionsPanel {...sectionProps("replace")} />
 				<CaseOptionsPanel {...sectionProps("case")} />
