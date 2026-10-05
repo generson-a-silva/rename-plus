@@ -82,9 +82,26 @@ A interface segue o modelo de três áreas: árvore de pastas à esquerda, lista
       <p><b>Arrastar e soltar.</b> Solte uma pasta para abri-la, ou arquivos para abrir a pasta deles já com eles selecionados.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Modal de Configurações com as seções Aparência e Menu de contexto do sistema, com o Dolphin adicionado"></a>
-      <p><b>Configurações.</b> Tema da interface e as opções "Abrir no Rename Plus" no menu de contexto do gerenciador de arquivos.</p>
+      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Configurações com as seções Aparência, Atualizações e Pastas monitoradas; a versão instalada 1.4.0 é a mais recente"></a>
+      <p><b>Configurações.</b> Tema da interface, verificação de atualizações no GitHub e pastas monitoradas, além das opções "Abrir no Rename Plus" no menu de contexto do gerenciador de arquivos.</p>
     </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/construtor-regex.png"><img src="docs/screenshots/construtor-regex.png" alt="Construtor visual de RegEx: paleta de blocos, a busca 'Início do nome + Texto exato IMG_ + Números (Trecho 1)' e a substituição 'Texto + Trecho guardado'"></a>
+      <p><b>Construtor visual de RegEx.</b> A busca e a substituição são montadas com blocos arrastáveis, com exemplos prontos. Aqui, <code>IMG_2041.JPG</code> vira <code>Foto 2041.JPG</code>.</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/pastas-monitoradas.png"><img src="docs/screenshots/pastas-monitoradas.png" alt="Pastas monitoradas: segundo plano ativado e a regra 'Faturas' monitorando PDFs na pasta Downloads"></a>
+      <p><b>Pastas monitoradas.</b> PDFs que chegam em Downloads ganham a data na frente, viram Título e vão para <code>Documentos/Faturas</code>, mesmo com o app fechado (segundo plano ativado).</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/pastas-monitoradas-atividade.png"><img src="docs/screenshots/pastas-monitoradas-atividade.png" alt="Regra de pasta monitorada com um nome de teste e a atividade recente com três PDFs renomeados e movidos"></a>
+      <p><b>Teste e atividade.</b> Teste a regra com um nome de exemplo antes de qualquer arquivo chegar e veja no registro de atividade o que foi renomeado (ou o que falhou).</p>
+    </td>
+    <td width="50%" valign="top"></td>
   </tr>
 </table>
 

@@ -84,9 +84,26 @@ The screenshots show the Portuguese interface. The app is also available in Engl
       <p><b>Drag and drop.</b> Drop a folder to open it, or drop files to open their folder with them already selected.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Settings dialog with the Appearance and System context menu sections, with Dolphin added"></a>
-      <p><b>Settings.</b> Interface theme and the "Open in Rename Plus" entries in the file manager's context menu.</p>
+      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Settings dialog with the Appearance, Updates and Watch folders sections; the installed version 1.4.0 is up to date"></a>
+      <p><b>Settings.</b> Interface theme, update checks on GitHub and watch folders, besides the "Open in Rename Plus" entries in the file manager's context menu.</p>
     </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/construtor-regex.png"><img src="docs/screenshots/construtor-regex.png" alt="Visual RegEx builder: palette of blocks, the search 'Start of name + Exact text IMG_ + Numbers (Match 1)' and the replacement 'Text + Kept match'"></a>
+      <p><b>Visual RegEx builder.</b> The search and the replacement are built from drag-and-drop blocks, with ready-made examples. Here, <code>IMG_2041.JPG</code> becomes <code>Foto 2041.JPG</code>.</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/pastas-monitoradas.png"><img src="docs/screenshots/pastas-monitoradas.png" alt="Watch folders settings: background watching turned on and the 'Faturas' rule watching Downloads for PDF files"></a>
+      <p><b>Watch folders.</b> PDFs that land in Downloads get the date in front, Title Case and go to <code>Documentos/Faturas</code>, even with the app closed (background watching on).</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/pastas-monitoradas-atividade.png"><img src="docs/screenshots/pastas-monitoradas-atividade.png" alt="Watch folder rule with a test name and the recent activity list showing three PDFs renamed and moved"></a>
+      <p><b>Test and activity.</b> Try the rule with a sample name before any file arrives, and see what was renamed (or what failed) in the activity log.</p>
+    </td>
+    <td width="50%" valign="top"></td>
   </tr>
 </table>
 

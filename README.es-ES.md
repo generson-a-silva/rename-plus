@@ -84,9 +84,26 @@ Las capturas muestran la interfaz en portugués. La aplicación también está d
       <p><b>Arrastrar y soltar.</b> Suelta una carpeta para abrirla, o archivos para abrir su carpeta con ellos ya seleccionados.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Diálogo de Configuración con las secciones Apariencia y Menú contextual del sistema, con Dolphin añadido"></a>
-      <p><b>Configuración.</b> Tema de la interfaz y las opciones «Abrir en Rename Plus» en el menú contextual del gestor de archivos.</p>
+      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Configuración con las secciones Apariencia, Actualizaciones y Carpetas vigiladas; la versión instalada 1.4.0 es la más reciente"></a>
+      <p><b>Configuración.</b> Tema de la interfaz, comprobación de actualizaciones en GitHub y carpetas vigiladas, además de las opciones «Abrir en Rename Plus» en el menú contextual del gestor de archivos.</p>
     </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/construtor-regex.png"><img src="docs/screenshots/construtor-regex.png" alt="Constructor visual de RegEx: paleta de bloques, la búsqueda 'Inicio del nombre + Texto exacto IMG_ + Números (Fragmento 1)' y el reemplazo 'Texto + Fragmento guardado'"></a>
+      <p><b>Constructor visual de RegEx.</b> La búsqueda y el reemplazo se arman con bloques que se arrastran, con ejemplos listos. Aquí, <code>IMG_2041.JPG</code> pasa a <code>Foto 2041.JPG</code>.</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/pastas-monitoradas.png"><img src="docs/screenshots/pastas-monitoradas.png" alt="Carpetas vigiladas: segundo plano activado y la regla 'Faturas' vigilando los PDF de la carpeta Downloads"></a>
+      <p><b>Carpetas vigiladas.</b> Los PDF que llegan a Downloads reciben la fecha delante, pasan a Título y van a <code>Documentos/Faturas</code>, incluso con la aplicación cerrada (segundo plano activado).</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/pastas-monitoradas-atividade.png"><img src="docs/screenshots/pastas-monitoradas-atividade.png" alt="Regla de carpeta vigilada con un nombre de prueba y la actividad reciente con tres PDF renombrados y movidos"></a>
+      <p><b>Prueba y actividad.</b> Prueba la regla con un nombre de ejemplo antes de que llegue ningún archivo y consulta en el registro de actividad qué se renombró (o qué falló).</p>
+    </td>
+    <td width="50%" valign="top"></td>
   </tr>
 </table>
 
