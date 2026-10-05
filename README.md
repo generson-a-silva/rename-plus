@@ -103,7 +103,10 @@ The screenshots show the Portuguese interface. The app is also available in Engl
       <a href="docs/screenshots/pastas-monitoradas-atividade.png"><img src="docs/screenshots/pastas-monitoradas-atividade.png" alt="Watch folder rule with a test name and the recent activity list showing three PDFs renamed and moved"></a>
       <p><b>Test and activity.</b> Try the rule with a sample name before any file arrives, and see what was renamed (or what failed) in the activity log.</p>
     </td>
-    <td width="50%" valign="top"></td>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/seus-filtros.png"><img src="docs/screenshots/seus-filtros.png" alt="'Save preset' dialog with the name 'Fotos de família'; behind it, the photos in the Família folder with the new names '2023-12-03 Família 01.jpg' and the preset list next to the language selector"></a>
+      <p><b>Presets.</b> The save button in the corner of the panels stores the current combination of rules (here, fixed Name, Auto date and Numbering) under a name. Pick it again from the list next to the language selector or in a watch folder rule.</p>
+    </td>
   </tr>
 </table>
 

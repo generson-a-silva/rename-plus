@@ -101,7 +101,10 @@ A interface segue o modelo de três áreas: árvore de pastas à esquerda, lista
       <a href="docs/screenshots/pastas-monitoradas-atividade.png"><img src="docs/screenshots/pastas-monitoradas-atividade.png" alt="Regra de pasta monitorada com um nome de teste e a atividade recente com três PDFs renomeados e movidos"></a>
       <p><b>Teste e atividade.</b> Teste a regra com um nome de exemplo antes de qualquer arquivo chegar e veja no registro de atividade o que foi renomeado (ou o que falhou).</p>
     </td>
-    <td width="50%" valign="top"></td>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/seus-filtros.png"><img src="docs/screenshots/seus-filtros.png" alt="Diálogo 'Salvar em Seus Filtros' com o nome 'Fotos de família'; atrás, as fotos da pasta Família com os novos nomes '2023-12-03 Família 01.jpg' e a lista Seus Filtros ao lado do seletor de idioma"></a>
+      <p><b>Seus Filtros.</b> O botão de salvar, no canto dos painéis, guarda a combinação atual de regras (aqui, Nome fixo, Data automática e Numeração) com um nome. Depois é só escolher na lista ao lado do idioma ou nas regras das pastas monitoradas.</p>
+    </td>
   </tr>
 </table>
 

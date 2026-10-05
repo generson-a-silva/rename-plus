@@ -103,7 +103,10 @@ Las capturas muestran la interfaz en portugués. La aplicación también está d
       <a href="docs/screenshots/pastas-monitoradas-atividade.png"><img src="docs/screenshots/pastas-monitoradas-atividade.png" alt="Regla de carpeta vigilada con un nombre de prueba y la actividad reciente con tres PDF renombrados y movidos"></a>
       <p><b>Prueba y actividad.</b> Prueba la regla con un nombre de ejemplo antes de que llegue ningún archivo y consulta en el registro de actividad qué se renombró (o qué falló).</p>
     </td>
-    <td width="50%" valign="top"></td>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/seus-filtros.png"><img src="docs/screenshots/seus-filtros.png" alt="Diálogo para guardar un preset con el nombre 'Fotos de família'; detrás, las fotos de la carpeta Família con los nuevos nombres '2023-12-03 Família 01.jpg' y la lista de presets junto al selector de idioma"></a>
+      <p><b>Presets.</b> El botón de guardar, en la esquina de los paneles, guarda la combinación actual de reglas (aquí, Nombre fijo, Fecha automática y Numeración) con un nombre. Después basta con elegirlo en la lista junto al idioma o en las reglas de las carpetas vigiladas.</p>
+    </td>
   </tr>
 </table>
 
