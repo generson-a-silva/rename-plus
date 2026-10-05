@@ -29,7 +29,8 @@ interface RenameOptionsPanelsProps {
 
 /**
  * Área inferior: painéis numerados (na ordem em que o motor aplica cada seção) à
- * esquerda e, à direita, a coluna fixa com Renomear/Desfazer/Redefinir.
+ * esquerda e, à direita, a coluna fixa com os filtros da listagem e
+ * Renomear/Desfazer/Redefinir.
  */
 export function RenameOptionsPanels({
 	options,
@@ -67,9 +68,10 @@ export function RenameOptionsPanels({
 				<AppendFolderOptionsPanel {...sectionProps("appendFolder")} />
 				<NumberingOptionsPanel {...sectionProps("numbering")} />
 				<ExtensionOptionsPanel {...sectionProps("extension")} />
-				<ListFiltersPanel value={filters} onChange={onFiltersChange} />
 			</div>
 			<aside className="rename-actions" aria-label={t("actions.label")}>
+				{/* Filtros mudam a listagem, não o nome: ficam junto das ações, sempre à vista. */}
+				<ListFiltersPanel value={filters} onChange={onFiltersChange} />
 				<RenameActionsPanel {...actions} />
 			</aside>
 		</div>

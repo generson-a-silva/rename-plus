@@ -532,6 +532,10 @@ button.header-cell:hover {
 }
 
 .rename-actions {
+	/* Filtros no topo e, abaixo, o bloco de ações ocupando o resto da altura. */
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
 	min-height: 0;
 	/* Mesmo espaçamento dos painéis, para não encostar na barra de rolagem deles. */
 	padding: 8px;
@@ -686,9 +690,7 @@ button.header-cell:hover {
 	display: flex;
 	flex-direction: column;
 	gap: 6px;
-	/* Alinha com a borda dos painéis, que começa no meio do badge do título (22px). */
-	margin-top: 11px;
-	min-height: calc(100% - 11px);
+	flex: 1 0 auto;
 	padding: 10px;
 	border: 1px solid var(--border);
 	border-radius: 8px;
