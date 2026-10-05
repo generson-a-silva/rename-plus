@@ -20,6 +20,8 @@
 	--changed: #1a7f37;
 	--error: #cf222e;
 	--error-soft: #fde4e6;
+	--diff-removed: rgb(255 129 130 / 0.4);
+	--diff-added: rgb(74 194 107 / 0.35);
 	--active-panel: #2f6fe4;
 	--marquee-bg: rgb(47 111 228 / 0.12);
 	--marquee-border: rgb(47 111 228 / 0.7);
@@ -48,6 +50,8 @@
 		--changed: #4ac26b;
 		--error: #ff6b6b;
 		--error-soft: #4a1f24;
+		--diff-removed: rgb(255 107 107 / 0.42);
+		--diff-added: rgb(74 194 107 / 0.3);
 		--active-panel: #4c8dff;
 		--marquee-bg: rgb(76 141 255 / 0.16);
 		--marquee-border: rgb(76 141 255 / 0.8);
@@ -72,6 +76,8 @@
 	--changed: #4ac26b;
 	--error: #ff6b6b;
 	--error-soft: #4a1f24;
+	--diff-removed: rgb(255 107 107 / 0.42);
+	--diff-added: rgb(74 194 107 / 0.3);
 	--active-panel: #4c8dff;
 	--marquee-bg: rgb(76 141 255 / 0.16);
 	--marquee-border: rgb(76 141 255 / 0.8);
@@ -485,6 +491,21 @@ button.header-cell:hover {
 .cell-text {
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+/* Trechos que mudam: removidos no nome atual, inseridos/trocados no novo. */
+.diff-removed,
+.diff-added {
+	border-radius: 2px;
+	color: inherit;
+}
+
+.diff-removed {
+	background: var(--diff-removed);
+}
+
+.diff-added {
+	background: var(--diff-added);
 }
 
 .marquee {

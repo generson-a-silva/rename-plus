@@ -1,6 +1,6 @@
 import { AppIcon } from "@components/common";
 import { useI18n, useMarqueeSelection, usePersistentState } from "@hooks";
-import type { SortState } from "@lib";
+import { diffNames, type NameDiffSegment, type SortState } from "@lib";
 import type { FileEntry } from "@shared/ipc";
 import type { Preview } from "@shared/rename";
 import { type KeyboardEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -197,6 +197,9 @@ export function FileListView(props: FileListViewProps) {
 		const isSelected = selection.has(entry.path);
 		const item = isSelected ? preview.items.get(entry.path) : undefined;
 		const status = item?.status ?? "";
+		const newName = visibleNewName(entry);
+		// Com novo nome visível, destaca o que muda nos dois nomes.
+		const nameDiff = newName ? diffNames(entry.name, newName) : null;
 		rows.push(
 			<div
 				key={entry.path}
@@ -208,12 +211,14 @@ export function FileListView(props: FileListViewProps) {
 				title={item?.message ? i18n.tr(item.message) : undefined}
 			>
 				{columns.map((column) => {
-					const text = cellText(column.id, entry, visibleNewName(entry), rootDir, i18n);
+					const text = cellText(column.id, entry, newName, rootDir, i18n);
 					if (column.id === "name") {
 						return (
 							<span key={column.id} className="cell name">
 								<AppIcon name={entry.isDir ? "folder" : "file"} size={14} />
-								<span className="cell-text">{text}</span>
+								<span className="cell-text">
+									{nameDiff ? <DiffText segments={nameDiff.before} kind="removed" /> : text}
+								</span>
 							</span>
 						);
 					}
@@ -221,7 +226,13 @@ export function FileListView(props: FileListViewProps) {
 						column.id === "newName" ? "new-name" : column.align === "right" ? "right" : "";
 					return (
 						<span key={column.id} className={`cell ${className}`}>
-							<span className="cell-text">{text}</span>
+							<span className="cell-text">
+								{column.id === "newName" && nameDiff ? (
+									<DiffText segments={nameDiff.after} kind="added" />
+								) : (
+									text
+								)}
+							</span>
 						</span>
 					);
 				})}
@@ -292,5 +303,25 @@ export function FileListView(props: FileListViewProps) {
 				)}
 			</div>
 		</section>
+	);
+}
+
+/** Texto de um nome com os trechos alterados realçados (vermelho no atual, verde no novo). */
+function DiffText({
+	segments,
+	kind,
+}: {
+	segments: readonly NameDiffSegment[];
+	kind: "removed" | "added";
+}) {
+	return segments.map((segment, index) =>
+		segment.changed ? (
+			// biome-ignore lint/suspicious/noArrayIndexKey: os trechos não têm outra identidade e só mudam juntos.
+			<mark key={index} className={`diff-${kind}`}>
+				{segment.text}
+			</mark>
+		) : (
+			segment.text
+		),
 	);
 }
