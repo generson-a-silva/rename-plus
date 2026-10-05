@@ -135,7 +135,9 @@ If you're on Windows and need advanced features such as EXIF/ID3 metadata, JavaS
 | **Folder name** | Adds the name of one or more parent folders. |
 | **Numbering** | Prefix, suffix, both or at a position; start, step, zero padding; `1, 2, 3`, `a, b, c`, `A, B, C` and `I, II, III` styles; restart in each folder. |
 | **Extension** | Keep, lowercase, UPPERCASE, Title, remove, replace with a fixed one or append an extra one. |
-| **Filters** | Name mask (`*.jpg; *.png`), files and/or folders, hidden items and subfolder contents (recursive mode). |
+| **Filters** | Name mask (`*.jpg; *.png`), files and/or folders, hidden items and subfolder contents (recursive mode). Sits in the actions column. |
+
+**Presets:** the save button in the top-right corner of the panels stores the current rules under a name. To apply them again, pick the preset from the list next to the language selector, where you can also delete it. Watch folder rules have the same list.
 
 ### Visual RegEx builder
 
@@ -150,7 +152,7 @@ For people who don't write regular expressions: in the **RegEx** panel, the **Vi
 
 In **Settings › Watch folders**, pick a folder (e.g. Downloads): every new file that lands there is renamed automatically and, if you want, moved to another folder. There are no watch folders by default.
 
-- The renaming rules are the ones from the main screen: set them up with the preview and use **Copy rules from the main screen**.
+- The renaming rules are the ones from the main screen: set them up with the preview and use **Copy rules from the main screen**, or pick a saved preset.
 - File mask (`*.pdf; *.jpg`), optional destination folder, a test with a sample name and a system notification for each file.
 - Waits for the file to finish being written and ignores downloads in progress (`.crdownload`, `.part`…), hidden files and subfolders. Never overwrites: repeated names get ` (2)`.
 - Only new files are handled (what's already in the folder is left alone). The activity log shows what was done and any failures.
@@ -305,7 +307,7 @@ The renaming engine (`src/shared/rename`) is plain TypeScript with no Electron d
 
 ## Where settings are stored
 
-Theme, language, rules, filters, sorting, column widths and the last folder opened are saved in the app's data folder (watch folders in `watch-folders.json`, background mode in `background.json` and update preferences in `updates.json`):
+Theme, language, rules, presets, filters, sorting, column widths and the last folder opened are saved in the app's data folder (watch folders in `watch-folders.json`, background mode in `background.json` and update preferences in `updates.json`):
 
 - **Linux:** `~/.config/rename-plus/`
 - **Windows:** `%APPDATA%\rename-plus\`

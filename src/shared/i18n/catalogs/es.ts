@@ -421,6 +421,23 @@ export const es: Messages = {
 	"actions.undo": "Deshacer",
 	"actions.reset": "Restablecer",
 	"actions.resetHint": "Restablecer todas las secciones",
+
+	// ---- Presets --------------------------------------------------------
+	"presets.label": "Preset",
+	"presets.choose": "Preset…",
+	"presets.empty": "Sin presets",
+	"presets.emptyHint":
+		"Guarde las reglas actuales como preset con el botón de la esquina superior derecha de los paneles",
+	"presets.save": "Guardar las reglas actuales como preset",
+	"presets.saveTitle": "Guardar preset",
+	"presets.name": "Nombre del preset",
+	"presets.saveConfirm": "Guardar",
+	"presets.nameRequired": "Escriba un nombre",
+	"presets.overwriteConfirm": "¿Reemplazar el preset «{name}» por las reglas actuales?",
+	"presets.overwrite": "Reemplazar",
+	"presets.saved": "Preset «{name}» guardado.",
+	"presets.delete": "Eliminar preset",
+	"presets.deleteConfirm": "¿Eliminar el preset «{name}»?",
 	"preview.selectItems": "Selecciona elementos de la lista para ver la vista previa.",
 	"preview.willRename": {
 		one: "Se renombrará {count} elemento.",

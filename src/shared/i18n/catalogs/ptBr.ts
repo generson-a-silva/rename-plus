@@ -426,6 +426,23 @@ export const ptBr = {
 	"actions.undo": "Desfazer",
 	"actions.reset": "Redefinir",
 	"actions.resetHint": "Redefinir todas as seções",
+
+	// ---- Seus Filtros (presets) ----------------------------------------
+	"presets.label": "Seus Filtros",
+	"presets.choose": "Seus Filtros…",
+	"presets.empty": "Seus Filtros",
+	"presets.emptyHint":
+		"Salve as regras atuais em Seus Filtros pelo botão no canto superior direito dos painéis",
+	"presets.save": "Salvar regras atuais em Seus Filtros",
+	"presets.saveTitle": "Salvar em Seus Filtros",
+	"presets.name": "Nome",
+	"presets.saveConfirm": "Salvar",
+	"presets.nameRequired": "Digite um nome",
+	"presets.overwriteConfirm": "Substituir “{name}” em Seus Filtros pelas regras atuais?",
+	"presets.overwrite": "Substituir",
+	"presets.saved": "“{name}” salvo em Seus Filtros.",
+	"presets.delete": "Excluir de Seus Filtros",
+	"presets.deleteConfirm": "Excluir “{name}” de Seus Filtros?",
 	"preview.selectItems": "Selecione itens na lista para ver a pré-visualização.",
 	"preview.willRename": {
 		one: "{count} item será renomeado.",

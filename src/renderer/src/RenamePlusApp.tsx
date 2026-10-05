@@ -19,6 +19,7 @@ import {
 	useFolderTreeState,
 	useI18n,
 	usePersistentState,
+	useRenamePresets,
 	useResizableSplitter,
 	useTextPrompt,
 	useThemeMode,
@@ -32,10 +33,13 @@ import {
 	describePreview,
 	describeRenameFailure,
 	expandHomeShortcut,
+	findMatchingPreset,
+	findPresetByName,
 	joinPath,
 	type ListFilters,
 	parentPath,
 	platformPaths,
+	type RenamePreset,
 	type SortState,
 	sortEntries,
 	toListOptions,
@@ -416,8 +420,48 @@ export function RenamePlusApp() {
 
 	const summary = describePreview(preview, selection.size, t);
 
-	// --- Operações de arquivo (menus de contexto e atalhos) -----------------
+	// --- Presets -------------------------------------------------------------
 	const prompt = useTextPrompt();
+	const presets = useRenamePresets();
+
+	const savePreset = useCallback(async () => {
+		const initialValue = findMatchingPreset(presets.presets, options)?.name ?? "";
+		const name = await prompt.ask({
+			title: t("presets.saveTitle"),
+			label: t("presets.name"),
+			initialValue,
+			confirmLabel: t("presets.saveConfirm"),
+			// Sem nome sugerido, o botão só habilita ao digitar (sem erro logo de cara).
+			requireChange: initialValue === "",
+			validate: (value) => (value.trim() || !value ? null : t("presets.nameRequired")),
+		});
+		if (!name?.trim()) return;
+		const existing = findPresetByName(presets.presets, name);
+		if (existing && JSON.stringify(existing.options) !== JSON.stringify(options)) {
+			const confirmed = await window.api.confirm({
+				message: t("presets.overwriteConfirm", { name: existing.name }),
+				confirmLabel: t("presets.overwrite"),
+				severity: "warning",
+			});
+			if (!confirmed) return;
+		}
+		presets.save(name, options);
+		setMessage({ kind: "success", text: t("presets.saved", { name: name.trim() }) });
+	}, [prompt.ask, presets, options, t]);
+
+	const deletePreset = useCallback(
+		async (preset: RenamePreset) => {
+			const confirmed = await window.api.confirm({
+				message: t("presets.deleteConfirm", { name: preset.name }),
+				confirmLabel: t("presets.delete"),
+				severity: "warning",
+			});
+			if (confirmed) presets.remove(preset.id);
+		},
+		[presets, t],
+	);
+
+	// --- Operações de arquivo (menus de contexto e atalhos) -----------------
 
 	/** Recarrega o que mudou e corrige a pasta atual se ela foi renomeada, movida ou apagada. */
 	const handleFileChange = useCallback(
@@ -575,7 +619,12 @@ export function RenamePlusApp() {
 						onRename: rename,
 						onUndo: undo,
 						onResetAll: () => setOptions(createDefaultOptions()),
+						presets: presets.presets,
+						options,
+						onApplyPreset: (preset) => setOptions(structuredClone(preset.options)),
+						onDeletePreset: (preset) => void deletePreset(preset),
 					}}
+					onSavePreset={() => void savePreset()}
 				/>
 			</div>
 
@@ -597,6 +646,7 @@ export function RenamePlusApp() {
 				onThemeChange={theme.setMode}
 				updates={updates}
 				renameOptions={options}
+				presets={presets.presets}
 			/>
 			{draggingFiles && <DropOverlay />}
 		</div>

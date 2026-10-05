@@ -1,6 +1,6 @@
-import { AppIcon, CheckField, TextField } from "@components/common";
+import { AppIcon, CheckField, PresetSelect, TextField } from "@components/common";
 import { useI18n, useWatchFolders } from "@hooks";
-import { baseName, formatDateTime, joinPath } from "@lib";
+import { baseName, formatDateTime, joinPath, type RenamePreset } from "@lib";
 import type { MessageKey } from "@shared/i18n";
 import type { WatchActivity, WatchRuleStatus } from "@shared/ipc";
 import { createDefaultOptions, type RenameOptions, type RenameSection } from "@shared/rename";
@@ -169,6 +169,7 @@ interface RuleCardProps {
 	rule: WatchRule;
 	status: WatchRuleStatus | undefined;
 	currentOptions: RenameOptions;
+	presets: readonly RenamePreset[];
 	defaultOpen: boolean;
 	onChange: (patch: Partial<WatchRule>) => void;
 	onRemove: () => void;
@@ -178,6 +179,7 @@ function RuleCard({
 	rule,
 	status,
 	currentOptions,
+	presets,
 	defaultOpen,
 	onChange,
 	onRemove,
@@ -244,6 +246,12 @@ function RuleCard({
 										</span>
 									))}
 						</span>
+						{/* Escolher um preset copia as opções dele para a regra. */}
+						<PresetSelect
+							presets={presets}
+							options={rule.rename}
+							onSelect={(preset) => onChange({ rename: structuredClone(preset.options) })}
+						/>
 						<button
 							type="button"
 							className="button"
@@ -316,13 +324,15 @@ function ActivityList({ items }: { items: WatchActivity[] }) {
 interface WatchFoldersSectionProps {
 	/** Regras de renomeação da tela principal, que podem ser copiadas para uma regra. */
 	currentOptions: RenameOptions;
+	/** Presets de renomeação, que também podem ser copiados para uma regra. */
+	presets: readonly RenamePreset[];
 }
 
 /**
  * Pastas monitoradas: arquivos novos numa pasta são renomeados (e opcionalmente movidos)
  * automaticamente. Sem regras, o padrão, nada é monitorado.
  */
-export function WatchFoldersSection({ currentOptions }: WatchFoldersSectionProps) {
+export function WatchFoldersSection({ currentOptions, presets }: WatchFoldersSectionProps) {
 	const { t } = useI18n();
 	const { rules, info, changeRules, clearActivity } = useWatchFolders();
 	const [createdId, setCreatedId] = useState<string | null>(null);
@@ -370,6 +380,7 @@ export function WatchFoldersSection({ currentOptions }: WatchFoldersSectionProps
 							rule={rule}
 							status={info?.statuses[rule.id]}
 							currentOptions={currentOptions}
+							presets={presets}
 							defaultOpen={rule.id === createdId}
 							onChange={(patch) => updateRule(rule.id, patch)}
 							onRemove={() => void removeRule(rule)}

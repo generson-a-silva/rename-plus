@@ -133,7 +133,9 @@ Se você usa Windows e precisa de recursos avançados como metadados EXIF/ID3, s
 | **Nome da pasta** | Acrescenta o nome de uma ou mais pastas ancestrais. |
 | **Numeração** | Prefixo, sufixo, ambos ou em uma posição; início, incremento, zeros à esquerda; estilos `1, 2, 3`, `a, b, c`, `A, B, C` e `I, II, III`; reinício por pasta. |
 | **Extensão** | Manter, minúsculas, MAIÚSCULAS, Título, remover, trocar por uma fixa ou acrescentar uma extra. |
-| **Filtros** | Máscara de nomes (`*.jpg; *.png`), arquivos e/ou pastas, itens ocultos e conteúdo das subpastas (modo recursivo). |
+| **Filtros** | Máscara de nomes (`*.jpg; *.png`), arquivos e/ou pastas, itens ocultos e conteúdo das subpastas (modo recursivo). Fica na coluna das ações. |
+
+**Seus Filtros:** o botão de salvar, no canto superior direito dos painéis, guarda as regras atuais com um nome. Para aplicar de novo, basta escolher o nome na lista **Seus Filtros**, ao lado do seletor de idioma, que também permite excluí-lo. As regras das pastas monitoradas têm a mesma lista.
 
 ### Construtor visual de RegEx
 
@@ -148,7 +150,7 @@ Para quem não escreve expressões regulares: no painel **RegEx**, o botão **Co
 
 Em **Configurações › Pastas monitoradas**, escolha uma pasta (ex.: Downloads): todo arquivo novo que chegar nela é renomeado automaticamente e, se quiser, movido para outra pasta. Por padrão não há nenhuma pasta monitorada.
 
-- As regras de renomeação são as da tela principal: monte-as com a pré-visualização e use **Copiar regras da tela principal**.
+- As regras de renomeação são as da tela principal: monte-as com a pré-visualização e use **Copiar regras da tela principal**, ou escolha uma opção de **Seus Filtros**.
 - Filtro por máscara (`*.pdf; *.jpg`), pasta de destino opcional, teste com um nome de exemplo e notificação do sistema por arquivo.
 - Espera o arquivo terminar de ser escrito; ignora downloads em andamento (`.crdownload`, `.part`…), arquivos ocultos e subpastas. Nunca sobrescreve: nomes repetidos ganham ` (2)`.
 - Só arquivos novos (o que já estava na pasta não muda). O registro de atividade mostra o que foi feito e as falhas.
@@ -303,7 +305,7 @@ O motor de renomeação (`src/shared/rename`) é TypeScript puro, sem dependênc
 
 ## Onde ficam as preferências
 
-Tema, idioma, regras, filtros, ordenação, larguras e última pasta aberta ficam salvos na pasta de dados do app (as pastas monitoradas em `watch-folders.json`, o modo em segundo plano em `background.json` e as preferências de atualização em `updates.json`):
+Tema, idioma, regras, Seus Filtros, filtros, ordenação, larguras e última pasta aberta ficam salvos na pasta de dados do app (as pastas monitoradas em `watch-folders.json`, o modo em segundo plano em `background.json` e as preferências de atualização em `updates.json`):
 
 - **Linux:** `~/.config/rename-plus/`
 - **Windows:** `%APPDATA%\rename-plus\`

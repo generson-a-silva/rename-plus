@@ -12,6 +12,7 @@ export { type I18n, I18nContext, useI18n, useI18nState } from "./useI18n";
 export { type MarqueeMode, type MarqueeRect, useMarqueeSelection } from "./useMarqueeSelection";
 export { useMasonryGrid } from "./useMasonryGrid";
 export { usePersistentState } from "./usePersistentState";
+export { type RenamePresetsState, useRenamePresets } from "./useRenamePresets";
 export { useResizableSplitter } from "./useResizableSplitter";
 export { type TextPromptRequest, useTextPrompt } from "./useTextPrompt";
 export { useThemeMode } from "./useThemeMode";

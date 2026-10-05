@@ -417,6 +417,23 @@ export const en: Messages = {
 	"actions.undo": "Undo",
 	"actions.reset": "Reset",
 	"actions.resetHint": "Reset all sections",
+
+	// ---- Presets --------------------------------------------------------
+	"presets.label": "Preset",
+	"presets.choose": "Preset…",
+	"presets.empty": "No presets",
+	"presets.emptyHint":
+		"Save the current rules as a preset with the button in the top-right corner of the panels",
+	"presets.save": "Save current rules as a preset",
+	"presets.saveTitle": "Save preset",
+	"presets.name": "Preset name",
+	"presets.saveConfirm": "Save",
+	"presets.nameRequired": "Enter a name",
+	"presets.overwriteConfirm": "Replace the preset “{name}” with the current rules?",
+	"presets.overwrite": "Replace",
+	"presets.saved": "Preset “{name}” saved.",
+	"presets.delete": "Delete preset",
+	"presets.deleteConfirm": "Delete the preset “{name}”?",
 	"preview.selectItems": "Select items in the list to see the preview.",
 	"preview.willRename": {
 		one: "{count} item will be renamed.",

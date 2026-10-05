@@ -1,3 +1,4 @@
+import { AppIcon } from "@components/common";
 import { useI18n, useMasonryGrid } from "@hooks";
 import type { ListFilters } from "@lib";
 import { createDefaultOptions, type RenameOptions, type RenameSection } from "@shared/rename";
@@ -23,6 +24,8 @@ interface RenameOptionsPanelsProps {
 	filters: ListFilters;
 	onFiltersChange: (patch: Partial<ListFilters>) => void;
 	actions: RenameActionsPanelProps;
+	/** Salva as opções atuais como preset (pede o nome). */
+	onSavePreset: () => void;
 	/** Nomes de exemplo para o construtor visual de RegEx. */
 	sampleNames: readonly string[];
 }
@@ -39,6 +42,7 @@ export function RenameOptionsPanels({
 	filters,
 	onFiltersChange,
 	actions,
+	onSavePreset,
 	sampleNames,
 }: RenameOptionsPanelsProps) {
 	const { t } = useI18n();
@@ -57,17 +61,29 @@ export function RenameOptionsPanels({
 	return (
 		<div className="rename-options">
 			{/* Opções roláveis; as ações ficam numa coluna fixa à direita, sempre visíveis. */}
-			<div ref={panelsRef} className="panels">
-				<RegexOptionsPanel {...sectionProps("regex")} sampleNames={sampleNames} />
-				<NameOptionsPanel {...sectionProps("name")} />
-				<ReplaceOptionsPanel {...sectionProps("replace")} />
-				<CaseOptionsPanel {...sectionProps("case")} />
-				<RemoveOptionsPanel {...sectionProps("remove")} />
-				<AddOptionsPanel {...sectionProps("add")} />
-				<AutoDateOptionsPanel {...sectionProps("autoDate")} />
-				<AppendFolderOptionsPanel {...sectionProps("appendFolder")} />
-				<NumberingOptionsPanel {...sectionProps("numbering")} />
-				<ExtensionOptionsPanel {...sectionProps("extension")} />
+			<div className="panels-area">
+				<div ref={panelsRef} className="panels">
+					<RegexOptionsPanel {...sectionProps("regex")} sampleNames={sampleNames} />
+					<NameOptionsPanel {...sectionProps("name")} />
+					<ReplaceOptionsPanel {...sectionProps("replace")} />
+					<CaseOptionsPanel {...sectionProps("case")} />
+					<RemoveOptionsPanel {...sectionProps("remove")} />
+					<AddOptionsPanel {...sectionProps("add")} />
+					<AutoDateOptionsPanel {...sectionProps("autoDate")} />
+					<AppendFolderOptionsPanel {...sectionProps("appendFolder")} />
+					<NumberingOptionsPanel {...sectionProps("numbering")} />
+					<ExtensionOptionsPanel {...sectionProps("extension")} />
+				</div>
+				{/* Fora da área rolável: fica sempre no canto superior direito, junto das ações. */}
+				<button
+					type="button"
+					className="preset-save"
+					title={t("presets.save")}
+					aria-label={t("presets.save")}
+					onClick={onSavePreset}
+				>
+					<AppIcon name="save" size={14} />
+				</button>
 			</div>
 			<aside className="rename-actions" aria-label={t("actions.label")}>
 				{/* Filtros mudam a listagem, não o nome: ficam junto das ações, sempre à vista. */}

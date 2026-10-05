@@ -34,6 +34,7 @@ const PATHS = {
 	trash: "M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13",
 	grip: "M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01",
 	chevronLeft: "M15 6l-6 6 6 6",
+	save: "M5 3h11l3 3v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2zM8 3v5h7V3M8 21v-7h8v7",
 } as const;
 
 export type AppIconName = keyof typeof PATHS;

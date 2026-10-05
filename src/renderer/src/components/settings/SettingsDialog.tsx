@@ -1,5 +1,6 @@
 import { AppIcon } from "@components/common";
 import { type UpdateStatusState, useI18n } from "@hooks";
+import type { RenamePreset } from "@lib";
 import type { ThemeMode } from "@shared/ipc";
 import type { RenameOptions } from "@shared/rename";
 import { useEffect, useId, useRef } from "react";
@@ -16,6 +17,8 @@ interface SettingsDialogProps {
 	updates: UpdateStatusState;
 	/** Regras da tela principal, para copiar para uma pasta monitorada. */
 	renameOptions: RenameOptions;
+	/** Presets de renomeação, que podem ser escolhidos nas regras das pastas monitoradas. */
+	presets: readonly RenamePreset[];
 }
 
 /**
@@ -29,6 +32,7 @@ export function SettingsDialog({
 	onThemeChange,
 	updates,
 	renameOptions,
+	presets,
 }: SettingsDialogProps) {
 	const { t } = useI18n();
 	const dialogRef = useRef<HTMLDialogElement>(null);
@@ -68,7 +72,7 @@ export function SettingsDialog({
 					<div className="settings-body">
 						<AppearanceSection theme={theme} onThemeChange={onThemeChange} />
 						<UpdatesSection updates={updates} />
-						<WatchFoldersSection currentOptions={renameOptions} />
+						<WatchFoldersSection currentOptions={renameOptions} presets={presets} />
 						<ContextMenuIntegrationSection />
 					</div>
 					<footer className="settings-footer">

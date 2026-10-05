@@ -135,7 +135,9 @@ Si usas Windows y necesitas funciones avanzadas como metadatos EXIF/ID3, scripts
 | **Nombre de la carpeta** | Añade el nombre de una o más carpetas superiores. |
 | **Numeración** | Prefijo, sufijo, ambos o en una posición; inicio, incremento, ceros a la izquierda; estilos `1, 2, 3`, `a, b, c`, `A, B, C` e `I, II, III`; reinicio por carpeta. |
 | **Extensión** | Mantener, minúsculas, MAYÚSCULAS, Título, quitar, cambiar por una fija o añadir una extra. |
-| **Filtros** | Máscara de nombres (`*.jpg; *.png`), archivos y/o carpetas, elementos ocultos y contenido de las subcarpetas (modo recursivo). |
+| **Filtros** | Máscara de nombres (`*.jpg; *.png`), archivos y/o carpetas, elementos ocultos y contenido de las subcarpetas (modo recursivo). Está en la columna de acciones. |
+
+**Presets:** el botón de guardar, en la esquina superior derecha de los paneles, guarda las reglas actuales con un nombre. Para aplicarlas de nuevo, elige el preset en la lista junto al selector de idioma, que también permite eliminarlo. Las reglas de las carpetas vigiladas tienen la misma lista.
 
 ### Constructor visual de RegEx
 
@@ -150,7 +152,7 @@ Para quien no escribe expresiones regulares: en el panel **RegEx**, el botón **
 
 En **Configuración › Carpetas vigiladas**, elige una carpeta (p. ej., Descargas): cada archivo nuevo que llegue a ella se renombra automáticamente y, si quieres, se mueve a otra carpeta. Por defecto no hay ninguna carpeta vigilada.
 
-- Las reglas de renombrado son las de la pantalla principal: configúralas con la vista previa y usa **Copiar reglas de la pantalla principal**.
+- Las reglas de renombrado son las de la pantalla principal: configúralas con la vista previa y usa **Copiar reglas de la pantalla principal**, o elige un preset guardado.
 - Máscara de archivos (`*.pdf; *.jpg`), carpeta de destino opcional, prueba con un nombre de ejemplo y notificación del sistema por cada archivo.
 - Espera a que el archivo termine de escribirse e ignora descargas en curso (`.crdownload`, `.part`…), archivos ocultos y subcarpetas. Nunca sobrescribe: los nombres repetidos reciben ` (2)`.
 - Solo archivos nuevos (lo que ya estaba en la carpeta no se toca). El registro de actividad muestra lo que se hizo y los fallos.
@@ -305,7 +307,7 @@ El motor de renombrado (`src/shared/rename`) es TypeScript puro, sin dependencia
 
 ## Dónde se guarda la configuración
 
-El tema, el idioma, las reglas, los filtros, la ordenación, los anchos y la última carpeta abierta se guardan en la carpeta de datos de la aplicación (las carpetas vigiladas en `watch-folders.json`, el modo en segundo plano en `background.json` y las preferencias de actualización en `updates.json`):
+El tema, el idioma, las reglas, los presets, los filtros, la ordenación, los anchos y la última carpeta abierta se guardan en la carpeta de datos de la aplicación (las carpetas vigiladas en `watch-folders.json`, el modo en segundo plano en `background.json` y las preferencias de actualización en `updates.json`):
 
 - **Linux:** `~/.config/rename-plus/`
 - **Windows:** `%APPDATA%\rename-plus\`

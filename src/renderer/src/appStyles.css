@@ -533,6 +533,13 @@ button.header-cell:hover {
 	background: var(--bg);
 }
 
+/* Envolve os painéis roláveis e o botão fixo de salvar preset. */
+.panels-area {
+	position: relative;
+	display: grid;
+	min-height: 0;
+}
+
 .panels {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
@@ -548,8 +555,36 @@ button.header-cell:hover {
 	min-height: 0;
 	padding: 8px;
 	overflow: auto;
+	/* Reserva sempre a barra de rolagem: o botão de salvar preset não muda de lugar. */
+	scrollbar-gutter: stable;
 	/* Permite adaptar os painéis largos à largura disponível (ver @container abaixo). */
 	container-type: inline-size;
+}
+
+/*
+ * Salvar preset: no canto superior direito da área dos painéis, ao lado das ações,
+ * na altura dos badges de título (apoiado sobre a borda do painel do canto).
+ */
+.preset-save {
+	position: absolute;
+	/* 8px do padding de .panels; à direita, mais os 10px da barra de rolagem. */
+	top: 8px;
+	right: 26px;
+	display: grid;
+	place-items: center;
+	width: 22px;
+	height: 22px;
+	padding: 0;
+	border: 1px solid var(--border);
+	border-radius: 999px;
+	background: var(--surface-2);
+	color: var(--muted);
+	cursor: pointer;
+}
+
+.preset-save:hover {
+	border-color: var(--accent);
+	color: var(--fg);
 }
 
 .rename-actions {
@@ -718,9 +753,41 @@ button.header-cell:hover {
 	background: var(--surface);
 }
 
+.preset-row {
+	display: flex;
+	flex: 1;
+	gap: 4px;
+	min-width: 0;
+}
+
+/* Mesmo visual dos campos dos painéis, na altura do botão de excluir ao lado. */
+.preset-select {
+	min-width: 0;
+	height: 28px;
+	padding: 0 6px;
+	border: 1px solid var(--border);
+	border-radius: 5px;
+	background: var(--surface-2);
+}
+
+.preset-row .preset-select {
+	flex: 1;
+}
+
+.preset-select:focus {
+	outline: 2px solid var(--accent);
+	outline-offset: -1px;
+}
+
+.preset-select:disabled {
+	opacity: 0.6;
+}
+
 /* Empurra o seletor de idioma para o canto inferior direito do bloco. */
 .actions-footer {
 	display: flex;
+	align-items: center;
+	gap: 6px;
 	justify-content: flex-end;
 	margin-top: auto;
 	padding-top: 6px;
@@ -1617,6 +1684,12 @@ a.button.primary {
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 6px;
+}
+
+.watch-rename .preset-select {
+	width: auto;
+	min-width: 160px;
+	max-width: 240px;
 }
 
 .watch-sections {
