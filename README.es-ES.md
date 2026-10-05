@@ -84,7 +84,7 @@ Las capturas muestran la interfaz en portugués. La aplicación también está d
       <p><b>Arrastrar y soltar.</b> Suelta una carpeta para abrirla, o archivos para abrir su carpeta con ellos ya seleccionados.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Configuración con las secciones Apariencia, Actualizaciones y Carpetas vigiladas; la versión instalada 1.4.0 es la más reciente"></a>
+      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Configuración con las secciones Apariencia, Actualizaciones y Carpetas vigiladas; la versión instalada 1.5.1 es la más reciente"></a>
       <p><b>Configuración.</b> Tema de la interfaz, comprobación de actualizaciones en GitHub y carpetas vigiladas, además de las opciones «Abrir en Rename Plus» en el menú contextual del gestor de archivos.</p>
     </td>
   </tr>
@@ -94,7 +94,7 @@ Las capturas muestran la interfaz en portugués. La aplicación también está d
       <p><b>Constructor visual de RegEx.</b> La búsqueda y el reemplazo se arman con bloques que se arrastran, con ejemplos listos. Aquí, <code>IMG_2041.JPG</code> pasa a <code>Foto 2041.JPG</code>.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/pastas-monitoradas.png"><img src="docs/screenshots/pastas-monitoradas.png" alt="Carpetas vigiladas: segundo plano activado y la regla 'Faturas' vigilando los PDF de la carpeta Downloads"></a>
+      <a href="docs/screenshots/pastas-monitoradas.png"><img src="docs/screenshots/pastas-monitoradas.png" alt="Carpetas vigiladas: segundo plano activado y la regla 'Faturas' vigilando los PDF de la carpeta Downloads, con las reglas de renombrado tomadas del preset 'Faturas'"></a>
       <p><b>Carpetas vigiladas.</b> Los PDF que llegan a Downloads reciben la fecha delante, pasan a Título y van a <code>Documentos/Faturas</code>, incluso con la aplicación cerrada (segundo plano activado).</p>
     </td>
   </tr>

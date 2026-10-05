@@ -82,7 +82,7 @@ A interface segue o modelo de três áreas: árvore de pastas à esquerda, lista
       <p><b>Arrastar e soltar.</b> Solte uma pasta para abri-la, ou arquivos para abrir a pasta deles já com eles selecionados.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Configurações com as seções Aparência, Atualizações e Pastas monitoradas; a versão instalada 1.4.0 é a mais recente"></a>
+      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Configurações com as seções Aparência, Atualizações e Pastas monitoradas; a versão instalada 1.5.1 é a mais recente"></a>
       <p><b>Configurações.</b> Tema da interface, verificação de atualizações no GitHub e pastas monitoradas, além das opções "Abrir no Rename Plus" no menu de contexto do gerenciador de arquivos.</p>
     </td>
   </tr>
@@ -92,7 +92,7 @@ A interface segue o modelo de três áreas: árvore de pastas à esquerda, lista
       <p><b>Construtor visual de RegEx.</b> A busca e a substituição são montadas com blocos arrastáveis, com exemplos prontos. Aqui, <code>IMG_2041.JPG</code> vira <code>Foto 2041.JPG</code>.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/pastas-monitoradas.png"><img src="docs/screenshots/pastas-monitoradas.png" alt="Pastas monitoradas: segundo plano ativado e a regra 'Faturas' monitorando PDFs na pasta Downloads"></a>
+      <a href="docs/screenshots/pastas-monitoradas.png"><img src="docs/screenshots/pastas-monitoradas.png" alt="Pastas monitoradas: segundo plano ativado e a regra 'Faturas' monitorando PDFs na pasta Downloads, com as regras de renomeação vindas de Seus Filtros"></a>
       <p><b>Pastas monitoradas.</b> PDFs que chegam em Downloads ganham a data na frente, viram Título e vão para <code>Documentos/Faturas</code>, mesmo com o app fechado (segundo plano ativado).</p>
     </td>
   </tr>

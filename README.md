@@ -84,7 +84,7 @@ The screenshots show the Portuguese interface. The app is also available in Engl
       <p><b>Drag and drop.</b> Drop a folder to open it, or drop files to open their folder with them already selected.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Settings dialog with the Appearance, Updates and Watch folders sections; the installed version 1.4.0 is up to date"></a>
+      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Settings dialog with the Appearance, Updates and Watch folders sections; the installed version 1.5.1 is up to date"></a>
       <p><b>Settings.</b> Interface theme, update checks on GitHub and watch folders, besides the "Open in Rename Plus" entries in the file manager's context menu.</p>
     </td>
   </tr>
@@ -94,7 +94,7 @@ The screenshots show the Portuguese interface. The app is also available in Engl
       <p><b>Visual RegEx builder.</b> The search and the replacement are built from drag-and-drop blocks, with ready-made examples. Here, <code>IMG_2041.JPG</code> becomes <code>Foto 2041.JPG</code>.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/pastas-monitoradas.png"><img src="docs/screenshots/pastas-monitoradas.png" alt="Watch folders settings: background watching turned on and the 'Faturas' rule watching Downloads for PDF files"></a>
+      <a href="docs/screenshots/pastas-monitoradas.png"><img src="docs/screenshots/pastas-monitoradas.png" alt="Watch folders settings: background watching turned on and the 'Faturas' rule watching Downloads for PDF files, with the rename rules taken from the 'Faturas' preset"></a>
       <p><b>Watch folders.</b> PDFs that land in Downloads get the date in front, Title Case and go to <code>Documentos/Faturas</code>, even with the app closed (background watching on).</p>
     </td>
   </tr>
