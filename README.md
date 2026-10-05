@@ -55,7 +55,7 @@ The window has three areas: the folder tree on the left, the file list on the ri
 
 ## Screenshots
 
-The screenshots show the Portuguese interface. The app is also available in English and Spanish.
+The screenshots show the English interface. The app is also available in Portuguese and Spanish.
 
 <table>
   <tr>
@@ -64,7 +64,7 @@ The screenshots show the Portuguese interface. The app is also available in Engl
       <p><b>Several rules and subfolders.</b> Remove, Replace, Title case, per-folder Numbering and a lowercase extension, applied to the tracks of two CDs at once (light theme).</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/conflitos.png"><img src="docs/screenshots/conflitos.png" alt="Rows in red with the new name 'foto.jpg' repeated; the status bar shows 4 conflicts and the Rename button is disabled"></a>
+      <a href="docs/screenshots/conflitos.png"><img src="docs/screenshots/conflitos.png" alt="Rows in red with the new name 'photo.jpg' repeated; the status bar shows 4 conflicts and the Rename button is disabled"></a>
       <p><b>Conflicts.</b> Names repeated in the batch, or matching a file that already exists, turn red and the Rename button is disabled. Hover over a row to see why.</p>
     </td>
   </tr>
@@ -94,8 +94,8 @@ The screenshots show the Portuguese interface. The app is also available in Engl
       <p><b>Visual RegEx builder.</b> The search and the replacement are built from drag-and-drop blocks, with ready-made examples. Here, <code>IMG_2041.JPG</code> becomes <code>Foto 2041.JPG</code>.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/pastas-monitoradas.png"><img src="docs/screenshots/pastas-monitoradas.png" alt="Watch folders settings: background watching turned on and the 'Faturas' rule watching Downloads for PDF files, with the rename rules taken from the 'Faturas' preset"></a>
-      <p><b>Watch folders.</b> PDFs that land in Downloads get the date in front, Title Case and go to <code>Documentos/Faturas</code>, even with the app closed (background watching on).</p>
+      <a href="docs/screenshots/pastas-monitoradas.png"><img src="docs/screenshots/pastas-monitoradas.png" alt="Watch folders settings: background watching turned on and the 'Invoices' rule watching Downloads for PDF files, with the rename rules taken from the 'Invoices' preset"></a>
+      <p><b>Watch folders.</b> PDFs that land in Downloads get the date in front, Title Case and go to <code>Documents/Invoices</code>, even with the app closed (background watching on).</p>
     </td>
   </tr>
   <tr>
@@ -104,7 +104,7 @@ The screenshots show the Portuguese interface. The app is also available in Engl
       <p><b>Test and activity.</b> Try the rule with a sample name before any file arrives, and see what was renamed (or what failed) in the activity log.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/seus-filtros.png"><img src="docs/screenshots/seus-filtros.png" alt="'Save preset' dialog with the name 'Fotos de família'; behind it, the photos in the Família folder with the new names '2023-12-03 Família 01.jpg' and the preset list next to the language selector"></a>
+      <a href="docs/screenshots/presets.png"><img src="docs/screenshots/presets.png" alt="'Save preset' dialog with the name 'Family photos'; behind it, the photos in the Family folder with new names such as '2023-12-03 Family 02.jpg' and the preset list next to the language selector"></a>
       <p><b>Presets.</b> The save button in the corner of the panels stores the current combination of rules (here, fixed Name, Auto date and Numbering) under a name. Pick it again from the list next to the language selector or in a watch folder rule.</p>
     </td>
   </tr>
@@ -208,7 +208,7 @@ RegEx → Name → Replace → Case → Remove → Add
       → Auto date → Folder name → Numbering → Extension
 ```
 
-Example from the main screenshot (at the top): `IMG_2041.JPG` → RegEx replaces `IMG_2041` with `Lisboa` → Auto date adds `2024-06-10 ` → Numbering adds ` - 01` → lowercase Extension → **`2024-06-10 Lisboa - 01.jpg`**.
+Example from the main screenshot (at the top): `IMG_2041.JPG` → RegEx replaces `IMG_2041` with `Lisbon` → Auto date adds `2024-06-10 ` → Numbering adds ` - 01` → lowercase Extension → **`2024-06-10 Lisbon - 01.jpg`**.
 
 For folders, the dot is **not** treated as an extension separator (`v1.2` stays the whole name), and the same goes for hidden files such as `.bashrc`.
 

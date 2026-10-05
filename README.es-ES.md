@@ -55,7 +55,7 @@ La ventana tiene tres zonas: el árbol de carpetas a la izquierda, la lista de a
 
 ## Capturas
 
-Las capturas muestran la interfaz en portugués. La aplicación también está disponible en español e inglés.
+Las capturas muestran la interfaz en inglés. La aplicación también está disponible en español y portugués.
 
 <table>
   <tr>
@@ -64,7 +64,7 @@ Las capturas muestran la interfaz en portugués. La aplicación también está d
       <p><b>Varias reglas y subcarpetas.</b> Quitar, Reemplazar, Título, Numeración por carpeta y extensión en minúsculas, aplicados a las pistas de dos CD a la vez (tema claro).</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/conflitos.png"><img src="docs/screenshots/conflitos.png" alt="Filas en rojo con el nuevo nombre 'foto.jpg' repetido; la barra de estado muestra 4 conflictos y el botón Renombrar está bloqueado"></a>
+      <a href="docs/screenshots/conflitos.png"><img src="docs/screenshots/conflitos.png" alt="Filas en rojo con el nuevo nombre 'photo.jpg' repetido; la barra de estado muestra 4 conflictos y el botón Renombrar está bloqueado"></a>
       <p><b>Conflictos.</b> Los nombres repetidos en el lote o iguales a un archivo que ya existe se marcan en rojo y el botón Renombrar se bloquea. El motivo aparece al pasar el ratón sobre la fila.</p>
     </td>
   </tr>
@@ -94,8 +94,8 @@ Las capturas muestran la interfaz en portugués. La aplicación también está d
       <p><b>Constructor visual de RegEx.</b> La búsqueda y el reemplazo se arman con bloques que se arrastran, con ejemplos listos. Aquí, <code>IMG_2041.JPG</code> pasa a <code>Foto 2041.JPG</code>.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/pastas-monitoradas.png"><img src="docs/screenshots/pastas-monitoradas.png" alt="Carpetas vigiladas: segundo plano activado y la regla 'Faturas' vigilando los PDF de la carpeta Downloads, con las reglas de renombrado tomadas del preset 'Faturas'"></a>
-      <p><b>Carpetas vigiladas.</b> Los PDF que llegan a Downloads reciben la fecha delante, pasan a Título y van a <code>Documentos/Faturas</code>, incluso con la aplicación cerrada (segundo plano activado).</p>
+      <a href="docs/screenshots/pastas-monitoradas.png"><img src="docs/screenshots/pastas-monitoradas.png" alt="Carpetas vigiladas: segundo plano activado y la regla 'Invoices' vigilando los PDF de la carpeta Downloads, con las reglas de renombrado tomadas del preset 'Invoices'"></a>
+      <p><b>Carpetas vigiladas.</b> Los PDF que llegan a Downloads reciben la fecha delante, pasan a Título y van a <code>Documents/Invoices</code>, incluso con la aplicación cerrada (segundo plano activado).</p>
     </td>
   </tr>
   <tr>
@@ -104,7 +104,7 @@ Las capturas muestran la interfaz en portugués. La aplicación también está d
       <p><b>Prueba y actividad.</b> Prueba la regla con un nombre de ejemplo antes de que llegue ningún archivo y consulta en el registro de actividad qué se renombró (o qué falló).</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/seus-filtros.png"><img src="docs/screenshots/seus-filtros.png" alt="Diálogo para guardar un preset con el nombre 'Fotos de família'; detrás, las fotos de la carpeta Família con los nuevos nombres '2023-12-03 Família 01.jpg' y la lista de presets junto al selector de idioma"></a>
+      <a href="docs/screenshots/presets.png"><img src="docs/screenshots/presets.png" alt="Diálogo 'Save preset' (guardar preset) con el nombre 'Family photos'; detrás, las fotos de la carpeta Family con nuevos nombres como '2023-12-03 Family 02.jpg' y la lista de presets junto al selector de idioma"></a>
       <p><b>Presets.</b> El botón de guardar, en la esquina de los paneles, guarda la combinación actual de reglas (aquí, Nombre fijo, Fecha automática y Numeración) con un nombre. Después basta con elegirlo en la lista junto al idioma o en las reglas de las carpetas vigiladas.</p>
     </td>
   </tr>
@@ -208,7 +208,7 @@ RegEx → Nombre → Reemplazar → Mayúsc./Minúsc. → Quitar → Añadir
       → Fecha automática → Nombre de la carpeta → Numeración → Extensión
 ```
 
-Ejemplo de la captura principal (arriba): `IMG_2041.JPG` → RegEx cambia `IMG_2041` por `Lisboa` → Fecha automática añade `2024-06-10 ` → Numeración añade ` - 01` → Extensión en minúsculas → **`2024-06-10 Lisboa - 01.jpg`**.
+Ejemplo de la captura principal (arriba): `IMG_2041.JPG` → RegEx cambia `IMG_2041` por `Lisbon` → Fecha automática añade `2024-06-10 ` → Numeración añade ` - 01` → Extensión en minúsculas → **`2024-06-10 Lisbon - 01.jpg`**.
 
 En las carpetas, el punto **no** se trata como separador de extensión (`v1.2` sigue siendo el nombre completo), y lo mismo ocurre con archivos ocultos como `.bashrc`.
 

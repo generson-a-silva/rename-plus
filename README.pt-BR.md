@@ -55,6 +55,8 @@ A interface segue o modelo de três áreas: árvore de pastas à esquerda, lista
 
 ## Telas
 
+Os prints mostram a interface em inglês. O app também está disponível em português e espanhol.
+
 <table>
   <tr>
     <td width="50%" valign="top">
@@ -62,7 +64,7 @@ A interface segue o modelo de três áreas: árvore de pastas à esquerda, lista
       <p><b>Várias regras e subpastas.</b> Remover, Substituir, Título, Numeração por pasta e extensão em minúsculas, aplicados às faixas de dois CDs de uma vez (tema claro).</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/conflitos.png"><img src="docs/screenshots/conflitos.png" alt="Linhas em vermelho com o novo nome 'foto.jpg' repetido; a barra de status mostra 4 conflitos e o botão Renomear está bloqueado"></a>
+      <a href="docs/screenshots/conflitos.png"><img src="docs/screenshots/conflitos.png" alt="Linhas em vermelho com o novo nome 'photo.jpg' repetido; a barra de status mostra 4 conflitos e o botão Renomear está bloqueado"></a>
       <p><b>Conflitos.</b> Nomes repetidos no lote ou iguais a um arquivo que já existe ficam em vermelho, e o botão Renomear é bloqueado. O motivo aparece ao passar o mouse sobre a linha.</p>
     </td>
   </tr>
@@ -92,8 +94,8 @@ A interface segue o modelo de três áreas: árvore de pastas à esquerda, lista
       <p><b>Construtor visual de RegEx.</b> A busca e a substituição são montadas com blocos arrastáveis, com exemplos prontos. Aqui, <code>IMG_2041.JPG</code> vira <code>Foto 2041.JPG</code>.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/pastas-monitoradas.png"><img src="docs/screenshots/pastas-monitoradas.png" alt="Pastas monitoradas: segundo plano ativado e a regra 'Faturas' monitorando PDFs na pasta Downloads, com as regras de renomeação vindas de Seus Filtros"></a>
-      <p><b>Pastas monitoradas.</b> PDFs que chegam em Downloads ganham a data na frente, viram Título e vão para <code>Documentos/Faturas</code>, mesmo com o app fechado (segundo plano ativado).</p>
+      <a href="docs/screenshots/pastas-monitoradas.png"><img src="docs/screenshots/pastas-monitoradas.png" alt="Pastas monitoradas: segundo plano ativado e a regra 'Invoices' monitorando PDFs na pasta Downloads, com as regras de renomeação vindas de Seus Filtros"></a>
+      <p><b>Pastas monitoradas.</b> PDFs que chegam em Downloads ganham a data na frente, viram Título e vão para <code>Documents/Invoices</code>, mesmo com o app fechado (segundo plano ativado).</p>
     </td>
   </tr>
   <tr>
@@ -102,7 +104,7 @@ A interface segue o modelo de três áreas: árvore de pastas à esquerda, lista
       <p><b>Teste e atividade.</b> Teste a regra com um nome de exemplo antes de qualquer arquivo chegar e veja no registro de atividade o que foi renomeado (ou o que falhou).</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/seus-filtros.png"><img src="docs/screenshots/seus-filtros.png" alt="Diálogo 'Salvar em Seus Filtros' com o nome 'Fotos de família'; atrás, as fotos da pasta Família com os novos nomes '2023-12-03 Família 01.jpg' e a lista Seus Filtros ao lado do seletor de idioma"></a>
+      <a href="docs/screenshots/presets.png"><img src="docs/screenshots/presets.png" alt="Diálogo 'Save preset' (Salvar em Seus Filtros) com o nome 'Family photos'; atrás, as fotos da pasta Family com novos nomes como '2023-12-03 Family 02.jpg' e a lista Seus Filtros ao lado do seletor de idioma"></a>
       <p><b>Seus Filtros.</b> O botão de salvar, no canto dos painéis, guarda a combinação atual de regras (aqui, Nome fixo, Data automática e Numeração) com um nome. Depois é só escolher na lista ao lado do idioma ou nas regras das pastas monitoradas.</p>
     </td>
   </tr>
@@ -206,7 +208,7 @@ RegEx → Nome → Substituir → Maiúsc./Minúsc. → Remover → Adicionar
       → Data automática → Nome da pasta → Numeração → Extensão
 ```
 
-Exemplo do print principal (no topo): `IMG_2041.JPG` → RegEx troca `IMG_2041` por `Lisboa` → Data automática acrescenta `2024-06-10 ` → Numeração acrescenta ` - 01` → Extensão em minúsculas → **`2024-06-10 Lisboa - 01.jpg`**.
+Exemplo do print principal (no topo): `IMG_2041.JPG` → RegEx troca `IMG_2041` por `Lisbon` → Data automática acrescenta `2024-06-10 ` → Numeração acrescenta ` - 01` → Extensão em minúsculas → **`2024-06-10 Lisbon - 01.jpg`**.
 
 Em pastas, o ponto **não** é tratado como separador de extensão (`v1.2` continua sendo o nome inteiro), e o mesmo vale para arquivos ocultos como `.bashrc`.
 
