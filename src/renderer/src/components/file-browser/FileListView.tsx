@@ -1,10 +1,10 @@
-import { AppIcon } from "@components/common";
 import { useI18n, useMarqueeSelection, usePersistentState } from "@hooks";
-import { diffNames, type NameDiffSegment, type SortState } from "@lib";
+import { diffNames, fileKind, type NameDiffSegment, type SortState } from "@lib";
 import type { FileEntry } from "@shared/ipc";
 import type { Preview } from "@shared/rename";
 import { type KeyboardEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { FileListHeader } from "./FileListHeader";
+import { FileTypeIcon } from "./FileTypeIcon";
 import {
 	type ColumnWidths,
 	cellText,
@@ -215,7 +215,7 @@ export function FileListView(props: FileListViewProps) {
 					if (column.id === "name") {
 						return (
 							<span key={column.id} className="cell name">
-								<AppIcon name={entry.isDir ? "folder" : "file"} size={14} />
+								<FileTypeIcon kind={fileKind(entry)} size={14} />
 								<span className="cell-text">
 									{nameDiff ? <DiffText segments={nameDiff.before} kind="removed" /> : text}
 								</span>

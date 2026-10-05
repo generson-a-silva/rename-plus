@@ -1,6 +1,7 @@
 import { AppIcon, type AppIconName } from "@components/common";
 import { type FolderTreeState, useI18n } from "@hooks";
 import { useEffect, useRef } from "react";
+import { FileTypeIcon } from "./FileTypeIcon";
 
 export interface TreeRoot {
 	label: string;
@@ -85,7 +86,11 @@ function FolderTreeNode({
 				>
 					<AppIcon name="chevron" size={12} />
 				</button>
-				<AppIcon name={icon} size={15} />
+				{icon === "folder" ? (
+					<FileTypeIcon kind="folder" size={15} />
+				) : (
+					<AppIcon name={icon} size={15} />
+				)}
 				<span className="tree-label">{label}</span>
 			</div>
 			{isOpen && children === "loading" && (

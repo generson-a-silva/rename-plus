@@ -7,6 +7,7 @@ export {
 	matchFileShortcut,
 } from "./fileContextMenus";
 export { fileExtensionLabel, fileType, formatDateTime, formatSize } from "./fileFormatting";
+export { type FileKind, fileKind } from "./fileKinds";
 export { DEFAULT_FILTERS, type ListFilters, toListOptions } from "./fileListFilters";
 export { DEFAULT_SORT, type SortKey, type SortState, sortEntries } from "./fileListSorting";
 export {

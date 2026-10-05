@@ -22,6 +22,21 @@
 	--error-soft: #fde4e6;
 	--diff-removed: rgb(255 129 130 / 0.4);
 	--diff-added: rgb(74 194 107 / 0.35);
+	/* Ícones da lista e da árvore, por tipo de item. */
+	--icon-folder: #3d7fe6;
+	--icon-file: #8c959f;
+	--icon-image: #8250df;
+	--icon-video: #bf3989;
+	--icon-audio: #d1610a;
+	--icon-archive: #9a6700;
+	--icon-pdf: #cf222e;
+	--icon-document: #2f6fe4;
+	--icon-spreadsheet: #1a7f37;
+	--icon-presentation: #bc4c00;
+	--icon-code: #1b7c83;
+	--icon-text: #6e7781;
+	--icon-executable: #57606a;
+	--icon-font: #6639ba;
 	--active-panel: #2f6fe4;
 	--marquee-bg: rgb(47 111 228 / 0.12);
 	--marquee-border: rgb(47 111 228 / 0.7);
@@ -52,6 +67,20 @@
 		--error-soft: #4a1f24;
 		--diff-removed: rgb(255 107 107 / 0.42);
 		--diff-added: rgb(74 194 107 / 0.3);
+		--icon-folder: #5b9cff;
+		--icon-file: #9aa3ad;
+		--icon-image: #b392f0;
+		--icon-video: #f778ba;
+		--icon-audio: #f0883e;
+		--icon-archive: #d4a72c;
+		--icon-pdf: #ff7b72;
+		--icon-document: #6ea8ff;
+		--icon-spreadsheet: #56d364;
+		--icon-presentation: #ffa657;
+		--icon-code: #39c5cf;
+		--icon-text: #b1bac4;
+		--icon-executable: #8b949e;
+		--icon-font: #d2a8ff;
 		--active-panel: #4c8dff;
 		--marquee-bg: rgb(76 141 255 / 0.16);
 		--marquee-border: rgb(76 141 255 / 0.8);
@@ -78,6 +107,20 @@
 	--error-soft: #4a1f24;
 	--diff-removed: rgb(255 107 107 / 0.42);
 	--diff-added: rgb(74 194 107 / 0.3);
+	--icon-folder: #5b9cff;
+	--icon-file: #9aa3ad;
+	--icon-image: #b392f0;
+	--icon-video: #f778ba;
+	--icon-audio: #f0883e;
+	--icon-archive: #d4a72c;
+	--icon-pdf: #ff7b72;
+	--icon-document: #6ea8ff;
+	--icon-spreadsheet: #56d364;
+	--icon-presentation: #ffa657;
+	--icon-code: #39c5cf;
+	--icon-text: #b1bac4;
+	--icon-executable: #8b949e;
+	--icon-font: #d2a8ff;
 	--active-panel: #4c8dff;
 	--marquee-bg: rgb(76 141 255 / 0.16);
 	--marquee-border: rgb(76 141 255 / 0.8);
@@ -301,7 +344,7 @@ select {
 	visibility: hidden;
 }
 
-.tree-node .icon:not(.tree-twisty .icon) {
+.tree-node .icon:not(.tree-twisty .icon, .file-icon) {
 	color: var(--muted);
 }
 
@@ -486,6 +529,63 @@ button.header-cell:hover {
 
 .cell .icon {
 	color: var(--muted);
+}
+
+/* Cor do ícone pelo tipo do item (vale para a lista e a árvore). */
+.icon.file-icon {
+	color: var(--icon-file);
+}
+
+.icon.kind-folder {
+	color: var(--icon-folder);
+}
+
+.icon.kind-image {
+	color: var(--icon-image);
+}
+
+.icon.kind-video {
+	color: var(--icon-video);
+}
+
+.icon.kind-audio {
+	color: var(--icon-audio);
+}
+
+.icon.kind-archive {
+	color: var(--icon-archive);
+}
+
+.icon.kind-pdf {
+	color: var(--icon-pdf);
+}
+
+.icon.kind-document {
+	color: var(--icon-document);
+}
+
+.icon.kind-spreadsheet {
+	color: var(--icon-spreadsheet);
+}
+
+.icon.kind-presentation {
+	color: var(--icon-presentation);
+}
+
+.icon.kind-code {
+	color: var(--icon-code);
+}
+
+.icon.kind-text {
+	color: var(--icon-text);
+}
+
+.icon.kind-executable {
+	color: var(--icon-executable);
+}
+
+.icon.kind-font {
+	color: var(--icon-font);
 }
 
 .cell-text {
