@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/screenshot.png" alt="Ventana de Rename Plus: árbol de carpetas a la izquierda, lista de fotos con los nuevos nombres en verde a la derecha y los paneles de reglas abajo" width="900">
+  <img src="docs/screenshots/es-ES/screenshot.png" alt="Ventana de Rename Plus: árbol de carpetas a la izquierda, lista de fotos con los nuevos nombres en verde a la derecha y los paneles de reglas abajo" width="900">
 </p>
 
 ---
@@ -55,56 +55,56 @@ La ventana tiene tres zonas: el árbol de carpetas a la izquierda, la lista de a
 
 ## Capturas
 
-Las capturas muestran la interfaz en inglés. La aplicación también está disponible en español y portugués.
+Las capturas muestran la interfaz en español. La aplicación también está disponible en inglés y portugués.
 
 <table>
   <tr>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/subpastas.png"><img src="docs/screenshots/subpastas.png" alt="Tema claro en modo Subcarpetas: pistas de dos CD renombradas como '01 - Opening Theme.mp3', con la numeración reiniciándose en cada carpeta"></a>
+      <a href="docs/screenshots/es-ES/subpastas.png"><img src="docs/screenshots/es-ES/subpastas.png" alt="Tema claro en modo Subcarpetas: pistas de dos CD renombradas como '01 - Opening Theme.mp3', con la numeración reiniciándose en cada carpeta"></a>
       <p><b>Varias reglas y subcarpetas.</b> Quitar, Reemplazar, Título, Numeración por carpeta y extensión en minúsculas, aplicados a las pistas de dos CD a la vez (tema claro).</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/conflitos.png"><img src="docs/screenshots/conflitos.png" alt="Filas en rojo con el nuevo nombre 'photo.jpg' repetido; la barra de estado muestra 4 conflictos y el botón Renombrar está bloqueado"></a>
+      <a href="docs/screenshots/es-ES/conflitos.png"><img src="docs/screenshots/es-ES/conflitos.png" alt="Filas en rojo con el nuevo nombre 'foto.jpg' repetido; la barra de estado muestra 4 conflictos y el botón Renombrar está bloqueado"></a>
       <p><b>Conflictos.</b> Los nombres repetidos en el lote o iguales a un archivo que ya existe se marcan en rojo y el botón Renombrar se bloquea. El motivo aparece al pasar el ratón sobre la fila.</p>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/erros.png"><img src="docs/screenshots/erros.png" alt="Panel de acciones con 'RegEx no válida: Unterminated group' y la barra de estado con 'Carpeta no encontrada'"></a>
+      <a href="docs/screenshots/es-ES/erros.png"><img src="docs/screenshots/es-ES/erros.png" alt="Panel de acciones con 'RegEx no válida: Unterminated group' y la barra de estado con 'Carpeta no encontrada'"></a>
       <p><b>Mensajes de error.</b> Una RegEx no válida se explica en el panel de acciones; las rutas inexistentes escritas en la barra de direcciones aparecen en rojo en la barra de estado.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/validacao.png"><img src="docs/screenshots/validacao.png" alt="Diálogo 'Renombrar archivo' con el campo en rojo y el mensaje 'Contiene el carácter &quot;/&quot;'"></a>
+      <a href="docs/screenshots/es-ES/validacao.png"><img src="docs/screenshots/es-ES/validacao.png" alt="Diálogo 'Renombrar archivo' con el campo en rojo y el mensaje 'Contiene el carácter &quot;/&quot;'"></a>
       <p><b>Validación de nombres.</b> Al renombrar un elemento (F2) o crear una carpeta, los nombres que el sistema no admite se señalan antes de confirmar.</p>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/arrastar.png"><img src="docs/screenshots/arrastar.png" alt="Ventana con borde discontinuo y el aviso 'Suelta para abrir'"></a>
+      <a href="docs/screenshots/es-ES/arrastar.png"><img src="docs/screenshots/es-ES/arrastar.png" alt="Ventana con borde discontinuo y el aviso 'Suelta para abrir'"></a>
       <p><b>Arrastrar y soltar.</b> Suelta una carpeta para abrirla, o archivos para abrir su carpeta con ellos ya seleccionados.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Configuración con las secciones Apariencia, Actualizaciones y Carpetas vigiladas; la versión instalada 1.5.1 es la más reciente"></a>
+      <a href="docs/screenshots/es-ES/configuracoes.png"><img src="docs/screenshots/es-ES/configuracoes.png" alt="Configuración con las secciones Apariencia, Actualizaciones y Carpetas vigiladas; la versión instalada 1.5.1 es la más reciente"></a>
       <p><b>Configuración.</b> Tema de la interfaz, comprobación de actualizaciones en GitHub y carpetas vigiladas, además de las opciones «Abrir en Rename Plus» en el menú contextual del gestor de archivos.</p>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/construtor-regex.png"><img src="docs/screenshots/construtor-regex.png" alt="Constructor visual de RegEx: paleta de bloques, la búsqueda 'Inicio del nombre + Texto exacto IMG_ + Números (Fragmento 1)' y el reemplazo 'Texto + Fragmento guardado'"></a>
+      <a href="docs/screenshots/es-ES/construtor-regex.png"><img src="docs/screenshots/es-ES/construtor-regex.png" alt="Constructor visual de RegEx: paleta de bloques, la búsqueda 'Inicio del nombre + Texto exacto IMG_ + Números (Fragmento 1)' y el reemplazo 'Texto + Fragmento guardado'"></a>
       <p><b>Constructor visual de RegEx.</b> La búsqueda y el reemplazo se arman con bloques que se arrastran, con ejemplos listos. Aquí, <code>IMG_2041.JPG</code> pasa a <code>Foto 2041.JPG</code>.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/pastas-monitoradas.png"><img src="docs/screenshots/pastas-monitoradas.png" alt="Carpetas vigiladas: segundo plano activado y la regla 'Invoices' vigilando los PDF de la carpeta Downloads, con las reglas de renombrado tomadas del preset 'Invoices'"></a>
-      <p><b>Carpetas vigiladas.</b> Los PDF que llegan a Downloads reciben la fecha delante, pasan a Título y van a <code>Documents/Invoices</code>, incluso con la aplicación cerrada (segundo plano activado).</p>
+      <a href="docs/screenshots/es-ES/pastas-monitoradas.png"><img src="docs/screenshots/es-ES/pastas-monitoradas.png" alt="Carpetas vigiladas: segundo plano activado y la regla 'Facturas' vigilando los PDF de la carpeta Descargas, con las reglas de renombrado tomadas del preset 'Facturas'"></a>
+      <p><b>Carpetas vigiladas.</b> Los PDF que llegan a Descargas reciben la fecha delante, pasan a Título y van a <code>Documentos/Facturas</code>, incluso con la aplicación cerrada (segundo plano activado).</p>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/pastas-monitoradas-atividade.png"><img src="docs/screenshots/pastas-monitoradas-atividade.png" alt="Regla de carpeta vigilada con un nombre de prueba y la actividad reciente con tres PDF renombrados y movidos"></a>
+      <a href="docs/screenshots/es-ES/pastas-monitoradas-atividade.png"><img src="docs/screenshots/es-ES/pastas-monitoradas-atividade.png" alt="Regla de carpeta vigilada con un nombre de prueba y la actividad reciente con tres PDF renombrados y movidos"></a>
       <p><b>Prueba y actividad.</b> Prueba la regla con un nombre de ejemplo antes de que llegue ningún archivo y consulta en el registro de actividad qué se renombró (o qué falló).</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/presets.png"><img src="docs/screenshots/presets.png" alt="Diálogo 'Save preset' (guardar preset) con el nombre 'Family photos'; detrás, las fotos de la carpeta Family con nuevos nombres como '2023-12-03 Family 02.jpg' y la lista de presets junto al selector de idioma"></a>
+      <a href="docs/screenshots/es-ES/presets.png"><img src="docs/screenshots/es-ES/presets.png" alt="Diálogo 'Guardar preset' con el nombre 'Fotos de familia'; detrás, las fotos de la carpeta Familia con nuevos nombres como '2023-12-03 Familia 02.jpg' y la lista de presets junto al selector de idioma"></a>
       <p><b>Presets.</b> El botón de guardar, en la esquina de los paneles, guarda la combinación actual de reglas (aquí, Nombre fijo, Fecha automática y Numeración) con un nombre. Después basta con elegirlo en la lista junto al idioma o en las reglas de las carpetas vigiladas.</p>
     </td>
   </tr>

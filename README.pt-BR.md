@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/screenshot.png" alt="Tela do Rename Plus: árvore de pastas à esquerda, lista de fotos com os novos nomes em verde à direita e os painéis de regras embaixo" width="900">
+  <img src="docs/screenshots/pt-BR/screenshot.png" alt="Tela do Rename Plus: árvore de pastas à esquerda, lista de fotos com os novos nomes em verde à direita e os painéis de regras embaixo" width="900">
 </p>
 
 ---
@@ -55,56 +55,56 @@ A interface segue o modelo de três áreas: árvore de pastas à esquerda, lista
 
 ## Telas
 
-Os prints mostram a interface em inglês. O app também está disponível em português e espanhol.
+Os prints mostram a interface em português. O app também está disponível em inglês e espanhol.
 
 <table>
   <tr>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/subpastas.png"><img src="docs/screenshots/subpastas.png" alt="Tema claro com o modo Subpastas: faixas de dois CDs renomeadas para '01 - Opening Theme.mp3', com numeração reiniciando em cada pasta"></a>
+      <a href="docs/screenshots/pt-BR/subpastas.png"><img src="docs/screenshots/pt-BR/subpastas.png" alt="Tema claro com o modo Subpastas: faixas de dois CDs renomeadas para '01 - Opening Theme.mp3', com numeração reiniciando em cada pasta"></a>
       <p><b>Várias regras e subpastas.</b> Remover, Substituir, Título, Numeração por pasta e extensão em minúsculas, aplicados às faixas de dois CDs de uma vez (tema claro).</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/conflitos.png"><img src="docs/screenshots/conflitos.png" alt="Linhas em vermelho com o novo nome 'photo.jpg' repetido; a barra de status mostra 4 conflitos e o botão Renomear está bloqueado"></a>
+      <a href="docs/screenshots/pt-BR/conflitos.png"><img src="docs/screenshots/pt-BR/conflitos.png" alt="Linhas em vermelho com o novo nome 'foto.jpg' repetido; a barra de status mostra 4 conflitos e o botão Renomear está bloqueado"></a>
       <p><b>Conflitos.</b> Nomes repetidos no lote ou iguais a um arquivo que já existe ficam em vermelho, e o botão Renomear é bloqueado. O motivo aparece ao passar o mouse sobre a linha.</p>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/erros.png"><img src="docs/screenshots/erros.png" alt="Painel de ações mostrando 'RegEx inválida: Unterminated group' e barra de status com 'Pasta não encontrada'"></a>
+      <a href="docs/screenshots/pt-BR/erros.png"><img src="docs/screenshots/pt-BR/erros.png" alt="Painel de ações mostrando 'RegEx inválida: Unterminated group' e barra de status com 'Pasta não encontrada'"></a>
       <p><b>Mensagens de erro.</b> Uma RegEx inválida é explicada no painel de ações; caminhos inexistentes digitados na barra de endereço aparecem em vermelho na barra de status.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/validacao.png"><img src="docs/screenshots/validacao.png" alt="Diálogo 'Renomear arquivo' com o campo em vermelho e a mensagem 'Contém o caractere /'"></a>
+      <a href="docs/screenshots/pt-BR/validacao.png"><img src="docs/screenshots/pt-BR/validacao.png" alt="Diálogo 'Renomear arquivo' com o campo em vermelho e a mensagem 'Contém o caractere /'"></a>
       <p><b>Validação de nomes.</b> Ao renomear um item (F2) ou criar uma pasta, nomes inválidos para o sistema são apontados antes de confirmar.</p>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/arrastar.png"><img src="docs/screenshots/arrastar.png" alt="Janela com borda tracejada e o aviso 'Solte para abrir'"></a>
+      <a href="docs/screenshots/pt-BR/arrastar.png"><img src="docs/screenshots/pt-BR/arrastar.png" alt="Janela com borda tracejada e o aviso 'Solte para abrir'"></a>
       <p><b>Arrastar e soltar.</b> Solte uma pasta para abri-la, ou arquivos para abrir a pasta deles já com eles selecionados.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Configurações com as seções Aparência, Atualizações e Pastas monitoradas; a versão instalada 1.5.1 é a mais recente"></a>
+      <a href="docs/screenshots/pt-BR/configuracoes.png"><img src="docs/screenshots/pt-BR/configuracoes.png" alt="Configurações com as seções Aparência, Atualizações e Pastas monitoradas; a versão instalada 1.5.1 é a mais recente"></a>
       <p><b>Configurações.</b> Tema da interface, verificação de atualizações no GitHub e pastas monitoradas, além das opções "Abrir no Rename Plus" no menu de contexto do gerenciador de arquivos.</p>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/construtor-regex.png"><img src="docs/screenshots/construtor-regex.png" alt="Construtor visual de RegEx: paleta de blocos, a busca 'Início do nome + Texto exato IMG_ + Números (Trecho 1)' e a substituição 'Texto + Trecho guardado'"></a>
+      <a href="docs/screenshots/pt-BR/construtor-regex.png"><img src="docs/screenshots/pt-BR/construtor-regex.png" alt="Construtor visual de RegEx: paleta de blocos, a busca 'Início do nome + Texto exato IMG_ + Números (Trecho 1)' e a substituição 'Texto + Trecho guardado'"></a>
       <p><b>Construtor visual de RegEx.</b> A busca e a substituição são montadas com blocos arrastáveis, com exemplos prontos. Aqui, <code>IMG_2041.JPG</code> vira <code>Foto 2041.JPG</code>.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/pastas-monitoradas.png"><img src="docs/screenshots/pastas-monitoradas.png" alt="Pastas monitoradas: segundo plano ativado e a regra 'Invoices' monitorando PDFs na pasta Downloads, com as regras de renomeação vindas de Seus Filtros"></a>
-      <p><b>Pastas monitoradas.</b> PDFs que chegam em Downloads ganham a data na frente, viram Título e vão para <code>Documents/Invoices</code>, mesmo com o app fechado (segundo plano ativado).</p>
+      <a href="docs/screenshots/pt-BR/pastas-monitoradas.png"><img src="docs/screenshots/pt-BR/pastas-monitoradas.png" alt="Pastas monitoradas: segundo plano ativado e a regra 'Faturas' monitorando PDFs na pasta Downloads, com as regras de renomeação vindas de Seus Filtros"></a>
+      <p><b>Pastas monitoradas.</b> PDFs que chegam em Downloads ganham a data na frente, viram Título e vão para <code>Documentos/Faturas</code>, mesmo com o app fechado (segundo plano ativado).</p>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/pastas-monitoradas-atividade.png"><img src="docs/screenshots/pastas-monitoradas-atividade.png" alt="Regra de pasta monitorada com um nome de teste e a atividade recente com três PDFs renomeados e movidos"></a>
+      <a href="docs/screenshots/pt-BR/pastas-monitoradas-atividade.png"><img src="docs/screenshots/pt-BR/pastas-monitoradas-atividade.png" alt="Regra de pasta monitorada com um nome de teste e a atividade recente com três PDFs renomeados e movidos"></a>
       <p><b>Teste e atividade.</b> Teste a regra com um nome de exemplo antes de qualquer arquivo chegar e veja no registro de atividade o que foi renomeado (ou o que falhou).</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/presets.png"><img src="docs/screenshots/presets.png" alt="Diálogo 'Save preset' (Salvar em Seus Filtros) com o nome 'Family photos'; atrás, as fotos da pasta Family com novos nomes como '2023-12-03 Family 02.jpg' e a lista Seus Filtros ao lado do seletor de idioma"></a>
+      <a href="docs/screenshots/pt-BR/presets.png"><img src="docs/screenshots/pt-BR/presets.png" alt="Diálogo 'Salvar em Seus Filtros' com o nome 'Fotos de família'; atrás, as fotos da pasta Família com novos nomes como '2023-12-03 Família 02.jpg' e a lista Seus Filtros ao lado do seletor de idioma"></a>
       <p><b>Seus Filtros.</b> O botão de salvar, no canto dos painéis, guarda a combinação atual de regras (aqui, Nome fixo, Data automática e Numeração) com um nome. Depois é só escolher na lista ao lado do idioma ou nas regras das pastas monitoradas.</p>
     </td>
   </tr>
