@@ -22,6 +22,7 @@
 
 <p align="center">
   <a href="https://github.com/generson-a-silva/rename-plus/releases/latest"><img alt="Baixar a última versão" src="https://img.shields.io/badge/%E2%AC%87%20Baixar-%C3%BAltima%20vers%C3%A3o-1a7f37?style=for-the-badge"></a>
+  <a href="https://www.renameplus.app.br/"><img alt="Site" src="https://img.shields.io/badge/Site-renameplus.app.br-2f6fe4?style=for-the-badge&logo=googlechrome&logoColor=white"></a>
 </p>
 
 <p align="center">
@@ -52,6 +53,8 @@ O **Rename Plus** renomeia muitos arquivos e pastas de uma vez a partir de regra
 Antes de qualquer alteração no disco, a coluna **Novo nome** mostra o resultado de cada item selecionado. Conflitos, como dois arquivos com o mesmo nome final ou caracteres proibidos pelo sistema, aparecem em vermelho e bloqueiam a operação. Depois de renomear, é possível **desfazer** o último lote.
 
 A interface segue o modelo de três áreas: árvore de pastas à esquerda, lista de arquivos à direita e painéis de regras embaixo, com os botões **Renomear**, **Desfazer** e **Redefinir** sempre visíveis.
+
+Mais sobre o projeto, com os downloads para cada sistema, no site: **[renameplus.app.br](https://www.renameplus.app.br/)**.
 
 ## Telas
 

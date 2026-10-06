@@ -22,6 +22,7 @@
 
 <p align="center">
   <a href="https://github.com/generson-a-silva/rename-plus/releases/latest"><img alt="Download the latest version" src="https://img.shields.io/badge/%E2%AC%87%20Download-latest%20version-1a7f37?style=for-the-badge"></a>
+  <a href="https://www.renameplus.app.br/en/"><img alt="Website" src="https://img.shields.io/badge/Website-renameplus.app.br-2f6fe4?style=for-the-badge&logo=googlechrome&logoColor=white"></a>
 </p>
 
 <p align="center">
@@ -52,6 +53,8 @@
 Nothing touches the disk until you confirm. The **New name** column shows the result for every selected item as you type. Conflicts, such as two files ending up with the same name or characters the system doesn't allow, are shown in red and block the operation. After renaming, you can **undo** the last batch.
 
 The window has three areas: the folder tree on the left, the file list on the right and the rule panels at the bottom, with the **Rename**, **Undo** and **Reset** buttons always in view.
+
+More about the project, with downloads for each system, on the website: **[renameplus.app.br](https://www.renameplus.app.br/en/)**.
 
 ## Screenshots
 

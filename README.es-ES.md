@@ -22,6 +22,7 @@
 
 <p align="center">
   <a href="https://github.com/generson-a-silva/rename-plus/releases/latest"><img alt="Descargar la última versión" src="https://img.shields.io/badge/%E2%AC%87%20Descargar-%C3%BAltima%20versi%C3%B3n-1a7f37?style=for-the-badge"></a>
+  <a href="https://www.renameplus.app.br/es/"><img alt="Sitio web" src="https://img.shields.io/badge/Sitio%20web-renameplus.app.br-2f6fe4?style=for-the-badge&logo=googlechrome&logoColor=white"></a>
 </p>
 
 <p align="center">
@@ -52,6 +53,8 @@
 Nada se modifica en el disco hasta que confirmas. La columna **Nuevo nombre** muestra el resultado de cada elemento seleccionado mientras escribes. Los conflictos, como dos archivos que acabarían con el mismo nombre o caracteres que el sistema no admite, aparecen en rojo y bloquean la operación. Después de renombrar, puedes **deshacer** el último lote.
 
 La ventana tiene tres zonas: el árbol de carpetas a la izquierda, la lista de archivos a la derecha y los paneles de reglas abajo, con los botones **Renombrar**, **Deshacer** y **Restablecer** siempre visibles.
+
+Más sobre el proyecto, con las descargas para cada sistema, en el sitio web: **[renameplus.app.br](https://www.renameplus.app.br/es/)**.
 
 ## Capturas
 
