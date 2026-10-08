@@ -63,6 +63,16 @@ The screenshots show the English interface. The app is also available in Portugu
 <table>
   <tr>
     <td width="50%" valign="top">
+      <a href="docs/screenshots/boas-vindas.png"><img src="docs/screenshots/boas-vindas.png" alt="Welcome screen first slide: choice of language (Portuguese, English or Spanish) and theme (system, light or dark)"></a>
+      <p><b>Welcome screen.</b> On the first run, pick the language and the theme; the whole app switches right away.</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/boas-vindas-recursos.png"><img src="docs/screenshots/boas-vindas-recursos.png" alt="Visual RegEx builder slide on the welcome screen, with an animation of the feature in use"></a>
+      <p><b>Feature tour.</b> Each feature comes with an animation recorded from the app itself. To see it again, use the ⓘ button in the top bar.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
       <a href="docs/screenshots/subpastas.png"><img src="docs/screenshots/subpastas.png" alt="Light theme in Subfolders mode: tracks from two CDs renamed to '01 - Opening Theme.mp3', with numbering restarting in each folder"></a>
       <p><b>Several rules and subfolders.</b> Remove, Replace, Title case, per-folder Numbering and a lowercase extension, applied to the tracks of two CDs at once (light theme).</p>
     </td>
@@ -87,7 +97,7 @@ The screenshots show the English interface. The app is also available in Portugu
       <p><b>Drag and drop.</b> Drop a folder to open it, or drop files to open their folder with them already selected.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Settings dialog with the Appearance, Updates and Watch folders sections; the installed version 1.5.1 is up to date"></a>
+      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Settings dialog with the Appearance, Updates and Watch folders sections; the installed version 1.5.3 is up to date"></a>
       <p><b>Settings.</b> Interface theme, update checks on GitHub and watch folders, besides the "Open in Rename Plus" entries in the file manager's context menu.</p>
     </td>
   </tr>
@@ -182,6 +192,7 @@ The app checks the [GitHub releases](https://github.com/generson-a-silva/rename-
 
 - Folder tree that loads on demand, with your home folder and the system roots (`/` on Linux, drives `C:`, `D:`… on Windows).
 - File list that stays fast in large folders (only visible rows are rendered), with column sorting and resizable columns (double-click the divider to fit the content).
+- Large folders and subfolder mode load progressively: the list fills in while the status bar shows "Loading…", with an option to cancel.
 - Selection works like a file manager: click, Ctrl/Shift+click, **drag to select** a rectangle with auto-scroll, and click an empty area to clear.
 - Hidden items are hidden by default and can be shown (they appear dimmed).
 
@@ -197,9 +208,10 @@ Right-click the list or the tree to open with the default app, show in the file 
 
 ### Interface
 
-- **Light**, **dark** or **system** theme, chosen in **Settings** (button at the right of the top bar).
-- **English**, **Portuguese** and **Spanish**, chosen with the button at the bottom right of the actions area. The initial language follows the system.
-- Adjustable layout: tree width, height of the rules area (up to half the window) and column widths.
+- **Welcome screen** on the first run: pick the language and theme, then a short tour of the features with animations. To see it again, use the ⓘ button in the top bar.
+- **Light**, **dark** or **system** theme, chosen on the welcome screen or in **Settings** (button at the right of the top bar).
+- **English**, **Portuguese** and **Spanish**, chosen on the welcome screen or with the button at the bottom right of the actions area. The initial language follows the system.
+- Adjustable layout: drag the dividers marked with three dots to change the tree width and the height of the rules area (up to half the window); columns can be resized too.
 - The window remembers its size, position and whether it was maximized. On the first run it opens maximized.
 
 ## How the rules are applied

@@ -1,6 +1,6 @@
 {
 	"name": "rename-plus",
-	"version": "1.5.2",
+	"version": "1.5.3",
 	"description": "Renomeador de arquivos e pastas em lote",
 	"author": {
 		"name": "Generson Silva"
@@ -9,6 +9,7 @@
 	"desktopName": "rename-plus.desktop",
 	"//": [
 		"welcome:record regrava as animações da tela de boas-vindas (src/renderer/src/assets/welcome). Rode npm run build antes; requer Linux com sessão gráfica, ImageMagick e img2webp. Para um idioma ou slide: npm run welcome:record -- pt-BR regex",
+		"docs:screenshots refaz os prints dos READMEs (docs/screenshots) a partir do AppImage: npm run dist e depois npm run docs:screenshots -- build/rename-plus-<versão>-linux-x86_64.AppImage [idioma] [print]",
 		"perf:listing mede a leitura de pastas do app (código compilado; rode npm run build antes). Ex.: npm run perf:listing -- --subfolders --hidden ~/.config"
 	],
 	"scripts": {
@@ -28,7 +29,8 @@
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"welcome:record": "node scripts/welcome-media/recordWelcomeMedia.mjs",
-		"perf:listing": "node scripts/perf/listingBenchmark.mjs"
+		"perf:listing": "node scripts/perf/listingBenchmark.mjs",
+		"docs:screenshots": "node scripts/docs-screenshots/captureScreenshots.mjs"
 	},
 	"type": "commonjs",
 	"dependencies": {

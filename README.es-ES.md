@@ -63,6 +63,16 @@ Las capturas muestran la interfaz en español. La aplicación también está dis
 <table>
   <tr>
     <td width="50%" valign="top">
+      <a href="docs/screenshots/es-ES/boas-vindas.png"><img src="docs/screenshots/es-ES/boas-vindas.png" alt="Primera diapositiva de la pantalla de bienvenida: elección de idioma (español, inglés o portugués) y de tema (sistema, claro u oscuro)"></a>
+      <p><b>Pantalla de bienvenida.</b> En la primera ejecución, elige el idioma y el tema; toda la app cambia al instante.</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/es-ES/boas-vindas-recursos.png"><img src="docs/screenshots/es-ES/boas-vindas-recursos.png" alt="Diapositiva del constructor visual de RegEx en la pantalla de bienvenida, con una animación de la función en uso"></a>
+      <p><b>Presentación de las funciones.</b> Cada función viene con una animación grabada de la propia app. Para volver a verla, usa el botón ⓘ de la barra superior.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
       <a href="docs/screenshots/es-ES/subpastas.png"><img src="docs/screenshots/es-ES/subpastas.png" alt="Tema claro en modo Subcarpetas: pistas de dos CD renombradas como '01 - Opening Theme.mp3', con la numeración reiniciándose en cada carpeta"></a>
       <p><b>Varias reglas y subcarpetas.</b> Quitar, Reemplazar, Título, Numeración por carpeta y extensión en minúsculas, aplicados a las pistas de dos CD a la vez (tema claro).</p>
     </td>
@@ -87,7 +97,7 @@ Las capturas muestran la interfaz en español. La aplicación también está dis
       <p><b>Arrastrar y soltar.</b> Suelta una carpeta para abrirla, o archivos para abrir su carpeta con ellos ya seleccionados.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/es-ES/configuracoes.png"><img src="docs/screenshots/es-ES/configuracoes.png" alt="Configuración con las secciones Apariencia, Actualizaciones y Carpetas vigiladas; la versión instalada 1.5.1 es la más reciente"></a>
+      <a href="docs/screenshots/es-ES/configuracoes.png"><img src="docs/screenshots/es-ES/configuracoes.png" alt="Configuración con las secciones Apariencia, Actualizaciones y Carpetas vigiladas; la versión instalada 1.5.3 es la más reciente"></a>
       <p><b>Configuración.</b> Tema de la interfaz, comprobación de actualizaciones en GitHub y carpetas vigiladas, además de las opciones «Abrir en Rename Plus» en el menú contextual del gestor de archivos.</p>
     </td>
   </tr>
@@ -182,6 +192,7 @@ La aplicación consulta las [releases de GitHub](https://github.com/generson-a-s
 
 - Árbol de carpetas que se carga bajo demanda, con la carpeta personal y las raíces del sistema (`/` en Linux, unidades `C:`, `D:`… en Windows).
 - Lista de archivos rápida incluso en carpetas grandes (solo dibuja las filas visibles), con ordenación por columna y columnas redimensionables (doble clic en el divisor para ajustar al contenido).
+- Las carpetas grandes y el modo Subcarpetas cargan poco a poco: la lista va apareciendo mientras la barra de estado muestra "Cargando…", con la opción de cancelar.
 - Selección como en un gestor de archivos: clic, Ctrl/Mayús+clic, **arrastrar para seleccionar** un rectángulo con desplazamiento automático, y clic en una zona vacía para limpiar.
 - Los elementos ocultos no se muestran por defecto y se pueden mostrar (aparecen atenuados).
 
@@ -197,9 +208,10 @@ Clic derecho en la lista o en el árbol para abrir con la aplicación predetermi
 
 ### Interfaz
 
-- Tema **claro**, **oscuro** o **según el sistema**, elegido en **Configuración** (botón a la derecha de la barra superior).
-- Idiomas **español**, **inglés** y **portugués**, elegidos con el botón de la esquina inferior derecha de la zona de acciones. El idioma inicial sigue al del sistema.
-- Diseño ajustable: ancho del árbol, alto de la zona de reglas (hasta la mitad de la ventana) y ancho de las columnas.
+- **Pantalla de bienvenida** en la primera ejecución: elección de idioma y tema y una presentación de las funciones con animaciones. Para volver a verla, usa el botón ⓘ de la barra superior.
+- Tema **claro**, **oscuro** o **según el sistema**, elegido en la pantalla de bienvenida o en **Configuración** (botón a la derecha de la barra superior).
+- Idiomas **español**, **inglés** y **portugués**, elegidos en la pantalla de bienvenida o con el botón de la esquina inferior derecha de la zona de acciones. El idioma inicial sigue al del sistema.
+- Diseño ajustable: arrastra los divisores marcados con tres puntos para cambiar el ancho del árbol y el alto de la zona de reglas (hasta la mitad de la ventana); las columnas también se pueden redimensionar.
 - La ventana recuerda su tamaño, su posición y si estaba maximizada. En la primera ejecución se abre maximizada.
 
 ## Cómo se aplican las reglas

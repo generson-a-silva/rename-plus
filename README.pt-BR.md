@@ -63,6 +63,16 @@ Os prints mostram a interface em português. O app também está disponível em 
 <table>
   <tr>
     <td width="50%" valign="top">
+      <a href="docs/screenshots/pt-BR/boas-vindas.png"><img src="docs/screenshots/pt-BR/boas-vindas.png" alt="Tela de boas-vindas no primeiro slide: escolha de idioma (português, inglês ou espanhol) e de tema (sistema, claro ou escuro)"></a>
+      <p><b>Tela de boas-vindas.</b> Na primeira execução, escolha o idioma e o tema; o app inteiro muda na hora.</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/pt-BR/boas-vindas-recursos.png"><img src="docs/screenshots/pt-BR/boas-vindas-recursos.png" alt="Slide do construtor visual de RegEx na tela de boas-vindas, com a animação do recurso em uso"></a>
+      <p><b>Apresentação dos recursos.</b> Cada recurso vem com uma animação gravada do próprio app. Para rever, use o botão ⓘ na barra superior.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
       <a href="docs/screenshots/pt-BR/subpastas.png"><img src="docs/screenshots/pt-BR/subpastas.png" alt="Tema claro com o modo Subpastas: faixas de dois CDs renomeadas para '01 - Opening Theme.mp3', com numeração reiniciando em cada pasta"></a>
       <p><b>Várias regras e subpastas.</b> Remover, Substituir, Título, Numeração por pasta e extensão em minúsculas, aplicados às faixas de dois CDs de uma vez (tema claro).</p>
     </td>
@@ -87,7 +97,7 @@ Os prints mostram a interface em português. O app também está disponível em 
       <p><b>Arrastar e soltar.</b> Solte uma pasta para abri-la, ou arquivos para abrir a pasta deles já com eles selecionados.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/pt-BR/configuracoes.png"><img src="docs/screenshots/pt-BR/configuracoes.png" alt="Configurações com as seções Aparência, Atualizações e Pastas monitoradas; a versão instalada 1.5.1 é a mais recente"></a>
+      <a href="docs/screenshots/pt-BR/configuracoes.png"><img src="docs/screenshots/pt-BR/configuracoes.png" alt="Configurações com as seções Aparência, Atualizações e Pastas monitoradas; a versão instalada 1.5.3 é a mais recente"></a>
       <p><b>Configurações.</b> Tema da interface, verificação de atualizações no GitHub e pastas monitoradas, além das opções "Abrir no Rename Plus" no menu de contexto do gerenciador de arquivos.</p>
     </td>
   </tr>
@@ -182,6 +192,7 @@ O app consulta as [releases do GitHub](https://github.com/generson-a-silva/renam
 
 - Árvore de pastas com carregamento sob demanda, com a pasta pessoal e as raízes do sistema (`/` no Linux, unidades `C:`, `D:`… no Windows).
 - Lista de arquivos rápida mesmo em pastas grandes (renderiza só as linhas visíveis), com ordenação por coluna e colunas redimensionáveis (duplo clique na divisória ajusta ao conteúdo).
+- Pastas grandes e o modo Subpastas carregam aos poucos: a lista vai aparecendo enquanto a barra de status mostra "Carregando…", com a opção de cancelar.
 - Seleção como num gerenciador de arquivos: clique, Ctrl/Shift+clique, **arrastar para selecionar** um retângulo com rolagem automática, e clique na área livre para limpar.
 - Itens ocultos ficam escondidos por padrão e podem ser exibidos (aparecem esmaecidos).
 
@@ -197,9 +208,10 @@ Botão direito na lista ou na árvore para abrir com o aplicativo padrão, mostr
 
 ### Interface
 
-- Tema **claro**, **escuro** ou **seguindo o sistema**, escolhido em **Configurações** (botão no canto direito da barra superior).
-- Idiomas **português**, **inglês** e **espanhol**, escolhidos pelo botão no canto inferior direito da área de ações. O idioma inicial segue o sistema.
-- Layout ajustável: largura da árvore, altura da área de regras (até metade da janela) e largura das colunas.
+- **Tela de boas-vindas** na primeira execução: escolha de idioma e tema e uma apresentação dos recursos com animações. Para rever, use o botão ⓘ na barra superior.
+- Tema **claro**, **escuro** ou **seguindo o sistema**, escolhido na tela de boas-vindas ou em **Configurações** (botão no canto direito da barra superior).
+- Idiomas **português**, **inglês** e **espanhol**, escolhidos na tela de boas-vindas ou pelo botão no canto inferior direito da área de ações. O idioma inicial segue o sistema.
+- Layout ajustável: arraste as divisórias marcadas com três pontinhos para mudar a largura da árvore e a altura da área de regras (até metade da janela); as colunas também podem ser redimensionadas.
 - A janela lembra tamanho, posição e se estava maximizada. Na primeira execução abre maximizada.
 
 ## Como as regras são aplicadas
