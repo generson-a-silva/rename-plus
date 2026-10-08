@@ -2,7 +2,7 @@ import type { Dirent, Stats } from "node:fs";
 import fs from "node:fs/promises";
 import type { EntryGroup, EntryTuple, ListOptions } from "../shared/ipc";
 import { getPlatformPaths } from "../shared/paths";
-import { createHiddenCheck, type HiddenCheck } from "./hiddenFileDetector";
+import { createHiddenCheck, type HiddenCheck, needsOwnHiddenCheck } from "./hiddenFileDetector";
 
 /** Pastas lidas ao mesmo tempo (modo Subpastas). */
 const DIR_CONCURRENCY = 8;
@@ -52,10 +52,18 @@ async function lstatOrNull(target: string): Promise<Stats | null> {
 	}
 }
 
+/** Pasta a ler e a verificação de ocultos que vale para ela. */
+interface PendingDir {
+	dir: string;
+	hiddenCheck: Promise<HiddenCheck>;
+	/** A verificação já cobre as pastas de rede longas deste ramo. */
+	coversLongPaths: boolean;
+}
+
 interface DirResult {
 	group: EntryGroup;
 	/** Subpastas a percorrer no modo Subpastas. */
-	subdirs: string[];
+	subdirs: PendingDir[];
 }
 
 /**
@@ -66,7 +74,8 @@ interface DirResult {
  */
 export async function* walkEntries(root: string, options: WalkOptions): AsyncGenerator<EntryGroup> {
 	const { signal } = options;
-	const paths = getPlatformPaths(options.platform ?? process.platform);
+	const platform = options.platform ?? process.platform;
+	const paths = getPlatformPaths(platform);
 	// Começa a verificar os ocultos junto com a leitura, sem esperar por ela.
 	const hiddenCheck: Promise<HiddenCheck> = createHiddenCheck(
 		root,
@@ -74,8 +83,19 @@ export async function* walkEntries(root: string, options: WalkOptions): AsyncGen
 		options.platform,
 	);
 
-	const readGroup = async (dir: string): Promise<DirResult> => {
-		const [dirents, isHidden] = await Promise.all([readDir(dir), hiddenCheck]);
+	/**
+	 * Verificação a usar numa subpasta. O `dir /s` pula as pastas de rede longas demais: a
+	 * primeira de cada ramo ganha uma consulta própria (com as subpastas dela), que vale
+	 * para todo o ramo abaixo, em vez de uma consulta por pasta.
+	 */
+	const forSubdir = (parent: PendingDir, dir: string): PendingDir =>
+		!parent.coversLongPaths && needsOwnHiddenCheck(dir, platform)
+			? { dir, hiddenCheck: createHiddenCheck(dir, true, platform), coversLongPaths: true }
+			: { ...parent, dir };
+
+	const readGroup = async (pending: PendingDir): Promise<DirResult> => {
+		const { dir } = pending;
+		const [dirents, isHidden] = await Promise.all([readDir(dir), pending.hiddenCheck]);
 		const candidates: Array<{ name: string; path: string; hidden: boolean }> = [];
 		for (const dirent of dirents) {
 			const fullPath = paths.join(dir, dirent.name);
@@ -90,12 +110,12 @@ export async function* walkEntries(root: string, options: WalkOptions): AsyncGen
 			signal,
 		);
 		const items: EntryTuple[] = [];
-		const subdirs: string[] = [];
+		const subdirs: PendingDir[] = [];
 		candidates.forEach((item, index) => {
 			const stat = stats[index];
 			if (!stat) return;
 			const isDir = stat.isDirectory();
-			if (isDir && options.recursive) subdirs.push(item.path);
+			if (isDir && options.recursive) subdirs.push(forSubdir(pending, item.path));
 			if (isDir ? !options.includeFolders : !options.includeFiles) return;
 			items.push([
 				item.name,
@@ -109,9 +129,11 @@ export async function* walkEntries(root: string, options: WalkOptions): AsyncGen
 		return { group: { dir, items }, subdirs };
 	};
 
-	let level = [root];
+	let level: PendingDir[] = [
+		{ dir: root, hiddenCheck, coversLongPaths: needsOwnHiddenCheck(root, platform) },
+	];
 	while (level.length > 0) {
-		const nextLevel: string[] = [];
+		const nextLevel: PendingDir[] = [];
 		for (let start = 0; start < level.length; start += DIR_CONCURRENCY) {
 			signal?.throwIfAborted();
 			const wave = await Promise.all(level.slice(start, start + DIR_CONCURRENCY).map(readGroup));

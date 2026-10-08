@@ -1,4 +1,5 @@
 import { execFile } from "node:child_process";
+import path from "node:path";
 import { getPlatformPaths } from "../shared/paths";
 
 /** Diz se um item deve ser tratado como oculto. */
@@ -11,19 +12,89 @@ const isDotFile: HiddenCheck = (_fullPath, name) => name.startsWith(".");
 const CACHE_MS = 5_000;
 const cache = new Map<string, { time: number; hidden: Promise<Set<string>> }>();
 
+/** Prefixo que deixa o `dir` passar de 260 caracteres sem depender do LongPathsEnabled. */
+const LONG_PATH_PREFIX = "\\\\?\\";
+/** Mesmo prefixo para caminhos de rede, que só o PowerShell aceita. */
+const LONG_UNC_PREFIX = "\\\\?\\UNC\\";
+/** Maior pasta de rede que o `dir` lista: 260 menos o "\*" e o terminador. */
+const MAX_UNC_DIR_LENGTH = 257;
+
+const isUncPath = (dir: string) => dir.startsWith("\\\\") || dir.startsWith("//");
+
 /**
- * Converte a saída do `dir` (um item por linha) em chaves minúsculas. Com `dir` sem
- * `/s`, cada linha é só o nome; `baseDir` monta o caminho completo.
+ * Pasta de rede comprida demais para o `dir`. No modo Subpastas, o `dir /s` pula essas
+ * pastas sem avisar: quem percorre a árvore pede uma consulta própria para elas.
+ */
+export function needsOwnHiddenCheck(dir: string, platform: string = process.platform): boolean {
+	return (
+		platform === "win32" && isUncPath(dir) && path.win32.resolve(dir).length > MAX_UNC_DIR_LENGTH
+	);
+}
+
+/**
+ * Pasta a consultar no `dir`. Em unidades (locais ou mapeadas) recebe o prefixo `\\?\`,
+ * que desliga a normalização do Windows: por isso o `resolve` antes. O cmd não aceita a
+ * forma `\\?\UNC\`, então caminhos de rede (`\\servidor\pasta`) seguem sem prefixo.
+ */
+export function toDirQueryPath(dir: string): string {
+	const full = path.win32.resolve(dir);
+	return isUncPath(full) ? full : LONG_PATH_PREFIX + full;
+}
+
+/** Caminho de rede no formato longo do PowerShell: `\\servidor\pasta` → `\\?\UNC\servidor\pasta`. */
+export function toLongUncPath(dir: string): string {
+	return LONG_UNC_PREFIX + path.win32.resolve(dir).slice(2);
+}
+
+/** Volta o caminho com prefixo longo à forma usada pelo app. */
+function withoutLongPrefix(line: string): string {
+	if (line.startsWith(LONG_UNC_PREFIX)) return `\\\\${line.slice(LONG_UNC_PREFIX.length)}`;
+	if (line.startsWith(LONG_PATH_PREFIX)) return line.slice(LONG_PATH_PREFIX.length);
+	return line;
+}
+
+/**
+ * Converte a saída do `dir` ou do PowerShell (um item por linha) em chaves minúsculas.
+ * Sem `/s`, cada linha é só o nome; `baseDir` monta o caminho completo. Com `/s`, as
+ * linhas vêm com o prefixo longo da consulta, que é retirado. Sem `trim`: no Windows um
+ * nome pode começar com espaço.
  */
 export function parseHiddenPathList(stdout: string, baseDir?: string): Set<string> {
 	const paths = getPlatformPaths("win32");
 	return new Set(
 		stdout
 			.split(/\r?\n/)
-			.map((line) => line.trim())
 			.filter(Boolean)
-			.map((line) => (baseDir ? paths.join(baseDir, line) : line).toLowerCase()),
+			.map((line) => (baseDir ? paths.join(baseDir, line) : withoutLongPrefix(line)).toLowerCase()),
 	);
+}
+
+/** Roda o comando e lê a saída; em caso de falha, segue sem ocultar nada em vez de bloquear a listagem. */
+function runHiddenQuery(
+	file: string,
+	args: string[],
+	env: NodeJS.ProcessEnv,
+	encoding: "utf16le" | "utf8",
+	baseDir: string | undefined,
+): Promise<Set<string>> {
+	return new Promise((resolve) => {
+		execFile(
+			file,
+			args,
+			{
+				env: { ...process.env, ...env },
+				encoding: "buffer",
+				windowsHide: true,
+				windowsVerbatimArguments: file === "cmd.exe",
+				timeout: 30_000,
+				maxBuffer: 64 * 1024 * 1024,
+			},
+			(_error, stdout) =>
+				resolve(
+					parseHiddenPathList(Buffer.isBuffer(stdout) ? stdout.toString(encoding) : "", baseDir),
+				),
+		);
+	});
 }
 
 /**
@@ -32,30 +103,45 @@ export function parseHiddenPathList(stdout: string, baseDir?: string): Set<strin
  * interpretado de novo pelo cmd) e `/u` faz a saída sair em UTF-16, sem perder acentos.
  * Sem itens ocultos, o `dir` termina com erro e saída vazia: o resultado é um conjunto vazio.
  */
+function listWithDir(dir: string, recursive: boolean): Promise<Set<string>> {
+	return runHiddenQuery(
+		"cmd.exe",
+		["/d", "/u", "/c", `dir /a:h /b "%RENAME_PLUS_DIR%"${recursive ? " /s" : ""}`],
+		{ RENAME_PLUS_DIR: toDirQueryPath(dir) },
+		"utf16le",
+		recursive ? undefined : dir,
+	);
+}
+
+/** Pastas de rede longas: o PowerShell aceita `\\?\UNC\`, o cmd não. Mais lento, por isso só aqui. */
+const POWERSHELL_HIDDEN_SCRIPT = [
+	"[Console]::OutputEncoding = [System.Text.Encoding]::UTF8",
+	"Get-ChildItem -LiteralPath $env:RENAME_PLUS_DIR -Force -Attributes Hidden" +
+		" -Recurse:($env:RENAME_PLUS_RECURSIVE -eq '1') -ErrorAction SilentlyContinue" +
+		" | ForEach-Object { if ($env:RENAME_PLUS_RECURSIVE -eq '1') { $_.FullName } else { $_.Name } }",
+].join("; ");
+
+function listWithPowerShell(dir: string, recursive: boolean): Promise<Set<string>> {
+	return runHiddenQuery(
+		"powershell.exe",
+		[
+			"-NoProfile",
+			"-NonInteractive",
+			"-ExecutionPolicy",
+			"Bypass",
+			"-Command",
+			POWERSHELL_HIDDEN_SCRIPT,
+		],
+		{ RENAME_PLUS_DIR: toLongUncPath(dir), RENAME_PLUS_RECURSIVE: recursive ? "1" : "0" },
+		"utf8",
+		recursive ? undefined : dir,
+	);
+}
+
 function listWindowsHiddenPaths(dir: string, recursive: boolean): Promise<Set<string>> {
-	const command = `dir /a:h /b "%RENAME_PLUS_DIR%"${recursive ? " /s" : ""}`;
-	return new Promise((resolve) => {
-		execFile(
-			"cmd.exe",
-			["/d", "/u", "/c", command],
-			{
-				env: { ...process.env, RENAME_PLUS_DIR: dir },
-				encoding: "buffer",
-				windowsHide: true,
-				windowsVerbatimArguments: true,
-				timeout: 30_000,
-				maxBuffer: 64 * 1024 * 1024,
-			},
-			// Em caso de falha, segue sem ocultar nada em vez de bloquear a listagem.
-			(_error, stdout) =>
-				resolve(
-					parseHiddenPathList(
-						Buffer.isBuffer(stdout) ? stdout.toString("utf16le") : "",
-						recursive ? undefined : dir,
-					),
-				),
-		);
-	});
+	return needsOwnHiddenCheck(dir, "win32")
+		? listWithPowerShell(dir, recursive)
+		: listWithDir(dir, recursive);
 }
 
 function cachedHiddenPaths(dir: string, recursive: boolean): Promise<Set<string>> {
