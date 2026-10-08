@@ -7,6 +7,7 @@
 	},
 	"main": "build-electron/main/mainProcess.js",
 	"desktopName": "rename-plus.desktop",
+	"//": "welcome:record regrava as animações da tela de boas-vindas (src/renderer/src/assets/welcome). Rode npm run build antes; requer Linux com sessão gráfica, ImageMagick e img2webp. Para um idioma ou slide: npm run welcome:record -- pt-BR regex",
 	"scripts": {
 		"dev": "concurrently -k -n react,tsc,electron -c cyan,yellow,magenta \"vite\" \"tsc -p tsconfig.electron.json --watch --preserveWatchOutput\" \"wait-on tcp:5173 file:build-electron/main/mainProcess.js file:build-electron/preload/preloadBridge.js && cross-env ELECTRON_RUN_AS_NODE= VITE_DEV_SERVER_URL=http://localhost:5173 electron .\"",
 		"build": "npm run typecheck && npm run build:react && npm run build:electron",
@@ -22,7 +23,8 @@
 		"check:fix": "biome check --write .",
 		"ci": "biome ci . && npm run typecheck && npm test",
 		"test": "vitest run",
-		"test:watch": "vitest"
+		"test:watch": "vitest",
+		"welcome:record": "node scripts/welcome-media/recordWelcomeMedia.mjs"
 	},
 	"type": "commonjs",
 	"dependencies": {

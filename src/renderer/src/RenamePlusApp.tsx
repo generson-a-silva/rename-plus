@@ -9,6 +9,7 @@ import {
 	type StatusMessage,
 	TextPromptDialog,
 	type TreeRoot,
+	WelcomeDialog,
 } from "@components";
 import {
 	type FileChange,
@@ -112,6 +113,9 @@ export function RenamePlusApp() {
 	const [busy, setBusy] = useState(false);
 	const [canUndo, setCanUndo] = useState(false);
 	const [settingsOpen, setSettingsOpen] = useState(false);
+	// As boas-vindas abrem sozinhas só na primeira execução; depois, pelo botão da barra.
+	const [welcomeSeen, setWelcomeSeen] = usePersistentState("welcomeSeen", false);
+	const [welcomeOpen, setWelcomeOpen] = useState(!welcomeSeen);
 	/** A pasta inicial já foi definida: a partir daí, pedidos de fora podem trocá-la. */
 	const [initialized, setInitialized] = useState(false);
 
@@ -493,9 +497,10 @@ export function RenamePlusApp() {
 	});
 
 	const rootPaths = useMemo(() => roots.map((root) => root.path), [roots]);
+	const modalOpen = prompt.request !== null || settingsOpen || welcomeOpen;
 	const draggingFiles = useFileDrop({
 		onDrop: openDroppedPaths,
-		enabled: prompt.request === null && !settingsOpen,
+		enabled: !modalOpen,
 	});
 
 	const commands = useFileCommands({
@@ -511,7 +516,7 @@ export function RenamePlusApp() {
 		refresh,
 		refreshFolder,
 		operations,
-		shortcutsEnabled: prompt.request === null && !settingsOpen,
+		shortcutsEnabled: !modalOpen,
 	});
 
 	// --- Layout --------------------------------------------------------------
@@ -558,6 +563,7 @@ export function RenamePlusApp() {
 				showHidden={filters.hidden}
 				onToggleHidden={toggleHidden}
 				onOpenSettings={() => setSettingsOpen(true)}
+				onOpenWelcome={() => setWelcomeOpen(true)}
 				onInvert={() =>
 					setSelection(
 						new Set(visibleEntries.filter((e) => !selection.has(e.path)).map((e) => e.path)),
@@ -647,6 +653,13 @@ export function RenamePlusApp() {
 				updates={updates}
 				renameOptions={options}
 				presets={presets.presets}
+			/>
+			<WelcomeDialog
+				open={welcomeOpen}
+				onClose={() => {
+					setWelcomeOpen(false);
+					setWelcomeSeen(true);
+				}}
 			/>
 			{draggingFiles && <DropOverlay />}
 		</div>

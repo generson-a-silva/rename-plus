@@ -560,4 +560,78 @@ export const es: Messages = {
 	"transfer.copyIntoItself": "No se puede copiar una carpeta dentro de sí misma",
 	"transfer.moveIntoItself": "No se puede mover una carpeta dentro de sí misma",
 	"trash.unavailable": "La papelera no está disponible en este disco",
+
+	// ---- Bienvenida ------------------------------------------------------
+	"toolbar.welcome": "Conoce Rename Plus",
+	"welcome.title": "Bienvenido a Rename Plus",
+	"welcome.carousel": "carrusel",
+	"welcome.slide": "diapositiva",
+	"welcome.slideOf": "{current} de {total}",
+	"welcome.goTo": "Ir a la diapositiva {current} de {total}",
+	"welcome.skip": "Omitir",
+	"welcome.previous": "Anterior",
+	"welcome.next": "Siguiente",
+	"welcome.finish": "Empezar",
+	"welcome.mediaAlt": "Animación que muestra: {feature}",
+	"welcome.language.title": "Elige el idioma",
+	"welcome.language.body": "Rename Plus y esta presentación se mostrarán en el idioma elegido.",
+	"welcome.language.hint":
+		"Puedes cambiarlo después con el botón de idioma, en la esquina inferior derecha de la ventana.",
+	"welcome.intro.title": "Renombra por lotes, sin sorpresas",
+	"welcome.intro.body":
+		"Combina reglas y mira el nuevo nombre de cada elemento antes de tocar el disco. En las siguientes diapositivas, descubre qué más hace la app.",
+	"welcome.intro.point1": "Vista previa en vivo en la columna Nuevo nombre",
+	"welcome.intro.point2": "RegEx, reemplazo, mayúsculas, fecha, numeración y extensión",
+	"welcome.intro.point3": "Subcarpetas, filtros por máscara y elementos ocultos",
+	"welcome.regex.title": "Constructor visual de RegEx",
+	"welcome.regex.body":
+		"Arma búsquedas y reemplazos con bloques arrastrables, sin escribir expresiones regulares.",
+	"welcome.regex.point1": "Bloques como Texto exacto, Números, Letras y Separador",
+	"welcome.regex.point2": "Ejemplos listos: IMG_1234 → Foto 1234, invertir fechas…",
+	"welcome.regex.point3": "Prueba en los archivos seleccionados o en un nombre escrito",
+	"welcome.watch.title": "Carpetas vigiladas",
+	"welcome.watch.body":
+		"Los archivos nuevos que llegan a una carpeta (como Descargas) se renombran y, si quieres, se mueven automáticamente.",
+	"welcome.watch.point1": "Filtro por máscara, como *.pdf; *.jpg",
+	"welcome.watch.point2": "Sigue funcionando con la app cerrada, desde la bandeja",
+	"welcome.watch.point3": "Registro de actividad con lo que se hizo y los fallos",
+	"welcome.presets.title": "Tus Filtros",
+	"welcome.presets.body":
+		"Guarda una combinación de reglas con un nombre y vuelve a aplicarla con un clic.",
+	"welcome.presets.point1": "Botón de guardar junto a la lista de presets",
+	"welcome.presets.point2": "Lista, guardar y eliminar junto al selector de idioma",
+	"welcome.presets.point3": "También disponible en las reglas de las carpetas vigiladas",
+	"welcome.safety.title": "La seguridad primero",
+	"welcome.safety.body":
+		"No se renombra nada si hay conflictos, y el último lote siempre se puede deshacer.",
+	"welcome.safety.point1":
+		"Los nombres repetidos o no válidos se marcan en rojo y bloquean la operación",
+	"welcome.safety.point2": "Todo o nada: si algo falla, vuelven los nombres originales",
+	"welcome.safety.point3": "Deshacer el último lote, sin sobrescribir nunca archivos",
+	"welcome.files.title": "Gestor de archivos integrado",
+	"welcome.files.body": "Organiza los archivos sin salir de la app y abre elementos desde fuera.",
+	"welcome.files.point1": "Cortar, copiar, pegar, crear carpeta y mover a la papelera",
+	"welcome.files.point2": "Arrastra carpetas o archivos a la ventana",
+	"welcome.files.point3": "“Abrir en Rename Plus” en el menú contextual del sistema",
+	"welcome.settings.title": "A tu manera",
+	"welcome.settings.body":
+		"Ajusta la apariencia y el idioma, y entérate cuando salga una versión nueva.",
+	"welcome.settings.point1": "Tema claro, oscuro o según el sistema",
+	"welcome.settings.point2": "Interfaz en español, portugués e inglés",
+	"welcome.settings.point3": "Avisos de actualización, sin instalar nada por sí sola",
+	"welcome.support.title": "Ayuda a Rename Plus a crecer",
+	"welcome.support.body":
+		"Rename Plus es gratuito y de código abierto. Si te ha sido útil, hay tres formas sencillas de apoyar el proyecto.",
+	"welcome.reddit.title": "Únete a la comunidad",
+	"welcome.reddit.body": "Resuelve dudas, sugiere funciones y comparte tus reglas en Reddit.",
+	"welcome.reddit.button": "Abrir r/RenamePlus",
+	"welcome.donate.title": "Haz una donación",
+	"welcome.donate.body":
+		"Cualquier cantidad ayuda a mantener el desarrollo. Apunta la cámara al código QR o usa el botón.",
+	"welcome.donate.qrAlt": "Código QR para donar con PayPal",
+	"welcome.donate.button": "Donar con PayPal",
+	"welcome.star.title": "Deja una estrella",
+	"welcome.star.body":
+		"Una ⭐ en GitHub da más visibilidad al proyecto y ayuda a otras personas a encontrarlo.",
+	"welcome.star.button": "Dar una estrella en GitHub",
 };

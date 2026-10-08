@@ -35,6 +35,11 @@ const PATHS = {
 	grip: "M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01",
 	chevronLeft: "M15 6l-6 6 6 6",
 	save: "M5 3h11l3 3v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2zM8 3v5h7V3M8 21v-7h8v7",
+	star: "M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9z",
+	heart: "M12 20s-7-4.4-9-9.2A5 5 0 0 1 12 7a5 5 0 0 1 9 3.8C19 15.6 12 20 12 20z",
+	chat: "M4 5h16v11H10l-6 4z",
+	shield: "M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6zM9 12l2 2 4-4",
+	info: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v5M12 8h.01",
 } as const;
 
 export type AppIconName = keyof typeof PATHS;

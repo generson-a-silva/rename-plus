@@ -16,6 +16,7 @@ interface NavigationToolbarProps {
 	showHidden: boolean;
 	onToggleHidden: () => void;
 	onOpenSettings: () => void;
+	onOpenWelcome: () => void;
 }
 
 function ToolButton(props: {
@@ -41,7 +42,7 @@ function ToolButton(props: {
 	);
 }
 
-/** Barra superior: navegação entre pastas, seleção em massa, itens ocultos e configurações. */
+/** Barra superior: navegação entre pastas, seleção em massa, itens ocultos, boas-vindas e configurações. */
 export function NavigationToolbar(props: NavigationToolbarProps) {
 	const { currentDir } = props;
 	const { t } = useI18n();
@@ -102,6 +103,7 @@ export function NavigationToolbar(props: NavigationToolbarProps) {
 					pressed={props.showHidden}
 					onClick={props.onToggleHidden}
 				/>
+				<ToolButton icon="info" label={t("toolbar.welcome")} onClick={props.onOpenWelcome} />
 				<ToolButton icon="settings" label={t("settings.button")} onClick={props.onOpenSettings} />
 			</div>
 		</header>

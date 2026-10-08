@@ -2190,3 +2190,282 @@ a.button.primary {
 	color: var(--muted);
 	font-size: 12px;
 }
+
+/* ---- Boas-vindas (carrossel) ----------------------------------------- */
+
+.settings-dialog.welcome-dialog {
+	width: min(960px, calc(100vw - 32px));
+}
+
+/* Slides e indicadores formam a área do carrossel; o rodapé fica só com a navegação. */
+.welcome-carousel {
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+	padding-bottom: 14px;
+}
+
+/* Os slides ficam lado a lado; a faixa desliza para mostrar um de cada vez. */
+.welcome-viewport {
+	min-height: 0;
+	overflow: hidden;
+}
+
+.welcome-track {
+	display: flex;
+	transition: transform 0.35s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.welcome-track {
+		transition: none;
+	}
+}
+
+.welcome-slide {
+	display: flex;
+	flex: 0 0 100%;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-width: 0;
+	max-height: calc(100vh - 170px);
+	padding: 20px 28px 8px;
+	overflow-y: auto;
+	text-align: center;
+}
+
+.welcome-slide h3 {
+	margin: 14px 0 4px;
+	font-size: 18px;
+}
+
+/*
+ * Animação do recurso: proporção fixa (16:10). A altura usa o que sobra da janela depois
+ * do cabeçalho, dos textos, dos indicadores e do rodapé (~340px).
+ */
+.welcome-media {
+	flex: none;
+	height: clamp(240px, calc(100vh - 340px), 560px);
+	max-width: 100%;
+	aspect-ratio: 16 / 10;
+	overflow: hidden;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	background: var(--bg);
+	box-shadow: 0 4px 16px rgb(0 0 0 / 0.18);
+}
+
+.welcome-media img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+
+.welcome-hero-icon {
+	display: grid;
+	place-items: center;
+	width: 76px;
+	height: 76px;
+	border-radius: 20px;
+	background: var(--accent-soft);
+	color: var(--accent);
+}
+
+.welcome-body {
+	max-width: 620px;
+	margin: 0;
+	color: var(--muted);
+	font-size: 14px;
+}
+
+/* Destaques lado a lado, quebrando linha quando não couberem. */
+.welcome-points {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 6px 18px;
+	margin: 12px 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.welcome-point {
+	display: flex;
+	align-items: flex-start;
+	gap: 6px;
+	text-align: left;
+}
+
+.welcome-point .icon {
+	flex: none;
+	margin-top: 2px;
+	color: var(--changed);
+}
+
+/* Escolha de idioma (primeiro slide): uma opção por linha, cada nome no próprio idioma. */
+.welcome-languages {
+	display: grid;
+	gap: 8px;
+	width: min(360px, 100%);
+	margin-top: 20px;
+}
+
+.welcome-language {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 10px 14px;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	background: var(--surface-2);
+	font-size: 14px;
+	text-align: left;
+	cursor: pointer;
+}
+
+.welcome-language:hover {
+	border-color: var(--accent);
+}
+
+.welcome-language.selected {
+	border-color: var(--accent);
+	background: var(--accent-soft);
+}
+
+.welcome-language:has(input:focus-visible) {
+	outline: 2px solid var(--accent);
+	outline-offset: 2px;
+}
+
+/* O rádio fica invisível: a opção inteira é o alvo do clique e do teclado. */
+.welcome-language input {
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.welcome-language-code {
+	display: grid;
+	place-items: center;
+	width: 34px;
+	height: 24px;
+	border-radius: 4px;
+	background: var(--surface);
+	color: var(--muted);
+	font-size: 11px;
+	font-weight: 700;
+}
+
+.welcome-language-name {
+	flex: 1;
+}
+
+.welcome-language .icon {
+	color: var(--accent);
+}
+
+.welcome-hint {
+	margin: 16px 0 0;
+	color: var(--muted);
+}
+
+.welcome-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 12px;
+	width: 100%;
+	margin-top: 20px;
+}
+
+.welcome-card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+	padding: 16px 14px;
+	border: 1px solid var(--border);
+	border-radius: 10px;
+	background: var(--surface-2);
+	color: inherit;
+	text-decoration: none;
+}
+
+a.welcome-card:hover {
+	border-color: var(--accent);
+}
+
+.welcome-card-icon {
+	display: grid;
+	place-items: center;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background: var(--accent-soft);
+	color: var(--accent);
+}
+
+.welcome-card strong {
+	font-size: 14px;
+}
+
+.welcome-card-text {
+	flex: 1;
+	color: var(--muted);
+}
+
+/* O card inteiro é o link; o "botão" dentro dele só reforça a ação. */
+a.welcome-card:hover .button {
+	border-color: var(--accent);
+}
+
+/* O QR code mantém o fundo branco nos dois temas para continuar legível pela câmera. */
+.welcome-qr {
+	padding: 6px;
+	border-radius: 6px;
+	background: #ffffff;
+	image-rendering: pixelated;
+}
+
+.welcome-dots {
+	display: flex;
+	justify-content: center;
+	gap: 6px;
+	padding-top: 12px;
+}
+
+.welcome-dot {
+	width: 8px;
+	height: 8px;
+	padding: 0;
+	border: 0;
+	border-radius: 4px;
+	background: var(--border-strong);
+	cursor: pointer;
+	transition:
+		width 0.2s ease,
+		background-color 0.2s ease;
+}
+
+.welcome-dot.active {
+	width: 22px;
+	background: var(--accent);
+}
+
+.welcome-footer {
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+.welcome-footer > .button[hidden] {
+	display: inline-flex;
+	visibility: hidden;
+}
+
+.welcome-nav {
+	display: flex;
+	gap: 8px;
+}
