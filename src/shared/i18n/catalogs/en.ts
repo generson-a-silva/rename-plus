@@ -284,7 +284,15 @@ export const en: Messages = {
 	"status.selected": { one: "{count} selected", other: "{count} selected" },
 	"status.willRename": { one: "{count} will be renamed", other: "{count} will be renamed" },
 	"status.conflicts": { one: "{count} conflict", other: "{count} conflicts" },
-	"status.truncated": "Listing limited to {count} items",
+	"status.loading": "Loading…",
+	"status.cancel": "Cancel",
+	"status.cancelled": "Listing stopped",
+	"status.tooMany": "Lots of items: load them all?",
+	"status.tooManyHint": "Keeps listing while the computer has free memory",
+	"status.support": "Enjoying Rename Plus? Support the project",
+	"status.memoryPaused": "Low free memory: load more?",
+	"status.memoryPausedHint": "Checks free memory again and loads what fits",
+	"status.memoryExhausted": "Not enough free memory to list more items",
 	"status.developedBy": "Developed by {author}",
 
 	// ---- Layout ---------------------------------------------------------

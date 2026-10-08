@@ -5,11 +5,11 @@ import { createTranslator } from "./translate";
 
 describe("createTranslator", () => {
 	it("interpola parâmetros e formata números no idioma", () => {
-		expect(createTranslator("pt-BR")("status.truncated", { count: 50000 })).toBe(
-			"Listagem limitada a 50.000 itens",
+		expect(createTranslator("pt-BR")("ops.trashConfirmMany", { count: 50000 })).toBe(
+			"Mover 50.000 itens para a lixeira?",
 		);
-		expect(createTranslator("en")("status.truncated", { count: 50000 })).toBe(
-			"Listing limited to 50,000 items",
+		expect(createTranslator("en")("ops.trashConfirmMany", { count: 50000 })).toBe(
+			"Move 50,000 items to the trash?",
 		);
 	});
 

@@ -228,7 +228,7 @@ To be clear about the current scope:
 - **Doesn't install updates by itself:** it only lets you know and opens the version's page on GitHub.
 - **Doesn't rename from the command line:** it only opens folders and files in the app, and there's no scheduling.
 - **Undo only covers the last batch**, and only while the app is open.
-- **Listing limit:** shows up to 50,000 items at a time; beyond that the list is truncated, with a warning.
+- **Very large lists:** listing pauses at 150,000 items and asks whether to load them all; from then on, it loads as much as the computer's free memory allows. With hundreds of thousands of items, selecting and previewing get slower.
 - **Doesn't run on macOS** yet.
 
 ## Supported platforms

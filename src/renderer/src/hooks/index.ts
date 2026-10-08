@@ -1,3 +1,9 @@
+export {
+	type DirectoryListing,
+	EMPTY_LISTING,
+	type ListingStatus,
+	useDirectoryListing,
+} from "./useDirectoryListing";
 export { useElementHeight } from "./useElementHeight";
 export { useFileCommands } from "./useFileCommands";
 export { useFileDrop } from "./useFileDrop";

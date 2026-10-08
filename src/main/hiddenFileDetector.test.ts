@@ -8,6 +8,16 @@ describe("parseHiddenPathList", () => {
 		);
 		expect([...hidden]).toEqual(["c:\\users\\ana\\desktop.ini", "c:\\users\\ana\\appdata"]);
 	});
+
+	it("com a pasta-base, monta o caminho a partir dos nomes (dir sem /s)", () => {
+		const hidden = parseHiddenPathList("desktop.ini\r\nAção.txt\r\n", "C:\\Users\\Ana");
+		expect([...hidden]).toEqual(["c:\\users\\ana\\desktop.ini", "c:\\users\\ana\\ação.txt"]);
+	});
+
+	it("lê a saída UTF-16 do cmd /u sem perder acentos", () => {
+		const output = Buffer.from("C:\\Fotos\\Família\r\n", "utf16le").toString("utf16le");
+		expect([...parseHiddenPathList(output)]).toEqual(["c:\\fotos\\família"]);
+	});
 });
 
 describe("createHiddenCheck", () => {

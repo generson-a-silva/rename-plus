@@ -288,7 +288,15 @@ export const es: Messages = {
 	"status.selected": { one: "{count} seleccionado", other: "{count} seleccionados" },
 	"status.willRename": { one: "{count} se renombrará", other: "{count} se renombrarán" },
 	"status.conflicts": { one: "{count} conflicto", other: "{count} conflictos" },
-	"status.truncated": "Lista limitada a {count} elementos",
+	"status.loading": "Cargando…",
+	"status.cancel": "Cancelar",
+	"status.cancelled": "Listado interrumpido",
+	"status.tooMany": "Muchos elementos: ¿cargar todos?",
+	"status.tooManyHint": "Sigue listando mientras haya memoria libre en el equipo",
+	"status.support": "¿Te gusta Rename Plus? Apoya el proyecto",
+	"status.memoryPaused": "Poca memoria libre: ¿cargar más?",
+	"status.memoryPausedHint": "Vuelve a comprobar la memoria libre y carga lo que quepa",
+	"status.memoryExhausted": "No hay memoria libre para listar más elementos",
 	"status.developedBy": "Desarrollado por {author}",
 
 	// ---- Diseño ---------------------------------------------------------

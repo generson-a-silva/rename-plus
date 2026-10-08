@@ -1,5 +1,5 @@
 import { AppIcon } from "@components/common";
-import { type I18n, useI18n } from "@hooks";
+import { type I18n, type ListingStatus, useI18n } from "@hooks";
 import type { AppInfo, ReleaseInfo } from "@shared/ipc";
 
 export interface StatusMessage {
@@ -12,7 +12,13 @@ interface RenameStatusBarProps {
 	selected: number;
 	changed: number;
 	errors: number;
-	truncated: boolean;
+	/** Situação da listagem (carregando, pausada por muitos itens ou pela memória…). */
+	listing: ListingStatus;
+	onCancelListing: () => void;
+	/** Continua a listagem pausada. */
+	onLoadMore: () => void;
+	/** Abre o convite para apoiar o projeto. */
+	onSupport: () => void;
 	message: StatusMessage | null;
 	/** Nome, versão e autor do app (`null` enquanto não carregou). */
 	appInfo: AppInfo | null;
@@ -35,7 +41,10 @@ export function RenameStatusBar({
 	selected,
 	changed,
 	errors,
-	truncated,
+	listing,
+	onCancelListing,
+	onLoadMore,
+	onSupport,
 	message,
 	appInfo,
 	update,
@@ -51,9 +60,43 @@ export function RenameStatusBar({
 			{errors > 0 && (
 				<span className="status-error">{t("status.conflicts", { count: errors })}</span>
 			)}
-			{truncated && (
-				<span className="status-error">{t("status.truncated", { count: 50_000 })}</span>
+			{listing === "loading" && (
+				<span className="status-listing" role="status">
+					{t("status.loading")}
+					<button type="button" className="status-link" onClick={onCancelListing}>
+						{t("status.cancel")}
+					</button>
+				</span>
 			)}
+			{listing === "paused-many" && (
+				<span className="status-listing">
+					<button
+						type="button"
+						className="status-link strong"
+						title={t("status.tooManyHint")}
+						onClick={onLoadMore}
+					>
+						{t("status.tooMany")}
+					</button>
+					<button type="button" className="status-link subtle" onClick={onSupport}>
+						{t("status.support")}
+					</button>
+				</span>
+			)}
+			{listing === "paused-memory" && (
+				<button
+					type="button"
+					className="status-link strong"
+					title={t("status.memoryPausedHint")}
+					onClick={onLoadMore}
+				>
+					{t("status.memoryPaused")}
+				</button>
+			)}
+			{listing === "memory-exhausted" && (
+				<span className="status-error">{t("status.memoryExhausted")}</span>
+			)}
+			{listing === "cancelled" && <span className="status-muted">{t("status.cancelled")}</span>}
 			{message && (
 				<span className={`status-message ${message.kind}`} role="status">
 					{message.text}

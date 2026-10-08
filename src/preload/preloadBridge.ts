@@ -9,7 +9,9 @@ const C = {
 	SetLocale: "app:set-locale",
 	GetHomeDir: "fs:get-home-dir",
 	ListDirectories: "fs:list-directories",
-	ListEntries: "fs:list-entries",
+	StartListing: "fs:listing-start",
+	ContinueListing: "fs:listing-continue",
+	CancelListing: "fs:listing-cancel",
 	ListRoots: "fs:list-roots",
 	ResolveDirectory: "fs:resolve-directory",
 	Rename: "rename:execute",
@@ -39,6 +41,7 @@ const C = {
 	SetBackground: "background:set",
 	LaunchRequest: "launch:request",
 	UpdateStatus: "update:status",
+	ListingEvent: "fs:listing-event",
 	WatchFoldersChanged: "watch:changed",
 } as const satisfies typeof IpcChannel;
 
@@ -58,7 +61,17 @@ const api: ElectronApi = {
 	setLocale: (locale) => ipcRenderer.invoke(C.SetLocale, locale),
 	getHomeDir: () => ipcRenderer.invoke(C.GetHomeDir),
 	listDirectories: (dir, showHidden) => ipcRenderer.invoke(C.ListDirectories, dir, showHidden),
-	listEntries: (dir, options) => ipcRenderer.invoke(C.ListEntries, dir, options),
+	// Listagem progressiva: pedidos sem resposta; os itens chegam por eventos.
+	startListing: (id, dir, options, memory) =>
+		ipcRenderer.send(C.StartListing, id, dir, options, memory),
+	// Valores do V8 em KB; o `performance.memory` da página é arredondado e não serve.
+	getMemoryReport: () => {
+		const heap = process.getHeapStatistics();
+		return { heapLimit: heap.heapSizeLimit * 1024, heapUsed: heap.usedHeapSize * 1024 };
+	},
+	continueListing: (id, memory) => ipcRenderer.send(C.ContinueListing, id, memory),
+	cancelListing: (id) => ipcRenderer.send(C.CancelListing, id),
+	onListingEvent: (listener) => subscribe(C.ListingEvent, listener),
 	listRoots: () => ipcRenderer.invoke(C.ListRoots),
 	resolveDirectory: (path) => ipcRenderer.invoke(C.ResolveDirectory, path),
 	rename: (operations) => ipcRenderer.invoke(C.Rename, operations),

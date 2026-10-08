@@ -228,7 +228,7 @@ Para dejar claro el alcance actual:
 - **No instala actualizaciones por sí sola:** solo avisa y abre la página de la versión en GitHub.
 - **No renombra desde la línea de comandos:** esta solo abre carpetas y archivos en la aplicación, y no hay programación de tareas.
 - **«Deshacer» solo cubre el último lote**, y solo mientras la aplicación está abierta.
-- **Límite de listado:** muestra hasta 50 000 elementos a la vez; por encima de eso la lista se trunca, con un aviso.
+- **Listas muy grandes:** el listado se detiene en 150 000 elementos y pregunta si cargar todos; a partir de ahí, carga según la memoria libre del equipo. Con cientos de miles de elementos, seleccionar y previsualizar se vuelven más lentos.
 - **No funciona en macOS** por ahora.
 
 ## Plataformas compatibles

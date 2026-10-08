@@ -293,7 +293,15 @@ export const ptBr = {
 	"status.selected": { one: "{count} selecionado", other: "{count} selecionados" },
 	"status.willRename": { one: "{count} será renomeado", other: "{count} serão renomeados" },
 	"status.conflicts": { one: "{count} conflito", other: "{count} conflitos" },
-	"status.truncated": "Listagem limitada a {count} itens",
+	"status.loading": "Carregando…",
+	"status.cancel": "Cancelar",
+	"status.cancelled": "Listagem interrompida",
+	"status.tooMany": "Muitos itens: carregar todos?",
+	"status.tooManyHint": "Continua a listagem enquanto houver memória livre no computador",
+	"status.support": "Gostou do Rename Plus? Apoie o projeto",
+	"status.memoryPaused": "Pouca memória livre: carregar mais?",
+	"status.memoryPausedHint": "Confere a memória livre de novo e carrega o que couber",
+	"status.memoryExhausted": "Sem memória livre para listar mais itens",
 	"status.developedBy": "Desenvolvido por {author}",
 
 	// ---- Layout ---------------------------------------------------------

@@ -6,7 +6,13 @@ import type { RenameOperation, RenameResult } from "./batchRenameTypes";
 import type { ContextMenuItem } from "./contextMenuTypes";
 import type { ConfirmRequest } from "./dialogTypes";
 import type { FileOperationResult } from "./fileOperationTypes";
-import type { DirEntry, FileSystemRoot, ListOptions, ListResult } from "./fileSystemTypes";
+import type {
+	DirEntry,
+	FileSystemRoot,
+	ListingEvent,
+	ListOptions,
+	MemoryReport,
+} from "./fileSystemTypes";
 import type {
 	LaunchRequest,
 	ShellIntegrationInfo,
@@ -25,7 +31,22 @@ export interface ElectronApi {
 	setLocale: (locale: Locale) => Promise<void>;
 	getHomeDir: () => Promise<string>;
 	listDirectories: (dir: string, showHidden: boolean) => Promise<DirEntry[]>;
-	listEntries: (dir: string, options: ListOptions) => Promise<ListResult>;
+	/**
+	 * Começa a listar `dir`; os itens chegam aos poucos por `onListingEvent`, com o mesmo
+	 * `id`. Uma listagem nova não cancela a anterior sozinha: chame `cancelListing`.
+	 */
+	startListing: (
+		id: number,
+		dir: string,
+		options: ListOptions,
+		memory: MemoryReport | null,
+	) => void;
+	/** Memória do JavaScript desta janela (estatística exata do V8), para a listagem medir o que cabe. */
+	getMemoryReport: () => MemoryReport;
+	/** Retoma uma listagem pausada (`paused`), conferindo de novo a memória livre. */
+	continueListing: (id: number, memory: MemoryReport | null) => void;
+	cancelListing: (id: number) => void;
+	onListingEvent: (listener: (event: ListingEvent) => void) => () => void;
 	listRoots: () => Promise<FileSystemRoot[]>;
 	/** Caminho absoluto e canônico da pasta, ou `null` se não existir/não for pasta. */
 	resolveDirectory: (path: string) => Promise<string | null>;

@@ -101,6 +101,8 @@ const SLIDE_COUNT = FEATURE_SLIDES.length + 2;
 
 interface WelcomeDialogProps {
 	open: boolean;
+	/** Slide inicial: o começo da apresentação ou direto o de apoio ao projeto. */
+	startAt?: "start" | "support";
 	onClose: () => void;
 }
 
@@ -108,7 +110,7 @@ interface WelcomeDialogProps {
  * Boas-vindas em carrossel horizontal: apresenta as principais funções do app e, no
  * último slide, os convites para a comunidade, doações e a estrela no GitHub.
  */
-export function WelcomeDialog({ open, onClose }: WelcomeDialogProps) {
+export function WelcomeDialog({ open, startAt = "start", onClose }: WelcomeDialogProps) {
 	const { t, locale, setLocale } = useI18n();
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const titleId = useId();
@@ -119,10 +121,10 @@ export function WelcomeDialog({ open, onClose }: WelcomeDialogProps) {
 		const dialog = dialogRef.current;
 		if (!dialog) return;
 		if (open && !dialog.open) {
-			setIndex(0);
+			setIndex(startAt === "support" ? SLIDE_COUNT - 1 : 0);
 			dialog.showModal();
 		} else if (!open && dialog.open) dialog.close();
-	}, [open]);
+	}, [open, startAt]);
 
 	const goTo = (next: number) => setIndex(Math.min(Math.max(next, 0), SLIDE_COUNT - 1));
 

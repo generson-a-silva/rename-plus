@@ -13,6 +13,7 @@ import {
 } from "@components";
 import {
 	type FileChange,
+	useDirectoryListing,
 	useElementHeight,
 	useFileCommands,
 	useFileDrop,
@@ -49,7 +50,6 @@ import {
 import type { Translator } from "@shared/i18n";
 import type {
 	AppInfo,
-	FileEntry,
 	FileSystemRoot,
 	LaunchMode,
 	RenameOperation,
@@ -62,15 +62,6 @@ import {
 	type RenameSection,
 } from "@shared/rename";
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
-
-interface Listing {
-	entries: FileEntry[];
-	truncated: boolean;
-	loading: boolean;
-	error: string | null;
-}
-
-const EMPTY_LISTING: Listing = { entries: [], truncated: false, loading: false, error: null };
 
 /** Altura mínima da área de filtros e fração máxima da área de trabalho que ela pode ocupar. */
 const MIN_PANELS_HEIGHT = 120;
@@ -107,7 +98,6 @@ export function RenamePlusApp() {
 	const [sort, setSort] = usePersistentState<SortState>("sort", DEFAULT_SORT);
 	const [layout, setLayout] = usePersistentState("layout", { treeWidth: 260, panelsHeight: 340 });
 
-	const [listing, setListing] = useState<Listing>(EMPTY_LISTING);
 	const [selection, setSelection] = useState<Set<string>>(() => new Set());
 	const [message, setMessage] = useState<StatusMessage | null>(null);
 	const [busy, setBusy] = useState(false);
@@ -115,7 +105,8 @@ export function RenamePlusApp() {
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	// As boas-vindas abrem sozinhas só na primeira execução; depois, pelo botão da barra.
 	const [welcomeSeen, setWelcomeSeen] = usePersistentState("welcomeSeen", false);
-	const [welcomeOpen, setWelcomeOpen] = useState(!welcomeSeen);
+	/** Boas-vindas abertas: do início ou direto no slide de apoio ao projeto. */
+	const [welcome, setWelcome] = useState<"start" | "support" | null>(welcomeSeen ? null : "start");
 	/** A pasta inicial já foi definida: a partir daí, pedidos de fora podem trocá-la. */
 	const [initialized, setInitialized] = useState(false);
 
@@ -167,28 +158,18 @@ export function RenamePlusApp() {
 		[subfolders, hidden, files, folders],
 	);
 
-	const requestRef = useRef(0);
+	// Os itens chegam aos poucos; a seleção só é conferida quando a listagem assenta.
+	const directory = useDirectoryListing(listOptions);
+	const { listing, load: loadDirectory, clear: clearListing } = directory;
 	const loadListing = useCallback(
 		async (dir: string, nextSelection?: Set<string>) => {
-			const request = ++requestRef.current;
-			setListing((prev) => ({ ...prev, loading: true, error: null }));
-			try {
-				const result = await window.api.listEntries(dir, listOptions);
-				if (request !== requestRef.current) return;
-				setListing({ ...result, loading: false, error: null });
-				const existing = new Set(result.entries.map((entry) => entry.path));
-				setSelection(
-					(prev) => new Set([...(nextSelection ?? prev)].filter((p) => existing.has(p))),
-				);
-			} catch (error) {
-				if (request !== requestRef.current) return;
-				setListing({
-					...EMPTY_LISTING,
-					error: t("list.error", { detail: (error as Error).message }),
-				});
-			}
+			const entries = await loadDirectory(dir);
+			// `null`: outra listagem tomou o lugar desta; a seleção fica para ela.
+			if (!entries) return;
+			const existing = new Set(entries.map((entry) => entry.path));
+			setSelection((prev) => new Set([...(nextSelection ?? prev)].filter((p) => existing.has(p))));
 		},
-		[listOptions, t],
+		[loadDirectory],
 	);
 
 	useEffect(() => {
@@ -209,10 +190,10 @@ export function RenamePlusApp() {
 			if (path === currentDir) return;
 			setMessage(null);
 			setSelection(new Set());
-			setListing(EMPTY_LISTING);
+			clearListing();
 			setCurrentDir(path);
 		},
-		[currentDir, home, setCurrentDir, t],
+		[currentDir, home, setCurrentDir, clearListing, t],
 	);
 
 	/**
@@ -497,7 +478,7 @@ export function RenamePlusApp() {
 	});
 
 	const rootPaths = useMemo(() => roots.map((root) => root.path), [roots]);
-	const modalOpen = prompt.request !== null || settingsOpen || welcomeOpen;
+	const modalOpen = prompt.request !== null || settingsOpen || welcome !== null;
 	const draggingFiles = useFileDrop({
 		onDrop: openDroppedPaths,
 		enabled: !modalOpen,
@@ -563,7 +544,7 @@ export function RenamePlusApp() {
 				showHidden={filters.hidden}
 				onToggleHidden={toggleHidden}
 				onOpenSettings={() => setSettingsOpen(true)}
-				onOpenWelcome={() => setWelcomeOpen(true)}
+				onOpenWelcome={() => setWelcome("start")}
 				onInvert={() =>
 					setSelection(
 						new Set(visibleEntries.filter((e) => !selection.has(e.path)).map((e) => e.path)),
@@ -595,8 +576,8 @@ export function RenamePlusApp() {
 						rootDir={currentDir}
 						showDirColumn={filters.subfolders}
 						sort={sort}
-						loading={listing.loading}
-						error={listing.error}
+						loading={listing.status === "loading"}
+						error={listing.error && t("list.error", { detail: listing.error })}
 						onSortChange={setSort}
 						onSelectionChange={setSelection}
 						onOpen={(entry) =>
@@ -640,7 +621,10 @@ export function RenamePlusApp() {
 				selected={selectedEntries.length}
 				changed={preview.changed}
 				errors={preview.errors}
-				truncated={listing.truncated}
+				listing={listing.status}
+				onCancelListing={directory.cancel}
+				onLoadMore={directory.loadMore}
+				onSupport={() => setWelcome("support")}
 				message={message}
 				update={updates.announced}
 			/>
@@ -655,9 +639,10 @@ export function RenamePlusApp() {
 				presets={presets.presets}
 			/>
 			<WelcomeDialog
-				open={welcomeOpen}
+				open={welcome !== null}
+				startAt={welcome ?? "start"}
 				onClose={() => {
-					setWelcomeOpen(false);
+					setWelcome(null);
 					setWelcomeSeen(true);
 				}}
 			/>

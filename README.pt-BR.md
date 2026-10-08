@@ -228,7 +228,7 @@ Para deixar claro o escopo atual:
 - **Não instala atualizações sozinho:** apenas avisa e abre a página da versão no GitHub.
 - **Não renomeia pela linha de comando:** ela só abre pastas e arquivos no app; também não há agendamento.
 - **O "Desfazer" vale só para o último lote** e só enquanto o app está aberto.
-- **Limite de listagem:** mostra até 50.000 itens por vez; acima disso a lista é truncada, com aviso.
+- **Listas muito grandes:** a listagem pausa em 150.000 itens e pergunta se deve carregar todos; daí em diante, carrega conforme a memória livre do computador. Com centenas de milhares de itens, selecionar e pré-visualizar ficam mais lentos.
 - **Não roda no macOS** por enquanto.
 
 ## Plataformas suportadas

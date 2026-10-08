@@ -1,13 +1,21 @@
 import os from "node:os";
-import { BrowserWindow, dialog, ipcMain } from "electron";
-import type { ConfirmRequest, ContextMenuItem, ListOptions, RenameOperation } from "../shared/ipc";
+import { app, BrowserWindow, dialog, ipcMain, type WebContents } from "electron";
+import type {
+	ConfirmRequest,
+	ContextMenuItem,
+	ListingEvent,
+	ListOptions,
+	MemoryReport,
+	RenameOperation,
+} from "../shared/ipc";
 import { IpcChannel } from "../shared/ipc";
 import { getAppInfo } from "./appInfo";
 import { getBackgroundInfo, setBackground } from "./backgroundService";
 import { canUndo, renameBatch, undoLastBatch } from "./batchRenamer";
-import { listDirectories, listEntries, listRoots, resolveDirectory } from "./fileSystemService";
+import { listDirectories, listRoots, resolveDirectory } from "./fileSystemService";
 import { copyItems, createFolder, deleteItems, moveItems } from "./fileTransferService";
 import { takeLaunchRequests } from "./launchRequestQueue";
+import { ListingJobs } from "./listingJobs";
 import { saveLocale } from "./localePreference";
 import { setMainLocale, tMain } from "./mainLocale";
 import {
@@ -26,6 +34,23 @@ import { setTheme } from "./themeSettings";
 import { checkForUpdates, getUpdateStatus, setUpdateSettings } from "./updateChecker";
 import { clearWatchActivity, getWatchFoldersInfo, setWatchRules } from "./watchFolderService";
 
+/** Listagens em andamento de cada janela (as de uma janela fechada são canceladas). */
+const listingsBySender = new Map<number, ListingJobs>();
+
+function listingsOf(sender: WebContents): ListingJobs {
+	let jobs = listingsBySender.get(sender.id);
+	if (!jobs) {
+		const created = new ListingJobs();
+		listingsBySender.set(sender.id, created);
+		sender.once("destroyed", () => {
+			created.cancelAll();
+			listingsBySender.delete(sender.id);
+		});
+		jobs = created;
+	}
+	return jobs;
+}
+
 export function registerIpcHandlers(): void {
 	ipcMain.handle(IpcChannel.GetAppInfo, () => getAppInfo());
 	ipcMain.handle(IpcChannel.SetTheme, (_event, mode: unknown) => setTheme(mode));
@@ -40,9 +65,30 @@ export function registerIpcHandlers(): void {
 	ipcMain.handle(IpcChannel.ListDirectories, (_event, dir: string, showHidden: boolean) =>
 		listDirectories(dir, showHidden),
 	);
-	ipcMain.handle(IpcChannel.ListEntries, (_event, dir: string, options: ListOptions) =>
-		listEntries(dir, options),
+	ipcMain.on(
+		IpcChannel.StartListing,
+		(event, id: number, dir: string, options: ListOptions, memory: MemoryReport | null) => {
+			const { sender } = event;
+			listingsOf(sender).start({
+				id,
+				dir,
+				options,
+				memory,
+				send: (listing: ListingEvent) => {
+					if (!sender.isDestroyed()) sender.send(IpcChannel.ListingEvent, listing);
+				},
+				// Em desenvolvimento, o tempo de cada listagem aparece no terminal.
+				onFinish: app.isPackaged
+					? undefined
+					: ({ dir, count, ms, outcome }) =>
+							console.debug(`[listagem] ${dir}: ${count} itens em ${ms} ms (${outcome})`),
+			});
+		},
 	);
+	ipcMain.on(IpcChannel.ContinueListing, (event, id: number, memory: MemoryReport | null) =>
+		listingsOf(event.sender).continue(id, memory),
+	);
+	ipcMain.on(IpcChannel.CancelListing, (event, id: number) => listingsOf(event.sender).cancel(id));
 	ipcMain.handle(IpcChannel.ListRoots, () => listRoots());
 	ipcMain.handle(IpcChannel.ResolveDirectory, (_event, target: string) => resolveDirectory(target));
 

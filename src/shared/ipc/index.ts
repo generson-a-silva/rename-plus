@@ -7,10 +7,13 @@ export type { ElectronApi } from "./electronApiContract";
 export type { FileOperationFailure, FileOperationResult } from "./fileOperationTypes";
 export type {
 	DirEntry,
+	EntryGroup,
+	EntryTuple,
 	FileEntry,
 	FileSystemRoot,
+	ListingEvent,
 	ListOptions,
-	ListResult,
+	MemoryReport,
 } from "./fileSystemTypes";
 export { IpcChannel } from "./ipcChannels";
 export type {

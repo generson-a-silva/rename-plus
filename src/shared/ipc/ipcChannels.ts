@@ -5,7 +5,9 @@ export const IpcChannel = {
 	SetLocale: "app:set-locale",
 	GetHomeDir: "fs:get-home-dir",
 	ListDirectories: "fs:list-directories",
-	ListEntries: "fs:list-entries",
+	StartListing: "fs:listing-start",
+	ContinueListing: "fs:listing-continue",
+	CancelListing: "fs:listing-cancel",
 	ListRoots: "fs:list-roots",
 	ResolveDirectory: "fs:resolve-directory",
 	Rename: "rename:execute",
@@ -37,6 +39,8 @@ export const IpcChannel = {
 	LaunchRequest: "launch:request",
 	/** Evento main → renderer: a situação da verificação de atualizações mudou. */
 	UpdateStatus: "update:status",
+	/** Evento main → renderer: itens e situação de uma listagem (`ListingEvent`). */
+	ListingEvent: "fs:listing-event",
 	/** Evento main → renderer: regras, situação ou atividade das pastas monitoradas mudaram. */
 	WatchFoldersChanged: "watch:changed",
 } as const;

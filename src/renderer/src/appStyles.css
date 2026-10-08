@@ -1030,6 +1030,43 @@ a.button.primary {
 	color: var(--error);
 }
 
+/* Situação da listagem: texto e ações em forma de link, sem sair da altura da barra. */
+.status-listing {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.status-link {
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--accent);
+	font: inherit;
+	cursor: pointer;
+}
+
+.status-link:hover {
+	text-decoration: underline;
+}
+
+.status-link.strong {
+	font-weight: 600;
+}
+
+/* Convite discreto: cor neutra, só ganha destaque ao passar o mouse. */
+.status-link.subtle {
+	color: var(--muted);
+}
+
+.status-link.subtle:hover {
+	color: var(--accent);
+}
+
+.status-muted {
+	opacity: 0.8;
+}
+
 .status-message {
 	margin-left: auto;
 	min-width: 0;
