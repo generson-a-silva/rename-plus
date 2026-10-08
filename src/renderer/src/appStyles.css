@@ -17,6 +17,18 @@
 	--accent-fg: #ffffff;
 	--accent-soft: #dce7fc;
 	--row-hover: #eef1f6;
+	/* Linhas alternadas da lista: só um leve tom, para guiar o olho em listas longas. */
+	--row-alt: #f6f8fc;
+	/*
+	 * Cabeçalho da lista: faixa no azul do app, com texto branco, para não se confundir
+	 * com as linhas selecionadas (tom claro do mesmo azul). Títulos dos painéis: tom claro.
+	 */
+	--header-bg: #2f6fe4;
+	--header-fg: #ffffff;
+	--header-border: #2459c0;
+	--badge-bg: #e8effc;
+	--badge-fg: #2456b5;
+	--badge-border: #c5d6f5;
 	--changed: #1a7f37;
 	--error: #cf222e;
 	--error-soft: #fde4e6;
@@ -62,6 +74,13 @@
 		--accent-fg: #ffffff;
 		--accent-soft: #233a63;
 		--row-hover: #252a34;
+		--row-alt: #20232b;
+		--header-bg: #2b5bb8;
+		--header-fg: #ffffff;
+		--header-border: #234b98;
+		--badge-bg: #1e2a44;
+		--badge-fg: #9fc0ff;
+		--badge-border: #2f4470;
 		--changed: #4ac26b;
 		--error: #ff6b6b;
 		--error-soft: #4a1f24;
@@ -102,6 +121,13 @@
 	--accent-fg: #ffffff;
 	--accent-soft: #233a63;
 	--row-hover: #252a34;
+	--row-alt: #20232b;
+	--header-bg: #2b5bb8;
+	--header-fg: #ffffff;
+	--header-border: #234b98;
+	--badge-bg: #1e2a44;
+	--badge-fg: #9fc0ff;
+	--badge-border: #2f4470;
 	--changed: #4ac26b;
 	--error: #ff6b6b;
 	--error-soft: #4a1f24;
@@ -220,6 +246,7 @@ select {
 }
 
 .splitter {
+	position: relative;
 	background: var(--bg);
 	transition: background 0.15s;
 }
@@ -228,12 +255,51 @@ select {
 	background: var(--accent);
 }
 
+/* Cursor de redimensionar: mostra a direção do arrasto ao passar o mouse. */
 .splitter.vertical {
 	cursor: col-resize;
 }
 
 .splitter.horizontal {
 	cursor: row-resize;
+}
+
+/*
+ * Pegada no meio da divisória: três pontinhos, o padrão de "pode arrastar" em divisórias
+ * (GIMP, Jira, SAP). Fica dentro da divisória, discreta; ao passar o mouse a divisória
+ * inteira fica azul e os pontos, brancos.
+ */
+.splitter-grip {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 3px;
+	/* Três intervalos de 7px: um ponto no centro de cada. */
+	height: 21px;
+	background:
+		radial-gradient(circle, var(--border-strong) 1.2px, transparent 1.6px) center top / 3px 7px
+		repeat-y;
+	transform: translate(-50%, -50%);
+	pointer-events: none;
+}
+
+.splitter.horizontal .splitter-grip {
+	width: 21px;
+	height: 3px;
+	background:
+		radial-gradient(circle, var(--border-strong) 1.2px, transparent 1.6px) left center / 7px 3px
+		repeat-x;
+}
+
+.splitter:hover .splitter-grip,
+body.resizing-x .splitter.vertical .splitter-grip,
+body.resizing-y .splitter.horizontal .splitter-grip {
+	--border-strong: var(--accent-fg);
+}
+
+body.resizing-x .splitter.vertical,
+body.resizing-y .splitter.horizontal {
+	background: var(--accent);
 }
 
 /* ---- Toolbar --------------------------------------------------------- */
@@ -379,8 +445,8 @@ select {
 /* Recebe a rolagem horizontal da lista (sincronizada via JS); sem barra própria. */
 .file-header-viewport {
 	overflow: hidden;
-	border-bottom: 1px solid var(--border);
-	background: var(--surface-2);
+	border-bottom: 1px solid var(--header-border);
+	background: var(--header-bg);
 }
 
 .file-header {
@@ -415,8 +481,8 @@ select {
 	left: 3px;
 	width: 2px;
 	border-radius: 1px;
-	background: var(--border-strong);
-	opacity: 0.6;
+	background: var(--header-fg);
+	opacity: 0.35;
 	transition:
 		background 0.12s,
 		opacity 0.12s;
@@ -440,7 +506,7 @@ body.resizing-x .column-resizer:active::after {
 	border: 0;
 	background: none;
 	font-weight: 600;
-	color: var(--muted);
+	color: var(--header-fg);
 	text-align: left;
 	white-space: nowrap;
 }
@@ -450,7 +516,8 @@ button.header-cell {
 }
 
 button.header-cell:hover {
-	color: var(--fg);
+	text-decoration: underline;
+	text-underline-offset: 3px;
 }
 
 .header-cell.right {
@@ -483,6 +550,10 @@ button.header-cell:hover {
 	right: 0;
 	height: 24px;
 	cursor: default;
+}
+
+.file-row.odd {
+	background: var(--row-alt);
 }
 
 .file-row:hover {
@@ -705,10 +776,10 @@ button.header-cell:hover {
 	gap: 4px;
 	height: 22px;
 	padding: 0 10px;
-	border: 1px solid var(--border);
+	border: 1px solid var(--badge-border);
 	border-radius: 999px;
-	background: var(--surface-2);
-	color: var(--muted);
+	background: var(--badge-bg);
+	color: var(--badge-fg);
 	font-size: 12px;
 	font-weight: 600;
 	line-height: 1;
@@ -1024,6 +1095,11 @@ a.button.primary {
 
 .status-changed {
 	color: var(--changed);
+}
+
+.status-selected {
+	color: var(--accent);
+	font-weight: 600;
 }
 
 .status-error {
@@ -2341,12 +2417,21 @@ a.button.primary {
 	color: var(--changed);
 }
 
+/* Rótulo de cada escolha do primeiro slide (idioma, tema). */
+.welcome-choice-label {
+	margin: 18px 0 8px;
+	color: var(--muted);
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
 /* Escolha de idioma (primeiro slide): uma opção por linha, cada nome no próprio idioma. */
 .welcome-languages {
 	display: grid;
 	gap: 8px;
 	width: min(360px, 100%);
-	margin-top: 20px;
 }
 
 .welcome-language {

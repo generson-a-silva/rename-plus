@@ -300,6 +300,7 @@ export const es: Messages = {
 	"status.developedBy": "Desarrollado por {author}",
 
 	// ---- Diseño ---------------------------------------------------------
+	"layout.treeSplitter": "Arrastra para redimensionar el árbol de carpetas",
 	"layout.panelsSplitter": "Arrastra para redimensionar (hasta la mitad del área)",
 
 	// ---- Opciones comunes de los paneles -------------------------------
@@ -581,10 +582,11 @@ export const es: Messages = {
 	"welcome.next": "Siguiente",
 	"welcome.finish": "Empezar",
 	"welcome.mediaAlt": "Animación que muestra: {feature}",
-	"welcome.language.title": "Elige el idioma",
-	"welcome.language.body": "Rename Plus y esta presentación se mostrarán en el idioma elegido.",
+	"welcome.language.title": "Idioma y tema",
+	"welcome.language.body": "Rename Plus y esta presentación siguen lo que elijas aquí.",
+	"welcome.language.label": "Idioma",
 	"welcome.language.hint":
-		"Puedes cambiarlo después con el botón de idioma, en la esquina inferior derecha de la ventana.",
+		"Puedes cambiarlos después: el idioma con el botón de la esquina inferior derecha, el tema en Configuración.",
 	"welcome.intro.title": "Renombra por lotes, sin sorpresas",
 	"welcome.intro.body":
 		"Combina reglas y mira el nuevo nombre de cada elemento antes de tocar el disco. En las siguientes diapositivas, descubre qué más hace la app.",

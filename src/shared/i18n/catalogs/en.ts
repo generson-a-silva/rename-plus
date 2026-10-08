@@ -296,6 +296,7 @@ export const en: Messages = {
 	"status.developedBy": "Developed by {author}",
 
 	// ---- Layout ---------------------------------------------------------
+	"layout.treeSplitter": "Drag to resize the folder tree",
 	"layout.panelsSplitter": "Drag to resize (up to half of the area)",
 
 	// ---- Common panel options ------------------------------------------
@@ -575,10 +576,11 @@ export const en: Messages = {
 	"welcome.next": "Next",
 	"welcome.finish": "Get started",
 	"welcome.mediaAlt": "Animation showing: {feature}",
-	"welcome.language.title": "Choose your language",
-	"welcome.language.body": "Rename Plus and this tour will be shown in the language you choose.",
+	"welcome.language.title": "Language and theme",
+	"welcome.language.body": "Rename Plus and this tour follow what you choose here.",
+	"welcome.language.label": "Language",
 	"welcome.language.hint":
-		"You can change it later with the language button in the bottom-right corner of the window.",
+		"You can change them later: the language with the button in the bottom-right corner, the theme in Settings.",
 	"welcome.intro.title": "Batch rename, no surprises",
 	"welcome.intro.body":
 		"Combine rules and see each item's new name before anything touches the disk. The next slides show what else the app can do.",

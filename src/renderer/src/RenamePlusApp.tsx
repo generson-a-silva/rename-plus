@@ -568,7 +568,13 @@ export function RenamePlusApp() {
 						onSelect={navigate}
 						onContextMenu={commands.openFolderMenu}
 					/>
-					<div className="splitter vertical" onPointerDown={startTreeResize} />
+					<div
+						className="splitter vertical"
+						title={t("layout.treeSplitter")}
+						onPointerDown={startTreeResize}
+					>
+						<span className="splitter-grip" />
+					</div>
 					<FileListView
 						entries={visibleEntries}
 						selection={selection}
@@ -590,7 +596,9 @@ export function RenamePlusApp() {
 					className="splitter horizontal"
 					title={t("layout.panelsSplitter")}
 					onPointerDown={startPanelsResize}
-				/>
+				>
+					<span className="splitter-grip" />
+				</div>
 				<RenameOptionsPanels
 					options={options}
 					onChange={changeOption}
@@ -641,6 +649,8 @@ export function RenamePlusApp() {
 			<WelcomeDialog
 				open={welcome !== null}
 				startAt={welcome ?? "start"}
+				theme={theme.mode}
+				onThemeChange={theme.setMode}
 				onClose={() => {
 					setWelcome(null);
 					setWelcomeSeen(true);

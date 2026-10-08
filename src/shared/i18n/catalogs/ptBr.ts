@@ -305,6 +305,7 @@ export const ptBr = {
 	"status.developedBy": "Desenvolvido por {author}",
 
 	// ---- Layout ---------------------------------------------------------
+	"layout.treeSplitter": "Arraste para redimensionar a árvore de pastas",
 	"layout.panelsSplitter": "Arraste para redimensionar (até metade da área)",
 
 	// ---- Opções comuns dos painéis -------------------------------------
@@ -584,10 +585,11 @@ export const ptBr = {
 	"welcome.next": "Próximo",
 	"welcome.finish": "Começar a usar",
 	"welcome.mediaAlt": "Animação mostrando: {feature}",
-	"welcome.language.title": "Escolha o idioma",
-	"welcome.language.body": "O Rename Plus e esta apresentação vão aparecer no idioma escolhido.",
+	"welcome.language.title": "Idioma e tema",
+	"welcome.language.body": "O Rename Plus e esta apresentação seguem o que você escolher aqui.",
+	"welcome.language.label": "Idioma",
 	"welcome.language.hint":
-		"Dá para trocar depois no botão de idioma, no canto inferior direito da janela.",
+		"Dá para trocar depois: o idioma no botão do canto inferior direito, o tema em Configurações.",
 	"welcome.intro.title": "Renomeie em lote, sem surpresas",
 	"welcome.intro.body":
 		"Combine regras e veja o novo nome de cada item antes de tocar no disco. Nos próximos slides, conheça o que mais o app faz.",

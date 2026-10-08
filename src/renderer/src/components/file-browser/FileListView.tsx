@@ -203,7 +203,7 @@ export function FileListView(props: FileListViewProps) {
 		rows.push(
 			<div
 				key={entry.path}
-				className={`file-row ${isSelected ? "selected" : ""} ${status}${entry.hidden ? " hidden-item" : ""}`}
+				className={`file-row ${isSelected ? "selected" : ""} ${status}${index % 2 ? " odd" : ""}${entry.hidden ? " hidden-item" : ""}`}
 				style={{ top: index * ROW_HEIGHT, gridTemplateColumns: template }}
 				role="option"
 				tabIndex={-1}

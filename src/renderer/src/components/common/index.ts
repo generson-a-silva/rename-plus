@@ -4,3 +4,4 @@ export { LanguageMenuButton } from "./LanguageMenuButton";
 export { OptionPanel } from "./OptionPanel";
 export { PresetSelect } from "./PresetSelect";
 export { TextPromptDialog } from "./TextPromptDialog";
+export { ThemeModeSelector } from "./ThemeModeSelector";

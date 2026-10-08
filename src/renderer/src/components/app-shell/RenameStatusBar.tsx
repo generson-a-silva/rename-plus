@@ -53,7 +53,9 @@ export function RenameStatusBar({
 	return (
 		<footer className="status-bar">
 			<span>{t("status.items", { count: total })}</span>
-			<span>{t("status.selected", { count: selected })}</span>
+			<span className={selected ? "status-selected" : undefined}>
+				{t("status.selected", { count: selected })}
+			</span>
 			<span className={changed ? "status-changed" : undefined}>
 				{t("status.willRename", { count: changed })}
 			</span>
