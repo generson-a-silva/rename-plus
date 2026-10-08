@@ -622,9 +622,9 @@ export function RenamePlusApp() {
 						presets: presets.presets,
 						options,
 						onApplyPreset: (preset) => setOptions(structuredClone(preset.options)),
+						onSavePreset: () => void savePreset(),
 						onDeletePreset: (preset) => void deletePreset(preset),
 					}}
-					onSavePreset={() => void savePreset()}
 				/>
 			</div>
 

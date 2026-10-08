@@ -108,7 +108,7 @@ Las capturas muestran la interfaz en español. La aplicación también está dis
     </td>
     <td width="50%" valign="top">
       <a href="docs/screenshots/es-ES/presets.png"><img src="docs/screenshots/es-ES/presets.png" alt="Diálogo 'Guardar preset' con el nombre 'Fotos de familia'; detrás, las fotos de la carpeta Familia con nuevos nombres como '2023-12-03 Familia 02.jpg' y la lista de presets junto al selector de idioma"></a>
-      <p><b>Presets.</b> El botón de guardar, en la esquina de los paneles, guarda la combinación actual de reglas (aquí, Nombre fijo, Fecha automática y Numeración) con un nombre. Después basta con elegirlo en la lista junto al idioma o en las reglas de las carpetas vigiladas.</p>
+      <p><b>Presets.</b> El botón de guardar, junto a la lista de presets, guarda la combinación actual de reglas (aquí, Nombre fijo, Fecha automática y Numeración) con un nombre. Después basta con elegirlo en la lista junto al idioma o en las reglas de las carpetas vigiladas.</p>
     </td>
   </tr>
 </table>
@@ -143,7 +143,7 @@ Si usas Windows y necesitas funciones avanzadas como metadatos EXIF/ID3, scripts
 | **Extensión** | Mantener, minúsculas, MAYÚSCULAS, Título, quitar, cambiar por una fija o añadir una extra. |
 | **Filtros** | Máscara de nombres (`*.jpg; *.png`), archivos y/o carpetas, elementos ocultos y contenido de las subcarpetas (modo recursivo). Está en la columna de acciones. |
 
-**Presets:** el botón de guardar, en la esquina superior derecha de los paneles, guarda las reglas actuales con un nombre. Para aplicarlas de nuevo, elige el preset en la lista junto al selector de idioma, que también permite eliminarlo. Las reglas de las carpetas vigiladas tienen la misma lista.
+**Presets:** el botón de guardar, junto a la lista de presets (al lado del selector de idioma), guarda las reglas actuales con un nombre. Para aplicarlas de nuevo, elige el preset en esa lista; el botón de la papelera de al lado elimina el elegido. Las reglas de las carpetas vigiladas tienen la misma lista.
 
 ### Constructor visual de RegEx
 

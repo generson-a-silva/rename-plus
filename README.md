@@ -108,7 +108,7 @@ The screenshots show the English interface. The app is also available in Portugu
     </td>
     <td width="50%" valign="top">
       <a href="docs/screenshots/presets.png"><img src="docs/screenshots/presets.png" alt="'Save preset' dialog with the name 'Family photos'; behind it, the photos in the Family folder with new names such as '2023-12-03 Family 02.jpg' and the preset list next to the language selector"></a>
-      <p><b>Presets.</b> The save button in the corner of the panels stores the current combination of rules (here, fixed Name, Auto date and Numbering) under a name. Pick it again from the list next to the language selector or in a watch folder rule.</p>
+      <p><b>Presets.</b> The save button next to the presets list stores the current combination of rules (here, fixed Name, Auto date and Numbering) under a name. Pick it again from the list next to the language selector or in a watch folder rule.</p>
     </td>
   </tr>
 </table>
@@ -143,7 +143,7 @@ If you're on Windows and need advanced features such as EXIF/ID3 metadata, JavaS
 | **Extension** | Keep, lowercase, UPPERCASE, Title, remove, replace with a fixed one or append an extra one. |
 | **Filters** | Name mask (`*.jpg; *.png`), files and/or folders, hidden items and subfolder contents (recursive mode). Sits in the actions column. |
 
-**Presets:** the save button in the top-right corner of the panels stores the current rules under a name. To apply them again, pick the preset from the list next to the language selector, where you can also delete it. Watch folder rules have the same list.
+**Presets:** the save button next to the presets list (by the language selector) stores the current rules under a name. To apply them again, pick the preset from that list; the trash button next to it deletes the selected one. Watch folder rules have the same list.
 
 ### Visual RegEx builder
 

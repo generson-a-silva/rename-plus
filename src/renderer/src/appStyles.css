@@ -628,12 +628,13 @@ button.header-cell:hover {
 
 .rename-options {
 	display: grid;
-	grid-template-columns: minmax(0, 1fr) clamp(200px, 22%, 260px);
+	/* Largura suficiente para lista de presets + salvar + excluir + idioma numa linha. */
+	grid-template-columns: minmax(0, 1fr) clamp(280px, 25%, 320px);
 	min-height: 0;
 	background: var(--bg);
 }
 
-/* Envolve os painéis roláveis e o botão fixo de salvar preset. */
+/* Envolve os painéis roláveis. */
 .panels-area {
 	position: relative;
 	display: grid;
@@ -655,36 +656,10 @@ button.header-cell:hover {
 	min-height: 0;
 	padding: 8px;
 	overflow: auto;
-	/* Reserva sempre a barra de rolagem: o botão de salvar preset não muda de lugar. */
+	/* Reserva sempre a barra de rolagem: os painéis não mudam de largura ao aparecer. */
 	scrollbar-gutter: stable;
 	/* Permite adaptar os painéis largos à largura disponível (ver @container abaixo). */
 	container-type: inline-size;
-}
-
-/*
- * Salvar preset: no canto superior direito da área dos painéis, ao lado das ações,
- * na altura dos badges de título (apoiado sobre a borda do painel do canto).
- */
-.preset-save {
-	position: absolute;
-	/* 8px do padding de .panels; à direita, mais os 10px da barra de rolagem. */
-	top: 8px;
-	right: 26px;
-	display: grid;
-	place-items: center;
-	width: 22px;
-	height: 22px;
-	padding: 0;
-	border: 1px solid var(--border);
-	border-radius: 999px;
-	background: var(--surface-2);
-	color: var(--muted);
-	cursor: pointer;
-}
-
-.preset-save:hover {
-	border-color: var(--accent);
-	color: var(--fg);
 }
 
 .rename-actions {

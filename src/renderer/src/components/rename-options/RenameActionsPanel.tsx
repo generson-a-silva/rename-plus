@@ -15,6 +15,8 @@ export interface RenameActionsPanelProps {
 	/** Opções aplicadas agora (o preset igual a elas aparece selecionado). */
 	options: RenameOptions;
 	onApplyPreset: (preset: RenamePreset) => void;
+	/** Salva as opções atuais como preset (pede o nome). */
+	onSavePreset: () => void;
 	onDeletePreset: (preset: RenamePreset) => void;
 }
 
@@ -33,6 +35,7 @@ export function RenameActionsPanel({
 	presets,
 	options,
 	onApplyPreset,
+	onSavePreset,
 	onDeletePreset,
 }: RenameActionsPanelProps) {
 	const { t } = useI18n();
@@ -64,10 +67,19 @@ export function RenameActionsPanel({
 					{t("actions.reset")}
 				</button>
 			</div>
-			{/* Rodapé: presets à esquerda e seletor de idioma no canto inferior direito. */}
+			{/* Rodapé: presets (lista, salvar, excluir) à esquerda e idioma no canto inferior direito. */}
 			<div className="actions-footer">
 				<div className="preset-row">
 					<PresetSelect presets={presets} options={options} onSelect={onApplyPreset} />
+					<button
+						type="button"
+						className="button icon-only preset-save"
+						title={t("presets.save")}
+						aria-label={t("presets.save")}
+						onClick={onSavePreset}
+					>
+						<AppIcon name="save" size={14} />
+					</button>
 					<button
 						type="button"
 						className="button icon-only danger"
