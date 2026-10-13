@@ -1,4 +1,5 @@
 import type { Stats } from "node:fs";
+import fsSync from "node:fs";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -75,6 +76,7 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
+	vi.restoreAllMocks();
 	service.stopWatchFolders();
 	await fs.rm(root, { recursive: true, force: true });
 });
@@ -229,5 +231,75 @@ describe("contagem salva em disco", () => {
 		settings.set("watch-counters.json", JSON.stringify([5]));
 		await start();
 		expect(service.getWatchFoldersInfo().counters).toEqual({});
+	});
+});
+
+describe("pasta monitorada que some ou é trocada", () => {
+	let folder: string;
+	const status = () => service.getWatchFoldersInfo().statuses.r1?.state;
+
+	beforeEach(async () => {
+		folder = path.join(root, "entrada");
+		await fs.mkdir(folder);
+	});
+
+	it("avisa o erro quando a pasta é apagada e volta a monitorar quando ela reaparece", async () => {
+		service.setWatchRules([numberedRule({ folder })]);
+		await fs.rm(folder, { recursive: true });
+		service.checkWatchedFolders();
+		expect(status()).toBe("error");
+		// Esperando a pasta voltar, a regra ainda conta para o app continuar em segundo plano.
+		expect(service.activeWatchCount()).toBe(1);
+
+		await fs.mkdir(folder);
+		service.checkWatchedFolders();
+		expect(status()).toBe("watching");
+		await arrive("entrada/a.txt");
+		expect(await list(folder)).toEqual(["1_a.txt"]);
+	});
+
+	it("troca o observador quando outra pasta toma o lugar no mesmo caminho", async () => {
+		const watch = vi.spyOn(fsSync, "watch");
+		service.setWatchRules([numberedRule({ folder })]);
+		expect(watch).toHaveBeenCalledTimes(1);
+
+		await fs.rename(folder, path.join(root, "antiga"));
+		await fs.mkdir(folder);
+		service.checkWatchedFolders();
+
+		expect(watch).toHaveBeenCalledTimes(2);
+		expect(status()).toBe("watching");
+	});
+
+	it("mantém o observador enquanto a pasta é a mesma", async () => {
+		const watch = vi.spyOn(fsSync, "watch");
+		service.setWatchRules([numberedRule({ folder })]);
+		await arrive("entrada/a.txt");
+		service.checkWatchedFolders();
+		service.checkWatchedFolders();
+
+		expect(watch).toHaveBeenCalledTimes(1);
+		expect(status()).toBe("watching");
+	});
+
+	it("passa a monitorar a pasta que não existia quando a regra foi salva", async () => {
+		const later = path.join(root, "depois");
+		service.setWatchRules([numberedRule({ folder: later })]);
+		expect(status()).toBe("error");
+
+		await fs.mkdir(later);
+		service.checkWatchedFolders();
+		expect(status()).toBe("watching");
+	});
+
+	it("não conta regras desativadas nem incompletas como ativas", () => {
+		service.setWatchRules([
+			numberedRule({ folder, enabled: false }),
+			numberedRule({ id: "r2", folder: "" }),
+		]);
+		service.checkWatchedFolders();
+
+		expect(service.activeWatchCount()).toBe(0);
+		expect(service.getWatchFoldersInfo().statuses.r2?.state).toBe("incomplete");
 	});
 });

@@ -66,6 +66,8 @@ import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } f
 /** Altura mínima da área de filtros e fração máxima da área de trabalho que ela pode ocupar. */
 const MIN_PANELS_HEIGHT = 120;
 const MAX_PANELS_FRACTION = 0.5;
+/** Por quanto tempo o aviso de preset salvo fica na barra de status. */
+const PRESET_SAVED_NOTICE_MS = 4_000;
 
 /** Sistema em que o app roda: define regras de nome e comparação de caminhos na pré-visualização. */
 const PREVIEW_CONTEXT = { platform: window.api.platform };
@@ -90,7 +92,8 @@ export function RenamePlusApp() {
 	const [home, setHome] = useState<string | null>(null);
 	const [appInfo, setAppInfo] = useState<AppInfo | null>(null);
 	const [currentDir, setCurrentDir] = usePersistentState<string>("lastDir", "");
-	const [filters, setFilters] = usePersistentState<ListFilters>("filters", DEFAULT_FILTERS);
+	// Os filtros não valem entre sessões: o app sempre abre só com arquivos e máscara "*".
+	const [filters, setFilters] = useState<ListFilters>(DEFAULT_FILTERS);
 	const [options, setOptions] = usePersistentState<RenameOptions>(
 		"options",
 		createDefaultOptions(),
@@ -238,7 +241,7 @@ export function RenamePlusApp() {
 			await navigate(parent);
 			setSelection(new Set(selected));
 		},
-		[filters.folders, filters.hidden, navigate, setFilters, t],
+		[filters.folders, filters.hidden, navigate, t],
 	);
 
 	const openDroppedPaths = useCallback((paths: string[]) => openPaths(paths, "open"), [openPaths]);
@@ -276,7 +279,7 @@ export function RenamePlusApp() {
 
 	const toggleHidden = useCallback(
 		() => setFilters((prev) => ({ ...prev, hidden: !prev.hidden })),
-		[setFilters],
+		[],
 	);
 
 	// --- Lista visível e pré-visualização ------------------------------------
@@ -431,7 +434,16 @@ export function RenamePlusApp() {
 			if (!confirmed) return;
 		}
 		presets.save(name, options);
-		setMessage({ kind: "success", text: t("presets.saved", { name: name.trim() }) });
+		const saved: StatusMessage = {
+			kind: "success",
+			text: t("presets.saved", { name: name.trim() }),
+		};
+		setMessage(saved);
+		// O aviso some sozinho, a menos que outra mensagem já tenha tomado o lugar.
+		window.setTimeout(
+			() => setMessage((current) => (current === saved ? null : current)),
+			PRESET_SAVED_NOTICE_MS,
+		);
 	}, [prompt.ask, presets, options, t]);
 
 	const deletePreset = useCallback(

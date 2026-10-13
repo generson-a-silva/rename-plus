@@ -151,7 +151,7 @@ If you're on Windows and need advanced features such as EXIF/ID3 metadata, JavaS
 | **Folder name** | Adds the name of one or more parent folders. |
 | **Numbering** | Prefix, suffix, both or at a position; start, step, zero padding; `1, 2, 3`, `a, b, c`, `A, B, C` and `I, II, III` styles; restart in each folder. |
 | **Extension** | Keep, lowercase, UPPERCASE, Title, remove, replace with a fixed one or append an extra one. |
-| **Filters** | Name mask (`*.jpg; *.png`), files and/or folders, hidden items and subfolder contents (recursive mode). Sits in the actions column. |
+| **Filters** | Name mask (`*.jpg; *.png`), files and/or folders, hidden items and subfolder contents (recursive mode). Sits in the actions column and always opens with the defaults (files only, mask `*`). |
 
 **Presets:** the save button next to the presets list (by the language selector) stores the current rules under a name. To apply them again, pick the preset from that list; the trash button next to it deletes the selected one. Watch folder rules have the same list.
 
@@ -326,7 +326,7 @@ The renaming engine (`src/shared/rename`) is plain TypeScript with no Electron d
 
 ## Where settings are stored
 
-Theme, language, rules, presets, filters, sorting, column widths and the last folder opened are saved in the app's data folder (watch folders in `watch-folders.json`, their numbering count in `watch-counters.json`, background mode in `background.json` and update preferences in `updates.json`):
+Theme, language, rules, presets, sorting, column widths and the last folder opened are saved in the app's data folder (watch folders in `watch-folders.json`, their numbering count in `watch-counters.json`, background mode in `background.json` and update preferences in `updates.json`):
 
 - **Linux:** `~/.config/rename-plus/`
 - **Windows:** `%APPDATA%\rename-plus\`

@@ -151,7 +151,7 @@ Si usas Windows y necesitas funciones avanzadas como metadatos EXIF/ID3, scripts
 | **Nombre de la carpeta** | Añade el nombre de una o más carpetas superiores. |
 | **Numeración** | Prefijo, sufijo, ambos o en una posición; inicio, incremento, ceros a la izquierda; estilos `1, 2, 3`, `a, b, c`, `A, B, C` e `I, II, III`; reinicio por carpeta. |
 | **Extensión** | Mantener, minúsculas, MAYÚSCULAS, Título, quitar, cambiar por una fija o añadir una extra. |
-| **Filtros** | Máscara de nombres (`*.jpg; *.png`), archivos y/o carpetas, elementos ocultos y contenido de las subcarpetas (modo recursivo). Está en la columna de acciones. |
+| **Filtros** | Máscara de nombres (`*.jpg; *.png`), archivos y/o carpetas, elementos ocultos y contenido de las subcarpetas (modo recursivo). Está en la columna de acciones y siempre se abre con los valores por defecto (solo archivos, máscara `*`). |
 
 **Presets:** el botón de guardar, junto a la lista de presets (al lado del selector de idioma), guarda las reglas actuales con un nombre. Para aplicarlas de nuevo, elige el preset en esa lista; el botón de la papelera de al lado elimina el elegido. Las reglas de las carpetas vigiladas tienen la misma lista.
 
@@ -326,7 +326,7 @@ El motor de renombrado (`src/shared/rename`) es TypeScript puro, sin dependencia
 
 ## Dónde se guarda la configuración
 
-El tema, el idioma, las reglas, los presets, los filtros, la ordenación, los anchos y la última carpeta abierta se guardan en la carpeta de datos de la aplicación (las carpetas vigiladas en `watch-folders.json`, el conteo de su numeración en `watch-counters.json`, el modo en segundo plano en `background.json` y las preferencias de actualización en `updates.json`):
+El tema, el idioma, las reglas, los presets, la ordenación, los anchos y la última carpeta abierta se guardan en la carpeta de datos de la aplicación (las carpetas vigiladas en `watch-folders.json`, el conteo de su numeración en `watch-counters.json`, el modo en segundo plano en `background.json` y las preferencias de actualización en `updates.json`):
 
 - **Linux:** `~/.config/rename-plus/`
 - **Windows:** `%APPDATA%\rename-plus\`

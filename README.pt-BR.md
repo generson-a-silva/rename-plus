@@ -151,7 +151,7 @@ Se você usa Windows e precisa de recursos avançados como metadados EXIF/ID3, s
 | **Nome da pasta** | Acrescenta o nome de uma ou mais pastas ancestrais. |
 | **Numeração** | Prefixo, sufixo, ambos ou em uma posição; início, incremento, zeros à esquerda; estilos `1, 2, 3`, `a, b, c`, `A, B, C` e `I, II, III`; reinício por pasta. |
 | **Extensão** | Manter, minúsculas, MAIÚSCULAS, Título, remover, trocar por uma fixa ou acrescentar uma extra. |
-| **Filtros** | Máscara de nomes (`*.jpg; *.png`), arquivos e/ou pastas, itens ocultos e conteúdo das subpastas (modo recursivo). Fica na coluna das ações. |
+| **Filtros** | Máscara de nomes (`*.jpg; *.png`), arquivos e/ou pastas, itens ocultos e conteúdo das subpastas (modo recursivo). Fica na coluna das ações e sempre abre no padrão (só arquivos, máscara `*`). |
 
 **Seus Filtros:** o botão de salvar, ao lado da lista **Seus Filtros** (junto do seletor de idioma), guarda as regras atuais com um nome. Para aplicar de novo, basta escolher o nome nessa lista; o botão da lixeira ao lado exclui o escolhido. As regras das pastas monitoradas têm a mesma lista.
 
@@ -326,7 +326,7 @@ O motor de renomeação (`src/shared/rename`) é TypeScript puro, sem dependênc
 
 ## Onde ficam as preferências
 
-Tema, idioma, regras, Seus Filtros, filtros, ordenação, larguras e última pasta aberta ficam salvos na pasta de dados do app (as pastas monitoradas em `watch-folders.json`, a contagem da numeração delas em `watch-counters.json`, o modo em segundo plano em `background.json` e as preferências de atualização em `updates.json`):
+Tema, idioma, regras, Seus Filtros, ordenação, larguras e última pasta aberta ficam salvos na pasta de dados do app (as pastas monitoradas em `watch-folders.json`, a contagem da numeração delas em `watch-counters.json`, o modo em segundo plano em `background.json` e as preferências de atualização em `updates.json`):
 
 - **Linux:** `~/.config/rename-plus/`
 - **Windows:** `%APPDATA%\rename-plus\`

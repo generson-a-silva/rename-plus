@@ -37,11 +37,16 @@ const RETRY_DELAY_MS = 1_000;
 /** Por quanto tempo os eventos dos arquivos gerados pelas próprias regras são ignorados. */
 const PRODUCED_TTL_MS = 15_000;
 const MAX_ACTIVITY = 100;
+/** Intervalo da conferência das pastas: percebe a que sumiu, foi trocada ou voltou. */
+const FOLDER_CHECK_MS = 5_000;
 
 const platformPaths = getPlatformPaths(process.platform);
 
 let rules: WatchRule[] = [];
 const watchers = new Map<string, fs.FSWatcher>();
+/** Identidade (disco e inode) da pasta que cada observador acompanha, por regra. */
+const watchedFolders = new Map<string, { dev: number; ino: number }>();
+let folderCheckTimer: ReturnType<typeof setInterval> | undefined;
 const statuses: Record<string, WatchRuleStatus> = {};
 /** Arquivos já processados por regra (posição usada pela numeração); salvo em disco. */
 const counters = new Map<string, number>();
@@ -66,9 +71,15 @@ export function getWatchFoldersInfo(): WatchFoldersInfo {
 	return { rules, statuses: { ...statuses }, counters: Object.fromEntries(counters), activity };
 }
 
-/** Quantas regras estão de fato monitorando uma pasta agora. */
+/**
+ * Quantas regras estão monitorando ou esperando a pasta voltar (apagada, disco
+ * desconectado): nos dois casos o app tem o que fazer em segundo plano.
+ */
 export function activeWatchCount(): number {
-	return watchers.size;
+	return rules.filter((rule) => {
+		const state = statuses[rule.id]?.state;
+		return state === "watching" || state === "error";
+	}).length;
 }
 
 const watchingListeners = new Set<(count: number) => void>();
@@ -81,7 +92,7 @@ export function onWatchingChanged(listener: (count: number) => void): () => void
 
 function notifyChanged(): void {
 	broadcast(IpcChannel.WatchFoldersChanged, getWatchFoldersInfo());
-	for (const listener of watchingListeners) listener(watchers.size);
+	for (const listener of watchingListeners) listener(activeWatchCount());
 }
 
 const ruleLabel = (rule: WatchRule) =>
@@ -255,8 +266,11 @@ function onFolderEvent(folder: string, filename: string | Buffer | null): void {
 }
 
 function stopAll(): void {
+	clearInterval(folderCheckTimer);
+	folderCheckTimer = undefined;
 	for (const watcher of watchers.values()) watcher.close();
 	watchers.clear();
+	watchedFolders.clear();
 	for (const item of pending.values()) clearTimeout(item.timer);
 	pending.clear();
 	for (const key of Object.keys(statuses)) delete statuses[key];
@@ -268,33 +282,87 @@ function startRule(rule: WatchRule): WatchRuleStatus {
 	if (problem) return { state: "incomplete", problem };
 
 	const { folder } = rule;
+	let stats: fs.Stats;
 	try {
-		if (!fs.statSync(folder).isDirectory())
-			return { state: "error", error: tMain("watch.notAFolder") };
+		stats = fs.statSync(folder);
+		if (!stats.isDirectory()) return { state: "error", error: tMain("watch.notAFolder") };
 	} catch (error) {
 		return { state: "error", error: describeFileSystemError(error) };
 	}
 	try {
-		const watcher = fs.watch(folder, { persistent: true }, (_event, filename) =>
-			onFolderEvent(folder, filename),
-		);
+		const ownName = path.basename(folder);
+		const watcher = fs.watch(folder, { persistent: true }, (event, filename) => {
+			onFolderEvent(folder, filename);
+			// Linux: apagar ou mover a própria pasta chega como um evento com o nome dela, e o
+			// observador fica preso à pasta antiga sem avisar erro.
+			if (event === "rename" && filename?.toString() === ownName) restartRule(rule, watcher);
+		});
 		watcher.on("error", (error) => {
-			// Ex.: a pasta foi apagada ou o disco foi desconectado.
+			// Ex.: a pasta foi apagada ou o disco foi desconectado (Windows).
+			if (watchers.get(rule.id) !== watcher) return;
 			watcher.close();
 			watchers.delete(rule.id);
+			watchedFolders.delete(rule.id);
 			statuses[rule.id] = { state: "error", error: describeFileSystemError(error) };
 			notifyChanged();
 		});
 		watchers.set(rule.id, watcher);
+		watchedFolders.set(rule.id, { dev: stats.dev, ino: stats.ino });
 		return { state: "watching" };
 	} catch (error) {
 		return { state: "error", error: describeFileSystemError(error) };
 	}
 }
 
+/** Troca o observador da regra por um novo; devolve se a situação dela mudou. */
+function restartRule(rule: WatchRule, current?: fs.FSWatcher): boolean {
+	const watcher = watchers.get(rule.id);
+	// Um evento atrasado de um observador já substituído não mexe no atual.
+	if (current && watcher !== current) return false;
+	watcher?.close();
+	watchers.delete(rule.id);
+	watchedFolders.delete(rule.id);
+	const before = JSON.stringify(statuses[rule.id]);
+	statuses[rule.id] = startRule(rule);
+	const changed = JSON.stringify(statuses[rule.id]) !== before;
+	if (current && changed) notifyChanged();
+	return changed;
+}
+
+/** O caminho da regra ainda leva à mesma pasta que o observador acompanha. */
+function watchesCurrentFolder(rule: WatchRule): boolean {
+	const watched = watchedFolders.get(rule.id);
+	try {
+		const stats = fs.statSync(rule.folder);
+		return watched?.dev === stats.dev && watched.ino === stats.ino;
+	} catch {
+		return false;
+	}
+}
+
+/**
+ * Confere as pastas das regras: reinicia o observador da que sumiu ou foi trocada por
+ * outra no mesmo caminho e tenta de novo as que estavam com erro (pasta recriada, disco
+ * reconectado). Roda a cada `FOLDER_CHECK_MS`.
+ */
+export function checkWatchedFolders(): void {
+	let changed = false;
+	for (const rule of rules) {
+		const stale = watchers.has(rule.id)
+			? !watchesCurrentFolder(rule)
+			: statuses[rule.id]?.state === "error";
+		if (stale && restartRule(rule)) changed = true;
+	}
+	if (changed) notifyChanged();
+}
+
 function applyRules(): void {
 	stopAll();
 	for (const rule of rules) statuses[rule.id] = startRule(rule);
+	if (activeWatchCount() > 0) {
+		folderCheckTimer = setInterval(checkWatchedFolders, FOLDER_CHECK_MS);
+		folderCheckTimer.unref();
+	}
 	const ids = new Set(rules.map((rule) => rule.id));
 	for (const id of counters.keys()) if (!ids.has(id)) counters.delete(id);
 	for (const id of restarts.keys()) if (!ids.has(id)) restarts.delete(id);
