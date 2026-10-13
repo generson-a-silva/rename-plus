@@ -50,9 +50,14 @@ export function findMatchingPreset(
 	return presets.find((preset) => JSON.stringify(preset.options) === target);
 }
 
+/** As regras de agora diferem das guardadas no preset (ele pode ser atualizado). */
+export function isPresetModified(preset: RenamePreset, options: RenameOptions): boolean {
+	return JSON.stringify(preset.options) !== JSON.stringify(options);
+}
+
 /**
- * Salva `options` com o nome dado: substitui o preset de mesmo nome (sem diferenciar
- * maiúsculas) ou adiciona um novo com `newId`. A lista fica em ordem alfabética.
+ * Salva `options` com o nome dado: substitui, no mesmo lugar, o preset de mesmo nome
+ * (sem diferenciar maiúsculas) ou adiciona um novo com `newId` no fim da lista.
  */
 export function upsertPreset(
 	presets: readonly RenamePreset[],
@@ -66,7 +71,43 @@ export function upsertPreset(
 		name: name.trim(),
 		options: structuredClone(options),
 	};
-	return [...presets.filter((preset) => preset !== existing), saved].sort((a, b) =>
-		a.name.localeCompare(b.name, undefined, { sensitivity: "base", numeric: true }),
+	return existing
+		? presets.map((preset) => (preset === existing ? saved : preset))
+		: [...presets, saved];
+}
+
+/** Troca o nome do preset; nomes vazios são ignorados. */
+export function renamePreset(
+	presets: readonly RenamePreset[],
+	id: string,
+	name: string,
+): RenamePreset[] {
+	const trimmed = name.trim();
+	if (!trimmed) return [...presets];
+	return presets.map((preset) => (preset.id === id ? { ...preset, name: trimmed } : preset));
+}
+
+/** Guarda uma cópia de `options` no preset, mantendo nome e posição. */
+export function updatePresetOptions(
+	presets: readonly RenamePreset[],
+	id: string,
+	options: RenameOptions,
+): RenamePreset[] {
+	return presets.map((preset) =>
+		preset.id === id ? { ...preset, options: structuredClone(options) } : preset,
 	);
+}
+
+/** Move o preset `offset` posições na lista (-1 sobe, 1 desce), sem passar das pontas. */
+export function movePreset(
+	presets: readonly RenamePreset[],
+	id: string,
+	offset: number,
+): RenamePreset[] {
+	const from = presets.findIndex((preset) => preset.id === id);
+	const preset = presets[from];
+	if (!preset) return [...presets];
+	const to = Math.max(0, Math.min(presets.length - 1, from + offset));
+	const rest = presets.filter((item) => item !== preset);
+	return [...rest.slice(0, to), preset, ...rest.slice(to)];
 }

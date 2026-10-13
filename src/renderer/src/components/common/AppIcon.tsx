@@ -5,6 +5,8 @@ const PATHS = {
 	home: "M3 11l9-7 9 7M5 10v10h5v-6h4v6h5V10",
 	drive: "M3 13h18M5 13l2-7h10l2 7v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1zM16 16h.01",
 	up: "M12 19V5M5 12l7-7 7 7",
+	down: "M12 5v14M5 12l7 7 7-7",
+	edit: "M4 17l9-9 3 3-9 9H4zM12 9l3 3M4 21h16",
 	refresh: "M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7",
 	open: "M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v1M3 7v10a2 2 0 0 0 2 2h12l4-8H8l-3 8",
 	undo: "M9 14L4 9l5-5M4 9h11a5 5 0 0 1 0 10h-3",

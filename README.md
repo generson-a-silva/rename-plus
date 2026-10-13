@@ -153,7 +153,7 @@ If you're on Windows and need advanced features such as EXIF/ID3 metadata, JavaS
 | **Extension** | Keep, lowercase, UPPERCASE, Title, remove, replace with a fixed one or append an extra one. |
 | **Filters** | Name mask (`*.jpg; *.png`), files and/or folders, hidden items and subfolder contents (recursive mode). Sits in the actions column and always opens with the defaults (files only, mask `*`). |
 
-**Presets:** the save button next to the presets list (by the language selector) stores the current rules under a name. To apply them again, pick the preset from that list; the trash button next to it deletes the selected one. Watch folder rules have the same list.
+**Presets:** the save button next to the presets list (by the language selector) stores the current rules under a name. To apply them again, pick the preset from that list; **None** goes back to the rules you had before picking one. The update button stores your rule changes in the selected preset, and the edit button opens the list to rename, delete and reorder presets. Watch folder rules have the same list.
 
 ### Visual RegEx builder
 

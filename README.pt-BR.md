@@ -153,7 +153,7 @@ Se você usa Windows e precisa de recursos avançados como metadados EXIF/ID3, s
 | **Extensão** | Manter, minúsculas, MAIÚSCULAS, Título, remover, trocar por uma fixa ou acrescentar uma extra. |
 | **Filtros** | Máscara de nomes (`*.jpg; *.png`), arquivos e/ou pastas, itens ocultos e conteúdo das subpastas (modo recursivo). Fica na coluna das ações e sempre abre no padrão (só arquivos, máscara `*`). |
 
-**Seus Filtros:** o botão de salvar, ao lado da lista **Seus Filtros** (junto do seletor de idioma), guarda as regras atuais com um nome. Para aplicar de novo, basta escolher o nome nessa lista; o botão da lixeira ao lado exclui o escolhido. As regras das pastas monitoradas têm a mesma lista.
+**Seus Filtros:** o botão de salvar, ao lado da lista **Seus Filtros** (junto do seletor de idioma), guarda as regras atuais com um nome. Para aplicar de novo, basta escolher o nome nessa lista; **Nenhum** volta às regras que você tinha antes de escolher. O botão de atualizar guarda no filtro escolhido as mudanças feitas nas regras, e o de editar abre a lista para renomear, excluir e reordenar. As regras das pastas monitoradas têm a mesma lista.
 
 ### Construtor visual de RegEx
 

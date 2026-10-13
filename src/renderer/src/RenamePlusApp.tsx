@@ -3,6 +3,7 @@ import {
 	FileListView,
 	FolderTreeView,
 	NavigationToolbar,
+	PresetManagerDialog,
 	RenameOptionsPanels,
 	RenameStatusBar,
 	SettingsDialog,
@@ -37,6 +38,7 @@ import {
 	expandHomeShortcut,
 	findMatchingPreset,
 	findPresetByName,
+	isPresetModified,
 	joinPath,
 	type ListFilters,
 	parentPath,
@@ -66,8 +68,8 @@ import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } f
 /** Altura mínima da área de filtros e fração máxima da área de trabalho que ela pode ocupar. */
 const MIN_PANELS_HEIGHT = 120;
 const MAX_PANELS_FRACTION = 0.5;
-/** Por quanto tempo o aviso de preset salvo fica na barra de status. */
-const PRESET_SAVED_NOTICE_MS = 4_000;
+/** Por quanto tempo os avisos de preset salvo/atualizado ficam na barra de status. */
+const PRESET_NOTICE_MS = 4_000;
 
 /** Sistema em que o app roda: define regras de nome e comparação de caminhos na pré-visualização. */
 const PREVIEW_CONTEXT = { platform: window.api.platform };
@@ -411,6 +413,48 @@ export function RenamePlusApp() {
 	// --- Presets -------------------------------------------------------------
 	const prompt = useTextPrompt();
 	const presets = useRenamePresets();
+	const [presetsOpen, setPresetsOpen] = useState(false);
+	// Preset em uso e as regras que o usuário tinha antes de escolher um (para "Nenhum").
+	const [presetSession, setPresetSession] = usePersistentState("presetSession", {
+		activeId: "",
+		before: createDefaultOptions(),
+	});
+	const activePreset =
+		presets.presets.find((preset) => preset.id === presetSession.activeId) ?? null;
+
+	/** Aviso de sucesso que some sozinho, a menos que outra mensagem já tenha tomado o lugar. */
+	const flashMessage = useCallback((text: string) => {
+		const notice: StatusMessage = { kind: "success", text };
+		setMessage(notice);
+		window.setTimeout(
+			() => setMessage((current) => (current === notice ? null : current)),
+			PRESET_NOTICE_MS,
+		);
+	}, []);
+
+	const applyPreset = useCallback(
+		(preset: RenamePreset) => {
+			// Trocar de um preset para outro mantém as regras de antes do primeiro.
+			setPresetSession((session) => ({
+				activeId: preset.id,
+				before: activePreset ? session.before : options,
+			}));
+			setOptions(structuredClone(preset.options));
+		},
+		[activePreset, options, setOptions, setPresetSession],
+	);
+
+	const selectNoPreset = useCallback(() => {
+		if (!activePreset) return;
+		setOptions(structuredClone(presetSession.before));
+		setPresetSession((session) => ({ ...session, activeId: "" }));
+	}, [activePreset, presetSession.before, setOptions, setPresetSession]);
+
+	const updatePreset = useCallback(() => {
+		if (!activePreset) return;
+		presets.updateOptions(activePreset.id, options);
+		flashMessage(t("presets.updated", { name: activePreset.name }));
+	}, [activePreset, presets, options, flashMessage, t]);
 
 	const savePreset = useCallback(async () => {
 		const initialValue = findMatchingPreset(presets.presets, options)?.name ?? "";
@@ -433,18 +477,34 @@ export function RenamePlusApp() {
 			});
 			if (!confirmed) return;
 		}
-		presets.save(name, options);
-		const saved: StatusMessage = {
-			kind: "success",
-			text: t("presets.saved", { name: name.trim() }),
-		};
-		setMessage(saved);
-		// O aviso some sozinho, a menos que outra mensagem já tenha tomado o lugar.
-		window.setTimeout(
-			() => setMessage((current) => (current === saved ? null : current)),
-			PRESET_SAVED_NOTICE_MS,
-		);
-	}, [prompt.ask, presets, options, t]);
+		const id = presets.save(name, options);
+		// O preset salvo passa a ser o que está em uso.
+		setPresetSession((session) => ({
+			activeId: id,
+			before: activePreset ? session.before : options,
+		}));
+		flashMessage(t("presets.saved", { name: name.trim() }));
+	}, [prompt.ask, presets, options, activePreset, setPresetSession, flashMessage, t]);
+
+	const renamePreset = useCallback(
+		async (preset: RenamePreset) => {
+			const name = await prompt.ask({
+				title: t("presets.renameTitle"),
+				label: t("presets.name"),
+				initialValue: preset.name,
+				confirmLabel: t("presets.rename"),
+				requireChange: true,
+				validate: (value) => {
+					if (!value) return null;
+					if (!value.trim()) return t("presets.nameRequired");
+					const other = findPresetByName(presets.presets, value);
+					return other && other.id !== preset.id ? t("presets.nameTaken") : null;
+				},
+			});
+			if (name?.trim()) presets.rename(preset.id, name);
+		},
+		[prompt.ask, presets, t],
+	);
 
 	const deletePreset = useCallback(
 		async (preset: RenamePreset) => {
@@ -490,7 +550,7 @@ export function RenamePlusApp() {
 	});
 
 	const rootPaths = useMemo(() => roots.map((root) => root.path), [roots]);
-	const modalOpen = prompt.request !== null || settingsOpen || welcome !== null;
+	const modalOpen = prompt.request !== null || settingsOpen || presetsOpen || welcome !== null;
 	const draggingFiles = useFileDrop({
 		onDrop: openDroppedPaths,
 		enabled: !modalOpen,
@@ -625,12 +685,19 @@ export function RenamePlusApp() {
 						summary,
 						onRename: rename,
 						onUndo: undo,
-						onResetAll: () => setOptions(createDefaultOptions()),
+						onResetAll: () => {
+							setOptions(createDefaultOptions());
+							// Redefinir sai do preset: as regras padrão não são uma edição dele.
+							setPresetSession((session) => ({ ...session, activeId: "" }));
+						},
 						presets: presets.presets,
-						options,
-						onApplyPreset: (preset) => setOptions(structuredClone(preset.options)),
+						activePreset,
+						presetModified: activePreset !== null && isPresetModified(activePreset, options),
+						onApplyPreset: applyPreset,
+						onSelectNoPreset: selectNoPreset,
+						onUpdatePreset: updatePreset,
 						onSavePreset: () => void savePreset(),
-						onDeletePreset: (preset) => void deletePreset(preset),
+						onManagePresets: () => setPresetsOpen(true),
 					}}
 				/>
 			</div>
@@ -647,6 +714,15 @@ export function RenamePlusApp() {
 				onSupport={() => setWelcome("support")}
 				message={message}
 				update={updates.announced}
+			/>
+			<PresetManagerDialog
+				open={presetsOpen}
+				onClose={() => setPresetsOpen(false)}
+				presets={presets.presets}
+				activeId={activePreset?.id ?? ""}
+				onRename={(preset) => void renamePreset(preset)}
+				onDelete={(preset) => void deletePreset(preset)}
+				onMove={(preset, offset) => presets.move(preset.id, offset)}
 			/>
 			<TextPromptDialog request={prompt.request} onClose={prompt.close} />
 			<SettingsDialog

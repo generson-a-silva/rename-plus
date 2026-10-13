@@ -1,6 +1,6 @@
 import { AppIcon, CheckField, PresetSelect, TextField } from "@components/common";
 import { useI18n, useWatchFolders } from "@hooks";
-import { baseName, formatDateTime, joinPath, type RenamePreset } from "@lib";
+import { baseName, findMatchingPreset, formatDateTime, joinPath, type RenamePreset } from "@lib";
 import type { MessageKey } from "@shared/i18n";
 import type { WatchActivity, WatchRuleStatus } from "@shared/ipc";
 import { createDefaultOptions, type RenameOptions, type RenameSection } from "@shared/rename";
@@ -258,7 +258,7 @@ function RuleCard({
 						{/* Escolher um preset copia as opções dele para a regra. */}
 						<PresetSelect
 							presets={presets}
-							options={rule.rename}
+							selectedId={findMatchingPreset(presets, rule.rename)?.id ?? ""}
 							onSelect={(preset) => onChange({ rename: structuredClone(preset.options) })}
 						/>
 						<button

@@ -6,6 +6,7 @@ export { ExtensionOptionsPanel } from "./ExtensionOptionsPanel";
 export { ListFiltersPanel } from "./ListFiltersPanel";
 export { NameOptionsPanel } from "./NameOptionsPanel";
 export { NumberingOptionsPanel } from "./NumberingOptionsPanel";
+export { PresetManagerDialog } from "./PresetManagerDialog";
 export { RegexOptionsPanel } from "./RegexOptionsPanel";
 export { RemoveOptionsPanel } from "./RemoveOptionsPanel";
 export { RenameActionsPanel, type RenameActionsPanelProps } from "./RenameActionsPanel";

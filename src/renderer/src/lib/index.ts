@@ -26,8 +26,12 @@ export { diffNames, type NameDiffSegment } from "./nameDiff";
 export {
 	findMatchingPreset,
 	findPresetByName,
+	isPresetModified,
+	movePreset,
 	type RenamePreset,
+	renamePreset,
 	sanitizePresets,
+	updatePresetOptions,
 	upsertPreset,
 } from "./renamePresets";
 export { describePreview, describeRenameFailure } from "./renameResultMessages";

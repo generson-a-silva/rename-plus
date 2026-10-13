@@ -699,8 +699,8 @@ button.header-cell:hover {
 
 .rename-options {
 	display: grid;
-	/* Largura suficiente para lista de presets + salvar + excluir + idioma numa linha. */
-	grid-template-columns: minmax(0, 1fr) clamp(280px, 25%, 320px);
+	/* Largura suficiente para lista de presets + atualizar + salvar + editar + idioma numa linha. */
+	grid-template-columns: minmax(0, 1fr) clamp(312px, 25%, 352px);
 	min-height: 0;
 	background: var(--bg);
 }
@@ -927,6 +927,43 @@ button.header-cell:hover {
 
 .preset-select:disabled {
 	opacity: 0.6;
+}
+
+/* ---- Lista de presets (modal) ------------------------------------------ */
+
+.preset-dialog {
+	width: min(460px, calc(100vw - 32px));
+}
+
+.preset-list {
+	display: grid;
+	gap: 4px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.preset-item {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	padding: 4px 4px 4px 10px;
+	border: 1px solid var(--border);
+	border-radius: 6px;
+	background: var(--surface-2);
+}
+
+.preset-item-name {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.preset-list-empty {
+	margin: 0;
+	color: var(--muted);
 }
 
 /* Empurra o seletor de idioma para o canto inferior direito do bloco. */

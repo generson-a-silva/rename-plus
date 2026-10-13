@@ -153,7 +153,7 @@ Si usas Windows y necesitas funciones avanzadas como metadatos EXIF/ID3, scripts
 | **Extensión** | Mantener, minúsculas, MAYÚSCULAS, Título, quitar, cambiar por una fija o añadir una extra. |
 | **Filtros** | Máscara de nombres (`*.jpg; *.png`), archivos y/o carpetas, elementos ocultos y contenido de las subcarpetas (modo recursivo). Está en la columna de acciones y siempre se abre con los valores por defecto (solo archivos, máscara `*`). |
 
-**Presets:** el botón de guardar, junto a la lista de presets (al lado del selector de idioma), guarda las reglas actuales con un nombre. Para aplicarlas de nuevo, elige el preset en esa lista; el botón de la papelera de al lado elimina el elegido. Las reglas de las carpetas vigiladas tienen la misma lista.
+**Presets:** el botón de guardar, junto a la lista de presets (al lado del selector de idioma), guarda las reglas actuales con un nombre. Para aplicarlas de nuevo, elige el preset en esa lista; **Ninguno** vuelve a las reglas que tenías antes de elegir uno. El botón de actualizar guarda en el preset elegido los cambios hechos en las reglas, y el de editar abre la lista para renombrar, eliminar y reordenar. Las reglas de las carpetas vigiladas tienen la misma lista.
 
 ### Constructor visual de RegEx
 

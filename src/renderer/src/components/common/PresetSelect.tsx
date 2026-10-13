@@ -1,38 +1,51 @@
 import { useI18n } from "@hooks";
-import { findMatchingPreset, type RenamePreset } from "@lib";
-import type { RenameOptions } from "@shared/rename";
+import type { RenamePreset } from "@lib";
 
 interface PresetSelectProps {
 	presets: readonly RenamePreset[];
-	/** Opções aplicadas agora: o preset igual a elas aparece selecionado. */
-	options: RenameOptions;
+	/** `id` do preset escolhido, ou "" se nenhum. */
+	selectedId: string;
 	onSelect: (preset: RenamePreset) => void;
+	/**
+	 * Com esta função, a lista ganha a opção "Nenhum", que pode ser escolhida para sair
+	 * do preset. Sem ela, "" é só o marcador "Escolher preset".
+	 */
+	onSelectNone?: () => void;
 	id?: string;
 }
 
-/**
- * Lista de presets de renomeação. Escolher um aplica as opções dele; sem preset igual
- * às opções atuais (editadas depois ou nunca salvas), mostra o marcador "Escolher preset".
- */
-export function PresetSelect({ presets, options, onSelect, id }: PresetSelectProps) {
+/** Lista de presets de renomeação. Escolher um aplica as opções dele. */
+export function PresetSelect({
+	presets,
+	selectedId,
+	onSelect,
+	onSelectNone,
+	id,
+}: PresetSelectProps) {
 	const { t } = useI18n();
-	const current = findMatchingPreset(presets, options);
+	const current = presets.find((preset) => preset.id === selectedId);
+	const empty = presets.length === 0;
 	return (
 		<select
 			id={id}
 			className="preset-select"
 			value={current?.id ?? ""}
-			disabled={presets.length === 0}
-			title={presets.length === 0 ? t("presets.emptyHint") : (current?.name ?? t("presets.label"))}
+			disabled={empty}
+			title={empty ? t("presets.emptyHint") : (current?.name ?? t("presets.label"))}
 			aria-label={t("presets.label")}
 			onChange={(event) => {
 				const preset = presets.find((item) => item.id === event.target.value);
 				if (preset) onSelect(preset);
+				else onSelectNone?.();
 			}}
 		>
-			<option value="" disabled hidden>
-				{presets.length === 0 ? t("presets.empty") : t("presets.choose")}
-			</option>
+			{onSelectNone && !empty ? (
+				<option value="">{t("presets.none")}</option>
+			) : (
+				<option value="" disabled hidden>
+					{empty ? t("presets.empty") : t("presets.choose")}
+				</option>
+			)}
 			{presets.map((preset) => (
 				<option key={preset.id} value={preset.id}>
 					{preset.name}
