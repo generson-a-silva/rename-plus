@@ -6,8 +6,7 @@ export const en: Messages = {
 	"common.confirm": "Confirm",
 
 	// ---- Language -------------------------------------------------------
-	"language.button": "Language: {language}",
-	"language.menu": "Interface language",
+	"language.label": "Language",
 
 	// ---- Settings -------------------------------------------------------
 	"settings.button": "Settings",
@@ -15,7 +14,7 @@ export const en: Messages = {
 	"settings.close": "Close",
 	"settings.appearance": "Appearance",
 	"settings.appearanceHint":
-		"Interface colors. “System” follows the operating system's light/dark theme.",
+		"Interface colors and language. “System” follows the operating system's light/dark theme.",
 	"theme.label": "Theme",
 	"theme.system": "System",
 	"theme.light": "Light",
@@ -599,9 +598,7 @@ export const en: Messages = {
 	"welcome.mediaAlt": "Animation showing: {feature}",
 	"welcome.language.title": "Language and theme",
 	"welcome.language.body": "Rename Plus and this tour follow what you choose here.",
-	"welcome.language.label": "Language",
-	"welcome.language.hint":
-		"You can change them later: the language with the button in the bottom-right corner, the theme in Settings.",
+	"welcome.language.hint": "You can change both later in Settings, under Appearance.",
 	"welcome.intro.title": "Batch rename, no surprises",
 	"welcome.intro.body":
 		"Combine rules and see each item's new name before anything touches the disk. The next slides show what else the app can do.",

@@ -12,8 +12,7 @@ export const ptBr = {
 	"common.confirm": "Confirmar",
 
 	// ---- Idioma ---------------------------------------------------------
-	"language.button": "Idioma: {language}",
-	"language.menu": "Idioma da interface",
+	"language.label": "Idioma",
 
 	// ---- Configurações --------------------------------------------------
 	"settings.button": "Configurações",
@@ -21,7 +20,7 @@ export const ptBr = {
 	"settings.close": "Fechar",
 	"settings.appearance": "Aparência",
 	"settings.appearanceHint":
-		"Cores da interface. “Sistema” acompanha o tema claro/escuro do sistema operacional.",
+		"Cores e idioma da interface. “Sistema” acompanha o tema claro/escuro do sistema operacional.",
 	"theme.label": "Tema",
 	"theme.system": "Sistema",
 	"theme.light": "Claro",
@@ -607,9 +606,7 @@ export const ptBr = {
 	"welcome.mediaAlt": "Animação mostrando: {feature}",
 	"welcome.language.title": "Idioma e tema",
 	"welcome.language.body": "O Rename Plus e esta apresentação seguem o que você escolher aqui.",
-	"welcome.language.label": "Idioma",
-	"welcome.language.hint":
-		"Dá para trocar depois: o idioma no botão do canto inferior direito, o tema em Configurações.",
+	"welcome.language.hint": "Dá para trocar os dois depois em Configurações, na seção Aparência.",
 	"welcome.intro.title": "Renomeie em lote, sem surpresas",
 	"welcome.intro.body":
 		"Combine regras e veja o novo nome de cada item antes de tocar no disco. Nos próximos slides, conheça o que mais o app faz.",

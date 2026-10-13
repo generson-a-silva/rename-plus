@@ -2,7 +2,6 @@ export type { MessageKey, Messages } from "./catalogs";
 export {
 	isLocale,
 	LOCALE_NATIVE_NAMES,
-	LOCALE_SHORT_NAMES,
 	LOCALES,
 	type Locale,
 	resolveLocale,

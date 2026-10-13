@@ -1,12 +1,6 @@
-import { AppIcon, type AppIconName, ThemeModeSelector } from "@components/common";
+import { AppIcon, type AppIconName, LocaleFlag, ThemeModeSelector } from "@components/common";
 import { useI18n } from "@hooks";
-import {
-	LOCALE_NATIVE_NAMES,
-	LOCALE_SHORT_NAMES,
-	LOCALES,
-	type Locale,
-	type MessageKey,
-} from "@shared/i18n";
+import { LOCALE_NATIVE_NAMES, LOCALES, type Locale, type MessageKey } from "@shared/i18n";
 import type { ThemeMode } from "@shared/ipc";
 import { GITHUB_REPOSITORY } from "@shared/updates";
 import { type KeyboardEvent, useEffect, useId, useRef, useState } from "react";
@@ -190,9 +184,9 @@ export function WelcomeDialog({
 									</div>
 									<h3>{t("welcome.language.title")}</h3>
 									<p className="welcome-body">{t("welcome.language.body")}</p>
-									{/* Trocar aqui vale para o app inteiro, como no seletor da barra de ações. */}
+									{/* Trocar aqui vale para o app inteiro, como no seletor das configurações. */}
 									<span className="welcome-choice-label" id={languageLabelId}>
-										{t("welcome.language.label")}
+										{t("language.label")}
 									</span>
 									<div
 										className="welcome-languages"
@@ -211,7 +205,7 @@ export function WelcomeDialog({
 													checked={option === locale}
 													onChange={() => setLocale(option)}
 												/>
-												<span className="welcome-language-code">{LOCALE_SHORT_NAMES[option]}</span>
+												<LocaleFlag locale={option} size={26} />
 												<span className="welcome-language-name">{LOCALE_NATIVE_NAMES[option]}</span>
 												{option === locale && <AppIcon name="check" size={16} />}
 											</label>

@@ -22,8 +22,8 @@ interface SettingsDialogProps {
 }
 
 /**
- * Janela modal de configurações, organizada em seções (aparência, atualizações, pastas
- * monitoradas, menu de contexto do sistema).
+ * Janela modal de configurações, organizada em seções (aparência, pastas monitoradas,
+ * menu de contexto do sistema, atualizações).
  */
 export function SettingsDialog({
 	open,
@@ -71,9 +71,9 @@ export function SettingsDialog({
 					</header>
 					<div className="settings-body">
 						<AppearanceSection theme={theme} onThemeChange={onThemeChange} />
-						<UpdatesSection updates={updates} />
 						<WatchFoldersSection currentOptions={renameOptions} presets={presets} />
 						<ContextMenuIntegrationSection />
+						<UpdatesSection updates={updates} />
 					</div>
 					<footer className="settings-footer">
 						<button type="button" className="button" onClick={onClose}>

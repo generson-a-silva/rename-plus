@@ -1,4 +1,4 @@
-import { AppIcon, LanguageMenuButton, PresetSelect } from "@components/common";
+import { AppIcon, PresetSelect } from "@components/common";
 import { useI18n } from "@hooks";
 import type { RenamePreset } from "@lib";
 
@@ -117,7 +117,6 @@ export function RenameActionsPanel({
 						<AppIcon name="edit" size={14} />
 					</button>
 				</div>
-				<LanguageMenuButton />
 			</div>
 		</section>
 	);

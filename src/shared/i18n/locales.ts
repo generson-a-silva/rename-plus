@@ -10,13 +10,6 @@ export const LOCALE_NATIVE_NAMES: Record<Locale, string> = {
 	es: "Español",
 };
 
-/** Código curto exibido no botão do seletor. */
-export const LOCALE_SHORT_NAMES: Record<Locale, string> = {
-	"pt-BR": "PT",
-	en: "EN",
-	es: "ES",
-};
-
 export function isLocale(value: unknown): value is Locale {
 	return LOCALES.includes(value as Locale);
 }

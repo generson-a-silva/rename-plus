@@ -300,13 +300,11 @@ const SCRIPTS = {
 		await sleep(1200);
 		await r.click(`text=${r.t("theme.dark")}`);
 		await sleep(1000);
-		await r.click(".settings-close");
-		await r.click(".language-button");
 		await r.click(`text=${names[other]}`);
 		await sleep(1400);
-		await r.click(".language-button");
 		await r.click(`text=${names[r.locale]}`);
 		await sleep(800);
+		await r.click(".settings-close");
 		await r.finish("settings");
 	},
 

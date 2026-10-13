@@ -6,8 +6,7 @@ export const es: Messages = {
 	"common.confirm": "Confirmar",
 
 	// ---- Idioma ---------------------------------------------------------
-	"language.button": "Idioma: {language}",
-	"language.menu": "Idioma de la interfaz",
+	"language.label": "Idioma",
 
 	// ---- Configuración --------------------------------------------------
 	"settings.button": "Configuración",
@@ -15,7 +14,7 @@ export const es: Messages = {
 	"settings.close": "Cerrar",
 	"settings.appearance": "Apariencia",
 	"settings.appearanceHint":
-		"Colores de la interfaz. «Sistema» sigue el tema claro/oscuro del sistema operativo.",
+		"Colores e idioma de la interfaz. «Sistema» sigue el tema claro/oscuro del sistema operativo.",
 	"theme.label": "Tema",
 	"theme.system": "Sistema",
 	"theme.light": "Claro",
@@ -604,9 +603,7 @@ export const es: Messages = {
 	"welcome.mediaAlt": "Animación que muestra: {feature}",
 	"welcome.language.title": "Idioma y tema",
 	"welcome.language.body": "Rename Plus y esta presentación siguen lo que elijas aquí.",
-	"welcome.language.label": "Idioma",
-	"welcome.language.hint":
-		"Puedes cambiarlos después: el idioma con el botón de la esquina inferior derecha, el tema en Configuración.",
+	"welcome.language.hint": "Puedes cambiar ambos después en Configuración, en Apariencia.",
 	"welcome.intro.title": "Renombra por lotes, sin sorpresas",
 	"welcome.intro.body":
 		"Combina reglas y mira el nuevo nombre de cada elemento antes de tocar el disco. En las siguientes diapositivas, descubre qué más hace la app.",

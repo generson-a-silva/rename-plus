@@ -1,4 +1,4 @@
-import { ThemeModeSelector } from "@components/common";
+import { LanguageSelector, ThemeModeSelector } from "@components/common";
 import { useI18n } from "@hooks";
 import type { ThemeMode } from "@shared/ipc";
 import { useId } from "react";
@@ -9,10 +9,11 @@ interface AppearanceSectionProps {
 	onThemeChange: (mode: ThemeMode) => void;
 }
 
-/** Tema da interface: sistema, claro ou escuro. */
+/** Tema (sistema, claro ou escuro) e idioma da interface. */
 export function AppearanceSection({ theme, onThemeChange }: AppearanceSectionProps) {
 	const { t } = useI18n();
-	const labelId = useId();
+	const themeLabelId = useId();
+	const languageLabelId = useId();
 	return (
 		<SettingsSection
 			icon="sun"
@@ -20,10 +21,16 @@ export function AppearanceSection({ theme, onThemeChange }: AppearanceSectionPro
 			description={t("settings.appearanceHint")}
 		>
 			<div className="settings-row">
-				<span className="settings-row-label" id={labelId}>
+				<span className="settings-row-label" id={themeLabelId}>
 					{t("theme.label")}
 				</span>
-				<ThemeModeSelector theme={theme} onChange={onThemeChange} labelledBy={labelId} />
+				<ThemeModeSelector theme={theme} onChange={onThemeChange} labelledBy={themeLabelId} />
+			</div>
+			<div className="settings-row">
+				<span className="settings-row-label" id={languageLabelId}>
+					{t("language.label")}
+				</span>
+				<LanguageSelector labelledBy={languageLabelId} />
 			</div>
 		</SettingsSection>
 	);

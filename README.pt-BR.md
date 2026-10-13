@@ -117,8 +117,8 @@ Os prints mostram a interface em português. O app também está disponível em 
       <p><b>Teste e atividade.</b> Teste a regra com um nome de exemplo antes de qualquer arquivo chegar e veja no registro de atividade o que foi renomeado (ou o que falhou).</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/pt-BR/presets.png"><img src="docs/screenshots/pt-BR/presets.png" alt="Diálogo 'Salvar em Seus Filtros' com o nome 'Fotos de família'; atrás, as fotos da pasta Família com novos nomes como '2023-12-03 Família 02.jpg' e a lista Seus Filtros ao lado do seletor de idioma"></a>
-      <p><b>Seus Filtros.</b> O botão de salvar, ao lado da lista Seus Filtros, guarda a combinação atual de regras (aqui, Nome fixo, Data automática e Numeração) com um nome. Depois é só escolher na lista ao lado do idioma ou nas regras das pastas monitoradas.</p>
+      <a href="docs/screenshots/pt-BR/presets.png"><img src="docs/screenshots/pt-BR/presets.png" alt="Diálogo 'Salvar em Seus Filtros' com o nome 'Fotos de família'; atrás, as fotos da pasta Família com novos nomes como '2023-12-03 Família 02.jpg' e a lista Seus Filtros no canto da área de ações"></a>
+      <p><b>Seus Filtros.</b> O botão de salvar, ao lado da lista Seus Filtros, guarda a combinação atual de regras (aqui, Nome fixo, Data automática e Numeração) com um nome. Depois é só escolher na lista ou nas regras das pastas monitoradas.</p>
     </td>
   </tr>
 </table>
@@ -153,7 +153,7 @@ Se você usa Windows e precisa de recursos avançados como metadados EXIF/ID3, s
 | **Extensão** | Manter, minúsculas, MAIÚSCULAS, Título, remover, trocar por uma fixa ou acrescentar uma extra. |
 | **Filtros** | Máscara de nomes (`*.jpg; *.png`), arquivos e/ou pastas, itens ocultos e conteúdo das subpastas (modo recursivo). Fica na coluna das ações e sempre abre no padrão (só arquivos, máscara `*`). |
 
-**Seus Filtros:** o botão de salvar, ao lado da lista **Seus Filtros** (junto do seletor de idioma), guarda as regras atuais com um nome. Para aplicar de novo, basta escolher o nome nessa lista; **Nenhum** volta às regras que você tinha antes de escolher. O botão de atualizar guarda no filtro escolhido as mudanças feitas nas regras, e o de editar abre a lista para renomear, excluir e reordenar. As regras das pastas monitoradas têm a mesma lista.
+**Seus Filtros:** o botão de salvar, ao lado da lista **Seus Filtros** (no canto inferior direito da área de ações), guarda as regras atuais com um nome. Para aplicar de novo, basta escolher o nome nessa lista; **Nenhum** volta às regras que você tinha antes de escolher. O botão de atualizar guarda no filtro escolhido as mudanças feitas nas regras, e o de editar abre a lista para renomear, excluir e reordenar. As regras das pastas monitoradas têm a mesma lista.
 
 ### Construtor visual de RegEx
 
@@ -211,7 +211,7 @@ Botão direito na lista ou na árvore para abrir com o aplicativo padrão, mostr
 
 - **Tela de boas-vindas** na primeira execução: escolha de idioma e tema e uma apresentação dos recursos com animações. Para rever, use o botão ⓘ na barra superior.
 - Tema **claro**, **escuro** ou **seguindo o sistema**, escolhido na tela de boas-vindas ou em **Configurações** (botão no canto direito da barra superior).
-- Idiomas **português**, **inglês** e **espanhol**, escolhidos na tela de boas-vindas ou pelo botão no canto inferior direito da área de ações. O idioma inicial segue o sistema.
+- Idiomas **português**, **inglês** e **espanhol**, escolhidos na tela de boas-vindas ou em **Configurações → Aparência**. O idioma inicial segue o sistema.
 - Layout ajustável: arraste as divisórias marcadas com três pontinhos para mudar a largura da árvore e a altura da área de regras (até metade da janela); as colunas também podem ser redimensionadas.
 - A janela lembra tamanho, posição e se estava maximizada. Na primeira execução abre maximizada.
 

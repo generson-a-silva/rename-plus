@@ -966,7 +966,7 @@ button.header-cell:hover {
 	color: var(--muted);
 }
 
-/* Empurra o seletor de idioma para o canto inferior direito do bloco. */
+/* Empurra Seus Filtros para o canto inferior direito do bloco. */
 .actions-footer {
 	display: flex;
 	align-items: center;
@@ -974,74 +974,6 @@ button.header-cell:hover {
 	justify-content: flex-end;
 	margin-top: auto;
 	padding-top: 6px;
-}
-
-.language-button {
-	display: inline-flex;
-	align-items: center;
-	gap: 5px;
-	height: 26px;
-	padding: 0 8px;
-	border: 1px solid var(--border);
-	border-radius: 999px;
-	background: var(--surface-2);
-	color: var(--muted);
-	font-size: 12px;
-	font-weight: 600;
-	cursor: pointer;
-}
-
-.language-button:hover,
-.language-button.open {
-	border-color: var(--accent);
-	color: var(--fg);
-}
-
-.language-button .icon:last-child {
-	transition: transform 0.12s;
-}
-
-.language-button.open .icon:last-child {
-	transform: rotate(180deg);
-}
-
-/* Lista que abre acima do botão (posição fixa calculada no componente). */
-.language-menu {
-	position: fixed;
-	z-index: 20;
-	display: flex;
-	flex-direction: column;
-	min-width: 190px;
-	padding: 4px;
-	border: 1px solid var(--border-strong);
-	border-radius: 8px;
-	background: var(--surface);
-	box-shadow: 0 8px 24px rgb(0 0 0 / 0.25);
-}
-
-.language-option {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 12px;
-	height: 30px;
-	padding: 0 10px;
-	border: 0;
-	border-radius: 5px;
-	background: none;
-	text-align: left;
-	cursor: pointer;
-}
-
-.language-option:hover,
-.language-option:focus-visible {
-	background: var(--row-hover);
-	outline: none;
-}
-
-.language-option[aria-checked="true"] {
-	color: var(--accent);
-	font-weight: 600;
 }
 
 .actions-summary {
@@ -1562,7 +1494,7 @@ a.button.primary {
 	font-weight: 600;
 }
 
-/* Botões de opção lado a lado (tema). */
+/* Botões de opção lado a lado (tema, idioma). */
 .segmented {
 	display: inline-flex;
 	padding: 2px;
@@ -1580,6 +1512,13 @@ a.button.primary {
 	border-radius: 5px;
 	color: var(--muted);
 	cursor: pointer;
+}
+
+/* Contorno fino para a bandeira não se perder no fundo (branco no tema claro). */
+.locale-flag {
+	flex: none;
+	border-radius: 2px;
+	box-shadow: 0 0 0 1px rgb(128 128 128 / 0.35);
 }
 
 .segmented-option input {
@@ -2504,18 +2443,6 @@ a.button.primary {
 	position: absolute;
 	opacity: 0;
 	pointer-events: none;
-}
-
-.welcome-language-code {
-	display: grid;
-	place-items: center;
-	width: 34px;
-	height: 24px;
-	border-radius: 4px;
-	background: var(--surface);
-	color: var(--muted);
-	font-size: 11px;
-	font-weight: 700;
 }
 
 .welcome-language-name {

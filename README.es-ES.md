@@ -117,8 +117,8 @@ Las capturas muestran la interfaz en español. La aplicación también está dis
       <p><b>Prueba y actividad.</b> Prueba la regla con un nombre de ejemplo antes de que llegue ningún archivo y consulta en el registro de actividad qué se renombró (o qué falló).</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/es-ES/presets.png"><img src="docs/screenshots/es-ES/presets.png" alt="Diálogo 'Guardar preset' con el nombre 'Fotos de familia'; detrás, las fotos de la carpeta Familia con nuevos nombres como '2023-12-03 Familia 02.jpg' y la lista de presets junto al selector de idioma"></a>
-      <p><b>Presets.</b> El botón de guardar, junto a la lista de presets, guarda la combinación actual de reglas (aquí, Nombre fijo, Fecha automática y Numeración) con un nombre. Después basta con elegirlo en la lista junto al idioma o en las reglas de las carpetas vigiladas.</p>
+      <a href="docs/screenshots/es-ES/presets.png"><img src="docs/screenshots/es-ES/presets.png" alt="Diálogo 'Guardar preset' con el nombre 'Fotos de familia'; detrás, las fotos de la carpeta Familia con nuevos nombres como '2023-12-03 Familia 02.jpg' y la lista de presets en la esquina de la zona de acciones"></a>
+      <p><b>Presets.</b> El botón de guardar, junto a la lista de presets, guarda la combinación actual de reglas (aquí, Nombre fijo, Fecha automática y Numeración) con un nombre. Después basta con elegirlo en la lista o en las reglas de las carpetas vigiladas.</p>
     </td>
   </tr>
 </table>
@@ -153,7 +153,7 @@ Si usas Windows y necesitas funciones avanzadas como metadatos EXIF/ID3, scripts
 | **Extensión** | Mantener, minúsculas, MAYÚSCULAS, Título, quitar, cambiar por una fija o añadir una extra. |
 | **Filtros** | Máscara de nombres (`*.jpg; *.png`), archivos y/o carpetas, elementos ocultos y contenido de las subcarpetas (modo recursivo). Está en la columna de acciones y siempre se abre con los valores por defecto (solo archivos, máscara `*`). |
 
-**Presets:** el botón de guardar, junto a la lista de presets (al lado del selector de idioma), guarda las reglas actuales con un nombre. Para aplicarlas de nuevo, elige el preset en esa lista; **Ninguno** vuelve a las reglas que tenías antes de elegir uno. El botón de actualizar guarda en el preset elegido los cambios hechos en las reglas, y el de editar abre la lista para renombrar, eliminar y reordenar. Las reglas de las carpetas vigiladas tienen la misma lista.
+**Presets:** el botón de guardar, junto a la lista de presets (en la esquina inferior derecha de la zona de acciones), guarda las reglas actuales con un nombre. Para aplicarlas de nuevo, elige el preset en esa lista; **Ninguno** vuelve a las reglas que tenías antes de elegir uno. El botón de actualizar guarda en el preset elegido los cambios hechos en las reglas, y el de editar abre la lista para renombrar, eliminar y reordenar. Las reglas de las carpetas vigiladas tienen la misma lista.
 
 ### Constructor visual de RegEx
 
@@ -211,7 +211,7 @@ Clic derecho en la lista o en el árbol para abrir con la aplicación predetermi
 
 - **Pantalla de bienvenida** en la primera ejecución: elección de idioma y tema y una presentación de las funciones con animaciones. Para volver a verla, usa el botón ⓘ de la barra superior.
 - Tema **claro**, **oscuro** o **según el sistema**, elegido en la pantalla de bienvenida o en **Configuración** (botón a la derecha de la barra superior).
-- Idiomas **español**, **inglés** y **portugués**, elegidos en la pantalla de bienvenida o con el botón de la esquina inferior derecha de la zona de acciones. El idioma inicial sigue al del sistema.
+- Idiomas **español**, **inglés** y **portugués**, elegidos en la pantalla de bienvenida o en **Configuración → Apariencia**. El idioma inicial sigue al del sistema.
 - Diseño ajustable: arrastra los divisores marcados con tres puntos para cambiar el ancho del árbol y el alto de la zona de reglas (hasta la mitad de la ventana); las columnas también se pueden redimensionar.
 - La ventana recuerda su tamaño, su posición y si estaba maximizada. En la primera ejecución se abre maximizada.
 

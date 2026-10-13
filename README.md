@@ -117,8 +117,8 @@ The screenshots show the English interface. The app is also available in Portugu
       <p><b>Test and activity.</b> Try the rule with a sample name before any file arrives, and see what was renamed (or what failed) in the activity log.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/presets.png"><img src="docs/screenshots/presets.png" alt="'Save preset' dialog with the name 'Family photos'; behind it, the photos in the Family folder with new names such as '2023-12-03 Family 02.jpg' and the preset list next to the language selector"></a>
-      <p><b>Presets.</b> The save button next to the presets list stores the current combination of rules (here, fixed Name, Auto date and Numbering) under a name. Pick it again from the list next to the language selector or in a watch folder rule.</p>
+      <a href="docs/screenshots/presets.png"><img src="docs/screenshots/presets.png" alt="'Save preset' dialog with the name 'Family photos'; behind it, the photos in the Family folder with new names such as '2023-12-03 Family 02.jpg' and the preset list in the corner of the actions area"></a>
+      <p><b>Presets.</b> The save button next to the presets list stores the current combination of rules (here, fixed Name, Auto date and Numbering) under a name. Pick it again from the list or in a watch folder rule.</p>
     </td>
   </tr>
 </table>
@@ -153,7 +153,7 @@ If you're on Windows and need advanced features such as EXIF/ID3 metadata, JavaS
 | **Extension** | Keep, lowercase, UPPERCASE, Title, remove, replace with a fixed one or append an extra one. |
 | **Filters** | Name mask (`*.jpg; *.png`), files and/or folders, hidden items and subfolder contents (recursive mode). Sits in the actions column and always opens with the defaults (files only, mask `*`). |
 
-**Presets:** the save button next to the presets list (by the language selector) stores the current rules under a name. To apply them again, pick the preset from that list; **None** goes back to the rules you had before picking one. The update button stores your rule changes in the selected preset, and the edit button opens the list to rename, delete and reorder presets. Watch folder rules have the same list.
+**Presets:** the save button next to the presets list (at the bottom right of the actions area) stores the current rules under a name. To apply them again, pick the preset from that list; **None** goes back to the rules you had before picking one. The update button stores your rule changes in the selected preset, and the edit button opens the list to rename, delete and reorder presets. Watch folder rules have the same list.
 
 ### Visual RegEx builder
 
@@ -211,7 +211,7 @@ Right-click the list or the tree to open with the default app, show in the file 
 
 - **Welcome screen** on the first run: pick the language and theme, then a short tour of the features with animations. To see it again, use the ⓘ button in the top bar.
 - **Light**, **dark** or **system** theme, chosen on the welcome screen or in **Settings** (button at the right of the top bar).
-- **English**, **Portuguese** and **Spanish**, chosen on the welcome screen or with the button at the bottom right of the actions area. The initial language follows the system.
+- **English**, **Portuguese** and **Spanish**, chosen on the welcome screen or in **Settings → Appearance**. The initial language follows the system.
 - Adjustable layout: drag the dividers marked with three dots to change the tree width and the height of the rules area (up to half the window); columns can be resized too.
 - The window remembers its size, position and whether it was maximized. On the first run it opens maximized.
 
