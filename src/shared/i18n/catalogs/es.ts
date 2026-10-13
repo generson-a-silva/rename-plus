@@ -626,7 +626,8 @@ export const es: Messages = {
 	"welcome.presets.body":
 		"Guarda una combinación de reglas con un nombre y vuelve a aplicarla con un clic.",
 	"welcome.presets.point1": "Botón de guardar junto a la lista de presets",
-	"welcome.presets.point2": "Lista, actualizar, guardar y editar junto al selector de idioma",
+	"welcome.presets.point2":
+		"Actualiza, renombra, elimina y reordena con los botones junto a la lista",
 	"welcome.presets.point3": "También disponible en las reglas de las carpetas vigiladas",
 	"welcome.safety.title": "La seguridad primero",
 	"welcome.safety.body":

@@ -97,8 +97,8 @@ The screenshots show the English interface. The app is also available in Portugu
       <p><b>Drag and drop.</b> Drop a folder to open it, or drop files to open their folder with them already selected.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Settings dialog with the Appearance, Updates and Watch folders sections; the installed version 1.5.3 is up to date"></a>
-      <p><b>Settings.</b> Interface theme, update checks on GitHub and watch folders, besides the "Open in Rename Plus" entries in the file manager's context menu.</p>
+      <a href="docs/screenshots/configuracoes.png"><img src="docs/screenshots/configuracoes.png" alt="Settings dialog with the Appearance section (theme and language, with flags) and the start of Watch folders, with background watching turned on"></a>
+      <p><b>Settings.</b> Interface theme and language, watch folders and update checks on GitHub, besides the "Open in Rename Plus" entries in the file manager's context menu.</p>
     </td>
   </tr>
   <tr>
@@ -118,8 +118,15 @@ The screenshots show the English interface. The app is also available in Portugu
     </td>
     <td width="50%" valign="top">
       <a href="docs/screenshots/presets.png"><img src="docs/screenshots/presets.png" alt="'Save preset' dialog with the name 'Family photos'; behind it, the photos in the Family folder with new names such as '2023-12-03 Family 02.jpg' and the preset list in the corner of the actions area"></a>
-      <p><b>Presets.</b> The save button next to the presets list stores the current combination of rules (here, fixed Name, Auto date and Numbering) under a name. Pick it again from the list or in a watch folder rule.</p>
+      <p><b>Presets.</b> The save button next to the presets list stores the current combination of rules (here, fixed Name, Auto date and Numbering) under a name. Pick it again from the list or in a watch folder rule. Changed the rules? The update button stores the changes in the preset in use.</p>
     </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/editar-filtros.png"><img src="docs/screenshots/editar-filtros.png" alt="'Presets' dialog listing Trips (in use), Invoices and Family photos, each with buttons to move up, move down, rename and delete"></a>
+      <p><b>Edit presets.</b> The edit button opens the list to rename, delete and reorder your saved presets. The one in use on the main screen is marked.</p>
+    </td>
+    <td width="50%" valign="top"></td>
   </tr>
 </table>
 

@@ -621,7 +621,7 @@ export const en: Messages = {
 	"welcome.presets.body":
 		"Save a combination of rules under a name and apply it again with one click.",
 	"welcome.presets.point1": "Save button next to the presets list",
-	"welcome.presets.point2": "List, update, save and edit next to the language selector",
+	"welcome.presets.point2": "Update, rename, delete and reorder with the buttons next to the list",
 	"welcome.presets.point3": "Also available in watch folder rules",
 	"welcome.safety.title": "Safety first",
 	"welcome.safety.body":

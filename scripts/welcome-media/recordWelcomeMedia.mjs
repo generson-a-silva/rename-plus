@@ -222,11 +222,23 @@ const SCRIPTS = {
 		await r.finish("regex");
 	},
 
-	/** Salvar as regras em Seus Filtros, redefinir e aplicar de novo pela lista. */
+	/**
+	 * Salvar as regras em Seus Filtros, redefinir, aplicar de novo pela lista e abrir a
+	 * lista de edição para reordenar.
+	 */
 	async presets(r) {
 		await r.reset();
 		await r.tagPanels();
 		await r.selectAll();
+		// Um preset já salvo (preparado antes de gravar), para a lista de edição ter o que reordenar.
+		await r.fill(r.field("case.title", "select", 0), "title");
+		await r.press(".preset-save");
+		await r.waitFor(`document.querySelector(".prompt-dialog[open] input")`);
+		await r.fill(".prompt-dialog input", r.names.invoices);
+		await r.press(".prompt-actions .button.primary");
+		await r.press(`text=${r.t("actions.reset")}`);
+		// O aviso de "salvo" na barra de status some sozinho em 4 s.
+		await sleep(4200);
 		await r.fill(r.field("name.title", "select", 0), "fixed");
 		await r.fill(r.field("name.title", "input", 0), `${r.names.trip} `);
 		await r.fill(r.field("numbering.title", "select", 0), "suffix");
@@ -241,6 +253,12 @@ const SCRIPTS = {
 		await sleep(900);
 		const id = await r.eval(`document.querySelector(".preset-select option:last-child").value`);
 		await r.select(".preset-select", id);
+		await sleep(700);
+		await r.click(".preset-manage");
+		await sleep(700);
+		await r.click(`.preset-item:last-child [title="${r.t("presets.moveUp")}"]`);
+		await sleep(1100);
+		await r.click(".preset-dialog .settings-footer .button");
 		await r.moveTo(".file-rows", { dx: 60, dy: -20 });
 		await sleep(1200);
 		await r.finish("presets");

@@ -3,7 +3,7 @@
 // três idiomas, a partir do app empacotado (AppImage): assim os avisos e caminhos são os
 // que o usuário vê.
 //
-//   npm run docs:screenshots -- build/rename-plus-1.5.3-linux-x86_64.AppImage
+//   npm run docs:screenshots -- build/rename-plus-1.6.4-linux-x86_64.AppImage
 //   npm run docs:screenshots -- <AppImage> pt-BR conflitos     # só um idioma / print
 //
 // Requer: Linux com sessão gráfica e o AppImage gerado por `npm run dist`.
@@ -187,12 +187,17 @@ class DocsDriver extends AppDriver {
 	}
 
 	/** Abre `dir` com tudo zerado, sem cursor desenhado, e marca os painéis. */
-	async open(dir, { filters, sort, theme = "dark", minRows = 1 } = {}) {
+	async open(dir, { subfolders = false, sort, theme = "dark", minRows = 1 } = {}) {
 		const stored = { layout: LAYOUT, theme };
-		if (filters) stored.filters = filters;
 		if (sort) stored.sort = sort;
-		await this.reset(dir, { minRows, cursor: false, stored });
+		// Os filtros não ficam salvos entre sessões: o modo Subpastas é marcado na própria tela.
+		await this.reset(dir, { minRows: subfolders ? 0 : minRows, cursor: false, stored });
 		await this.tagPanels();
+		if (subfolders) {
+			await this.check(this.field("filters.title", "checkbox", 3), true);
+			await this.waitFor(`document.querySelectorAll(".file-row").length >= ${minRows}`);
+			await sleep(600);
+		}
 	}
 
 	async out(name, { settle = true } = {}) {
@@ -377,6 +382,39 @@ const SHOTS = {
 		await d.press(".prompt-actions .button:not(.primary)");
 	},
 
+	/**
+	 * Editar Seus Filtros: a lista com três presets (o da viagem em uso), para renomear,
+	 * excluir e reordenar.
+	 */
+	async "editar-filtros"(d) {
+		await d.open(d.paths.trip);
+		// Hífens viram espaços, Título e data na frente.
+		await d.fill(d.field("replace.title", "input", 0), "-");
+		await d.fill(d.field("replace.title", "input", 1), " ");
+		await d.fill(d.field("case.title", "select", 0), "title");
+		await d.fill(d.field("autoDate.title", "select", 0), "prefix");
+		await d.fill(d.field("autoDate.title", "input", 1), " ");
+		await d.savePreset(d.n.presetInvoices);
+		await d.press(`text=${d.t("actions.reset")}`);
+		await d.fill(d.field("name.title", "select", 0), "fixed");
+		await d.fill(d.field("name.title", "input", 0), d.n.familyFixed);
+		await d.fill(d.field("numbering.title", "select", 0), "suffix");
+		await d.savePreset(d.n.presetFamily);
+		await d.press(`text=${d.t("actions.reset")}`);
+		await d.tripRules();
+		await d.savePreset(d.n.presetTrip);
+		await d.selectTripPhotos();
+		await d.press(".preset-manage");
+		await d.waitFor(`document.querySelectorAll(".preset-dialog[open] .preset-item").length === 3`);
+		// Sobe o preset da viagem (o último salvo) para o topo da lista.
+		for (let i = 0; i < 2; i++)
+			await d.press(`.preset-item:has(.integration-badge) [title="${d.t("presets.moveUp")}"]`);
+		// O aviso de "salvo" na barra de status some sozinho em 4 s.
+		await sleep(4200);
+		await d.out("editar-filtros");
+		await d.press(".preset-dialog .settings-footer .button");
+	},
+
 	/** Conflitos: o mesmo nome fixo para várias fotos (e igual a um arquivo que já existe). */
 	async conflitos(d) {
 		await d.open(d.paths.family);
@@ -391,7 +429,7 @@ const SHOTS = {
 	async subpastas(d) {
 		await d.open(d.paths.album, {
 			theme: "light",
-			filters: { mask: "*", files: true, folders: false, hidden: false, subfolders: true },
+			subfolders: true,
 			sort: { key: "dir", desc: false },
 		});
 		await d.fill(d.field("remove.title", "input", 0), "3");

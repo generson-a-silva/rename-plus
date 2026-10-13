@@ -97,8 +97,8 @@ Las capturas muestran la interfaz en español. La aplicación también está dis
       <p><b>Arrastrar y soltar.</b> Suelta una carpeta para abrirla, o archivos para abrir su carpeta con ellos ya seleccionados.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/es-ES/configuracoes.png"><img src="docs/screenshots/es-ES/configuracoes.png" alt="Configuración con las secciones Apariencia, Actualizaciones y Carpetas vigiladas; la versión instalada 1.5.3 es la más reciente"></a>
-      <p><b>Configuración.</b> Tema de la interfaz, comprobación de actualizaciones en GitHub y carpetas vigiladas, además de las opciones «Abrir en Rename Plus» en el menú contextual del gestor de archivos.</p>
+      <a href="docs/screenshots/es-ES/configuracoes.png"><img src="docs/screenshots/es-ES/configuracoes.png" alt="Configuración con la sección Apariencia (tema e idioma, con banderas) y el comienzo de Carpetas vigiladas, con el segundo plano activado"></a>
+      <p><b>Configuración.</b> Tema e idioma de la interfaz, carpetas vigiladas y comprobación de actualizaciones en GitHub, además de las opciones «Abrir en Rename Plus» en el menú contextual del gestor de archivos.</p>
     </td>
   </tr>
   <tr>
@@ -118,8 +118,15 @@ Las capturas muestran la interfaz en español. La aplicación también está dis
     </td>
     <td width="50%" valign="top">
       <a href="docs/screenshots/es-ES/presets.png"><img src="docs/screenshots/es-ES/presets.png" alt="Diálogo 'Guardar preset' con el nombre 'Fotos de familia'; detrás, las fotos de la carpeta Familia con nuevos nombres como '2023-12-03 Familia 02.jpg' y la lista de presets en la esquina de la zona de acciones"></a>
-      <p><b>Presets.</b> El botón de guardar, junto a la lista de presets, guarda la combinación actual de reglas (aquí, Nombre fijo, Fecha automática y Numeración) con un nombre. Después basta con elegirlo en la lista o en las reglas de las carpetas vigiladas.</p>
+      <p><b>Presets.</b> El botón de guardar, junto a la lista de presets, guarda la combinación actual de reglas (aquí, Nombre fijo, Fecha automática y Numeración) con un nombre. Después basta con elegirlo en la lista o en las reglas de las carpetas vigiladas. ¿Cambiaste las reglas? El botón de actualizar guarda los cambios en el preset en uso.</p>
     </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/es-ES/editar-filtros.png"><img src="docs/screenshots/es-ES/editar-filtros.png" alt="Ventana 'Presets' con la lista Viajes (en uso), Facturas y Fotos de familia, cada uno con botones para subir, bajar, renombrar y eliminar"></a>
+      <p><b>Editar presets.</b> El botón de editar abre la lista para renombrar, eliminar y reordenar los presets guardados. El que está en uso en la pantalla principal aparece marcado.</p>
+    </td>
+    <td width="50%" valign="top"></td>
   </tr>
 </table>
 

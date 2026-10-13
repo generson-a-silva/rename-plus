@@ -97,8 +97,8 @@ Os prints mostram a interface em português. O app também está disponível em 
       <p><b>Arrastar e soltar.</b> Solte uma pasta para abri-la, ou arquivos para abrir a pasta deles já com eles selecionados.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="docs/screenshots/pt-BR/configuracoes.png"><img src="docs/screenshots/pt-BR/configuracoes.png" alt="Configurações com as seções Aparência, Atualizações e Pastas monitoradas; a versão instalada 1.5.3 é a mais recente"></a>
-      <p><b>Configurações.</b> Tema da interface, verificação de atualizações no GitHub e pastas monitoradas, além das opções "Abrir no Rename Plus" no menu de contexto do gerenciador de arquivos.</p>
+      <a href="docs/screenshots/pt-BR/configuracoes.png"><img src="docs/screenshots/pt-BR/configuracoes.png" alt="Configurações com a seção Aparência (tema e idioma, com bandeiras) e o início de Pastas monitoradas, com o segundo plano ativado"></a>
+      <p><b>Configurações.</b> Tema e idioma da interface, pastas monitoradas e verificação de atualizações no GitHub, além das opções "Abrir no Rename Plus" no menu de contexto do gerenciador de arquivos.</p>
     </td>
   </tr>
   <tr>
@@ -118,8 +118,15 @@ Os prints mostram a interface em português. O app também está disponível em 
     </td>
     <td width="50%" valign="top">
       <a href="docs/screenshots/pt-BR/presets.png"><img src="docs/screenshots/pt-BR/presets.png" alt="Diálogo 'Salvar em Seus Filtros' com o nome 'Fotos de família'; atrás, as fotos da pasta Família com novos nomes como '2023-12-03 Família 02.jpg' e a lista Seus Filtros no canto da área de ações"></a>
-      <p><b>Seus Filtros.</b> O botão de salvar, ao lado da lista Seus Filtros, guarda a combinação atual de regras (aqui, Nome fixo, Data automática e Numeração) com um nome. Depois é só escolher na lista ou nas regras das pastas monitoradas.</p>
+      <p><b>Seus Filtros.</b> O botão de salvar, ao lado da lista Seus Filtros, guarda a combinação atual de regras (aqui, Nome fixo, Data automática e Numeração) com um nome. Depois é só escolher na lista ou nas regras das pastas monitoradas. Mudou as regras? O botão de atualizar guarda as mudanças no filtro em uso.</p>
     </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/pt-BR/editar-filtros.png"><img src="docs/screenshots/pt-BR/editar-filtros.png" alt="Janela 'Seus Filtros' com a lista Viagens (em uso), Faturas e Fotos de família, cada um com botões para subir, descer, renomear e excluir"></a>
+      <p><b>Editar Seus Filtros.</b> O botão de editar abre a lista para renomear, excluir e mudar a ordem dos filtros salvos. O que está em uso na tela principal aparece marcado.</p>
+    </td>
+    <td width="50%" valign="top"></td>
   </tr>
 </table>
 

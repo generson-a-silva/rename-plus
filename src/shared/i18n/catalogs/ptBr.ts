@@ -629,7 +629,7 @@ export const ptBr = {
 	"welcome.presets.body":
 		"Guarde uma combinação de regras com um nome e aplique de novo com um clique.",
 	"welcome.presets.point1": "Botão de salvar ao lado da lista Seus Filtros",
-	"welcome.presets.point2": "Lista, atualizar, salvar e editar junto do seletor de idioma",
+	"welcome.presets.point2": "Atualize, renomeie, exclua e reordene pelos botões ao lado da lista",
 	"welcome.presets.point3": "Também disponível nas regras das pastas monitoradas",
 	"welcome.safety.title": "Segurança em primeiro lugar",
 	"welcome.safety.body":
