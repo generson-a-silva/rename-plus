@@ -7,6 +7,7 @@ import { createDefaultOptions, type RenameOptions, type RenameSection } from "@s
 import {
 	createWatchRule,
 	planWatchedFile,
+	ruleUsesNumbering,
 	type WatchRule,
 	type WatchRuleProblem,
 	watchRuleProblem,
@@ -121,8 +122,11 @@ function FolderField({ label, value, placeholder, onChange, clearable }: FolderF
 	);
 }
 
-/** Simula a regra com um nome digitado, sem tocar no disco. */
-function RuleTester({ rule }: { rule: WatchRule }) {
+/**
+ * Simula a regra com um nome digitado, sem tocar no disco. `index` é a posição do
+ * próximo arquivo na numeração, para o resultado mostrar o número que ele receberia.
+ */
+function RuleTester({ rule, index }: { rule: WatchRule; index: number }) {
 	const { t, tr } = useI18n();
 	const [sample, setSample] = useState("Documento Exemplo.pdf");
 	const folder = rule.folder || "/";
@@ -138,7 +142,7 @@ function RuleTester({ rule }: { rule: WatchRule }) {
 			mtimeMs: Date.now(),
 			birthtimeMs: Date.now(),
 		},
-		0,
+		index,
 		new Date(),
 		window.api.platform,
 	);
@@ -168,20 +172,25 @@ function RuleTester({ rule }: { rule: WatchRule }) {
 interface RuleCardProps {
 	rule: WatchRule;
 	status: WatchRuleStatus | undefined;
+	/** Arquivos já processados pela regra (posição do próximo na numeração). */
+	processed: number;
 	currentOptions: RenameOptions;
 	presets: readonly RenamePreset[];
 	defaultOpen: boolean;
 	onChange: (patch: Partial<WatchRule>) => void;
+	onResetNumbering: () => void;
 	onRemove: () => void;
 }
 
 function RuleCard({
 	rule,
 	status,
+	processed,
 	currentOptions,
 	presets,
 	defaultOpen,
 	onChange,
+	onResetNumbering,
 	onRemove,
 }: RuleCardProps) {
 	const { t } = useI18n();
@@ -274,6 +283,21 @@ function RuleCard({
 								{t("watch.renameClear")}
 							</button>
 						)}
+						{ruleUsesNumbering(rule) && (
+							<button
+								type="button"
+								className="button"
+								disabled={processed === 0}
+								title={
+									processed === 0
+										? t("watch.resetNumberingEmpty")
+										: t("watch.resetNumberingHint", { count: processed })
+								}
+								onClick={onResetNumbering}
+							>
+								{t("watch.resetNumbering")}
+							</button>
+						)}
 					</div>
 				</div>
 
@@ -285,7 +309,7 @@ function RuleCard({
 					onChange={(destination) => onChange({ destination })}
 				/>
 
-				<RuleTester rule={rule} />
+				<RuleTester rule={rule} index={processed} />
 
 				<div className="watch-rule-footer">
 					<CheckField
@@ -334,7 +358,7 @@ interface WatchFoldersSectionProps {
  */
 export function WatchFoldersSection({ currentOptions, presets }: WatchFoldersSectionProps) {
 	const { t } = useI18n();
-	const { rules, info, changeRules, clearActivity } = useWatchFolders();
+	const { rules, info, changeRules, clearActivity, resetNumbering } = useWatchFolders();
 	const [createdId, setCreatedId] = useState<string | null>(null);
 	const activity = info?.activity ?? [];
 	const errors = useMemo(() => activity.filter((item) => item.error).length, [activity]);
@@ -379,10 +403,12 @@ export function WatchFoldersSection({ currentOptions, presets }: WatchFoldersSec
 							key={rule.id}
 							rule={rule}
 							status={info?.statuses[rule.id]}
+							processed={info?.counters[rule.id] ?? 0}
 							currentOptions={currentOptions}
 							presets={presets}
 							defaultOpen={rule.id === createdId}
 							onChange={(patch) => updateRule(rule.id, patch)}
+							onResetNumbering={() => resetNumbering(rule.id)}
 							onRemove={() => void removeRule(rule)}
 						/>
 					))}

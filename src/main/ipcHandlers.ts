@@ -32,7 +32,12 @@ import {
 } from "./shell-integration";
 import { setTheme } from "./themeSettings";
 import { checkForUpdates, getUpdateStatus, setUpdateSettings } from "./updateChecker";
-import { clearWatchActivity, getWatchFoldersInfo, setWatchRules } from "./watchFolderService";
+import {
+	clearWatchActivity,
+	getWatchFoldersInfo,
+	resetWatchNumbering,
+	setWatchRules,
+} from "./watchFolderService";
 
 /** Listagens em andamento de cada janela (as de uma janela fechada são canceladas). */
 const listingsBySender = new Map<number, ListingJobs>();
@@ -156,6 +161,9 @@ export function registerIpcHandlers(): void {
 	ipcMain.handle(IpcChannel.GetWatchFolders, () => getWatchFoldersInfo());
 	ipcMain.handle(IpcChannel.SetWatchRules, (_event, rules: unknown) => setWatchRules(rules));
 	ipcMain.handle(IpcChannel.ClearWatchActivity, () => clearWatchActivity());
+	ipcMain.handle(IpcChannel.ResetWatchNumbering, (_event, ruleId: unknown) =>
+		resetWatchNumbering(ruleId),
+	);
 	ipcMain.handle(IpcChannel.GetBackground, () => getBackgroundInfo());
 	ipcMain.handle(IpcChannel.SetBackground, (_event, enabled: unknown) => setBackground(enabled));
 }

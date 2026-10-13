@@ -53,6 +53,19 @@ export function ruleChangesName(rule: WatchRule): boolean {
 	return JSON.stringify(rule.rename) !== JSON.stringify(createDefaultOptions());
 }
 
+/** A regra numera os arquivos que processa. */
+export function ruleUsesNumbering(rule: WatchRule): boolean {
+	return rule.rename.numbering.mode !== "none";
+}
+
+/**
+ * As opções de numeração mudaram entre duas versões da regra. Só isso recomeça a
+ * contagem dos arquivos; mudar pasta, máscara ou outras seções mantém a sequência.
+ */
+export function numberingChanged(before: WatchRule, after: WatchRule): boolean {
+	return JSON.stringify(before.rename.numbering) !== JSON.stringify(after.rename.numbering);
+}
+
 /** Por que a regra não faria nada, ou `null` se está pronta para monitorar. */
 export function watchRuleProblem(rule: WatchRule): WatchRuleProblem | null {
 	if (!rule.folder.trim()) return "noFolder";

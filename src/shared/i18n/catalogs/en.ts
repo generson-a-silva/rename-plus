@@ -127,6 +127,13 @@ export const en: Messages = {
 	"watch.useCurrentEmpty":
 		"Set up the renaming rules on the main screen (with the preview) and come back here to copy them.",
 	"watch.renameClear": "Don't rename",
+	"watch.resetNumbering": "Restart numbering",
+	"watch.resetNumberingHint": {
+		one: "1 file already numbered by this rule. The next one goes back to the start number.",
+		other:
+			"{count} files already numbered by this rule. The next one goes back to the start number.",
+	},
+	"watch.resetNumberingEmpty": "The numbering is already at the start.",
 	"watch.destination": "Move to",
 	"watch.destinationPlaceholder": "Keep in the same folder",
 	"watch.clearDestination": "Keep in the same folder",

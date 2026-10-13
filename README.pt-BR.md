@@ -172,6 +172,7 @@ Em **Configurações › Pastas monitoradas**, escolha uma pasta (ex.: Downloads
 - Filtro por máscara (`*.pdf; *.jpg`), pasta de destino opcional, teste com um nome de exemplo e notificação do sistema por arquivo.
 - Espera o arquivo terminar de ser escrito; ignora downloads em andamento (`.crdownload`, `.part`…), arquivos ocultos e subpastas. Nunca sobrescreve: nomes repetidos ganham ` (2)`.
 - Só arquivos novos (o que já estava na pasta não muda). O registro de atividade mostra o que foi feito e as falhas.
+- A numeração continua de onde parou, mesmo depois de fechar o app ou reiniciar o computador. Ela volta ao número inicial quando você muda as opções de numeração da regra ou usa **Reiniciar numeração**.
 - **Continua com o app fechado:** com **Continuar monitorando com o app fechado** ativado, o Rename Plus inicia com a sua sessão, sem janela, e fica no ícone da bandeja enquanto houver pastas monitoradas ativas (menu da bandeja: abrir, sair). Abrir o app só mostra a janela nesse mesmo processo. Sem pastas monitoradas ativas, ele encerra na hora e não fica rodando à toa.
   - **Windows:** o instalador tem a página "Pastas monitoradas" para ativar para todos os usuários (marcada por padrão; desmarque para instalar sem). Cada usuário pode desativar em Configurações.
   - **Linux (AppImage):** não há etapa de instalação, então ative em Configurações. É criado `~/.config/autostart/rename-plus-background.desktop` (XDG Autostart, usado por KDE, GNOME, Xfce, Cinnamon…). Se mover ou trocar o AppImage, abra-o uma vez para corrigir a entrada; abrir um AppImage novo com o antigo em segundo plano passa o controle para o novo.
@@ -325,7 +326,7 @@ O motor de renomeação (`src/shared/rename`) é TypeScript puro, sem dependênc
 
 ## Onde ficam as preferências
 
-Tema, idioma, regras, Seus Filtros, filtros, ordenação, larguras e última pasta aberta ficam salvos na pasta de dados do app (as pastas monitoradas em `watch-folders.json`, o modo em segundo plano em `background.json` e as preferências de atualização em `updates.json`):
+Tema, idioma, regras, Seus Filtros, filtros, ordenação, larguras e última pasta aberta ficam salvos na pasta de dados do app (as pastas monitoradas em `watch-folders.json`, a contagem da numeração delas em `watch-counters.json`, o modo em segundo plano em `background.json` e as preferências de atualização em `updates.json`):
 
 - **Linux:** `~/.config/rename-plus/`
 - **Windows:** `%APPDATA%\rename-plus\`

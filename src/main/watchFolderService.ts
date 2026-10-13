@@ -11,6 +11,7 @@ import {
 } from "../shared/ipc";
 import { getPlatformPaths } from "../shared/paths";
 import {
+	numberingChanged,
 	planWatchedFile,
 	sanitizeWatchRules,
 	type WatchRule,
@@ -22,6 +23,7 @@ import { tMain, tMainRef } from "./mainLocale";
 import { broadcast, readSettingsFile, writeSettingsFile } from "./settingsFile";
 
 const SETTINGS_FILE = "watch-folders.json";
+const COUNTERS_FILE = "watch-counters.json";
 /**
  * Intervalo entre as conferências de um arquivo que chegou. Ele só é processado quando
  * tamanho e data de modificação não mudam entre duas conferências (cópia/download terminou).
@@ -41,8 +43,10 @@ const platformPaths = getPlatformPaths(process.platform);
 let rules: WatchRule[] = [];
 const watchers = new Map<string, fs.FSWatcher>();
 const statuses: Record<string, WatchRuleStatus> = {};
-/** Arquivos já processados por regra nesta sessão (posição usada pela numeração). */
+/** Arquivos já processados por regra (posição usada pela numeração); salvo em disco. */
 const counters = new Map<string, number>();
+/** Reinícios da numeração por regra: um arquivo em andamento não conta depois de um reinício. */
+const restarts = new Map<string, number>();
 let activity: WatchActivity[] = [];
 let nextActivityId = 1;
 
@@ -59,7 +63,7 @@ const pending = new Map<string, PendingFile>();
 const produced = new Map<string, number>();
 
 export function getWatchFoldersInfo(): WatchFoldersInfo {
-	return { rules, statuses: { ...statuses }, activity };
+	return { rules, statuses: { ...statuses }, counters: Object.fromEntries(counters), activity };
 }
 
 /** Quantas regras estão de fato monitorando uma pasta agora. */
@@ -161,6 +165,7 @@ async function processFile(file: string, stats: fs.Stats): Promise<void> {
 	};
 	for (const rule of rulesFor(dir)) {
 		const index = counters.get(rule.id) ?? 0;
+		const restart = restarts.get(rule.id) ?? 0;
 		const plan = planWatchedFile(rule, entry, index, new Date(), process.platform);
 		if (plan.kind === "skip") continue;
 		if (plan.kind === "error") {
@@ -176,13 +181,30 @@ async function processFile(file: string, stats: fs.Stats): Promise<void> {
 				: await findAvailablePath(plan.dir, plan.name, false);
 			markProduced(target);
 			await moveWithRetry(file, target);
-			counters.set(rule.id, index + 1);
+			// A numeração foi reiniciada durante o processamento: este arquivo é da contagem antiga.
+			if ((restarts.get(rule.id) ?? 0) === restart) {
+				counters.set(rule.id, index + 1);
+				saveCounters();
+			}
 			record(rule, file, target, null);
 		} catch (error) {
 			record(rule, file, null, describeFileSystemError(error));
 		}
 		return;
 	}
+}
+
+let queue: Promise<void> = Promise.resolve();
+
+/**
+ * Processa um arquivo que já parou de mudar. Um de cada vez, em fila: arquivos que
+ * chegam juntos leriam a mesma posição da numeração e disputariam o mesmo nome de
+ * destino, e o segundo sobrescreveria o primeiro.
+ */
+export function processSettledFile(file: string, stats: fs.Stats): Promise<void> {
+	const run = queue.then(() => processFile(file, stats));
+	queue = run.catch(() => {});
+	return run;
 }
 
 /** Confere o arquivo até ele parar de mudar; então o processa. */
@@ -213,7 +235,7 @@ async function settle(file: string): Promise<void> {
 		return;
 	}
 	pending.delete(key);
-	if (stable) await processFile(file, stats);
+	if (stable) await processSettledFile(file, stats);
 }
 
 function onFolderEvent(folder: string, filename: string | Buffer | null): void {
@@ -273,7 +295,9 @@ function startRule(rule: WatchRule): WatchRuleStatus {
 function applyRules(): void {
 	stopAll();
 	for (const rule of rules) statuses[rule.id] = startRule(rule);
-	for (const id of counters.keys()) if (!rules.some((rule) => rule.id === id)) counters.delete(id);
+	const ids = new Set(rules.map((rule) => rule.id));
+	for (const id of counters.keys()) if (!ids.has(id)) counters.delete(id);
+	for (const id of restarts.keys()) if (!ids.has(id)) restarts.delete(id);
 }
 
 function loadRules(value: unknown): WatchRule[] {
@@ -284,18 +308,54 @@ function loadRules(value: unknown): WatchRule[] {
 	}));
 }
 
+function saveCounters(): void {
+	writeSettingsFile(COUNTERS_FILE, Object.fromEntries(counters));
+}
+
+function loadCounters(): void {
+	const stored = readSettingsFile(COUNTERS_FILE);
+	if (!stored || typeof stored !== "object") return;
+	for (const [id, value] of Object.entries(stored)) {
+		if (typeof value === "number" && Number.isInteger(value) && value >= 0) {
+			counters.set(id, value);
+		}
+	}
+}
+
 /** Carrega as regras salvas e começa a monitorar. Sem regras (o padrão), não faz nada. */
 export function startWatchFolders(): void {
 	rules = loadRules(readSettingsFile(SETTINGS_FILE));
+	loadCounters();
 	applyRules();
 	notifyChanged();
 }
 
+function restartNumbering(id: string): void {
+	counters.delete(id);
+	restarts.set(id, (restarts.get(id) ?? 0) + 1);
+}
+
 export function setWatchRules(value: unknown): WatchFoldersInfo {
+	const previous = new Map(rules.map((rule) => [rule.id, rule]));
 	rules = loadRules(value);
+	for (const rule of rules) {
+		const before = previous.get(rule.id);
+		if (before && numberingChanged(before, rule)) restartNumbering(rule.id);
+	}
 	writeSettingsFile(SETTINGS_FILE, rules);
 	applyRules();
+	saveCounters();
 	notifyChanged();
+	return getWatchFoldersInfo();
+}
+
+/** Faz o próximo arquivo da regra voltar ao número inicial. */
+export function resetWatchNumbering(ruleId: unknown): WatchFoldersInfo {
+	if (typeof ruleId === "string" && counters.has(ruleId)) {
+		restartNumbering(ruleId);
+		saveCounters();
+		notifyChanged();
+	}
 	return getWatchFoldersInfo();
 }
 

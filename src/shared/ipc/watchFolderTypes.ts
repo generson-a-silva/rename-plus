@@ -26,6 +26,8 @@ export interface WatchFoldersInfo {
 	rules: WatchRule[];
 	/** Por `id` da regra. */
 	statuses: Record<string, WatchRuleStatus>;
+	/** Arquivos já processados por regra (por `id`); é a posição usada pela numeração. */
+	counters: Record<string, number>;
 	/** Mais recentes primeiro. */
 	activity: WatchActivity[];
 }

@@ -12,6 +12,8 @@ export interface WatchFoldersState {
 	/** Altera as regras; o salvamento é adiado até o usuário parar de digitar. */
 	changeRules: (update: (rules: WatchRule[]) => WatchRule[]) => void;
 	clearActivity: () => void;
+	/** Faz o próximo arquivo da regra voltar ao número inicial. */
+	resetNumbering: (ruleId: string) => void;
 }
 
 /**
@@ -70,5 +72,15 @@ export function useWatchFolders(): WatchFoldersState {
 		void window.api.clearWatchActivity().then(receive);
 	}, [receive]);
 
-	return { rules, info, changeRules, clearActivity };
+	const resetNumbering = useCallback(
+		(ruleId: string) => {
+			// Salva antes uma edição pendente, para o reinício valer sobre a regra atual.
+			void flush()
+				.then(() => window.api.resetWatchNumbering(ruleId))
+				.then(receive);
+		},
+		[flush, receive],
+	);
+
+	return { rules, info, changeRules, clearActivity, resetNumbering };
 }

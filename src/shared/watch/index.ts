@@ -1,8 +1,10 @@
 export {
 	createWatchRule,
 	isIncompleteDownload,
+	numberingChanged,
 	planWatchedFile,
 	ruleChangesName,
+	ruleUsesNumbering,
 	sanitizeWatchRules,
 	type WatchPlan,
 	type WatchRule,

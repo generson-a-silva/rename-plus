@@ -172,6 +172,7 @@ En **Configuración › Carpetas vigiladas**, elige una carpeta (p. ej., Descarg
 - Máscara de archivos (`*.pdf; *.jpg`), carpeta de destino opcional, prueba con un nombre de ejemplo y notificación del sistema por cada archivo.
 - Espera a que el archivo termine de escribirse e ignora descargas en curso (`.crdownload`, `.part`…), archivos ocultos y subcarpetas. Nunca sobrescribe: los nombres repetidos reciben ` (2)`.
 - Solo archivos nuevos (lo que ya estaba en la carpeta no se toca). El registro de actividad muestra lo que se hizo y los fallos.
+- La numeración continúa donde se quedó, incluso después de cerrar la aplicación o reiniciar el equipo. Vuelve al número inicial cuando cambias las opciones de numeración de la regla o usas **Reiniciar numeración**.
 - **Sigue funcionando con la aplicación cerrada:** con **Seguir vigilando con la aplicación cerrada** activado, Rename Plus se inicia con tu sesión, sin ventana, y queda en la bandeja mientras haya carpetas vigiladas activas (menú de la bandeja: abrir, salir). Abrir la aplicación solo muestra la ventana en ese mismo proceso. Sin carpetas vigiladas activas, se cierra al momento y no sigue ejecutándose sin motivo.
   - **Windows:** el instalador tiene la página «Carpetas vigiladas» para activarlo para todos los usuarios (marcada por defecto; desmárcala para instalar sin ella). Cada usuario puede desactivarlo en Configuración.
   - **Linux (AppImage):** no hay paso de instalación, así que actívalo en Configuración. Se crea `~/.config/autostart/rename-plus-background.desktop` (XDG Autostart, usado por KDE, GNOME, Xfce, Cinnamon…). Si mueves o sustituyes el AppImage, ábrelo una vez para corregir la entrada; abrir un AppImage nuevo con el antiguo en segundo plano cede el control al nuevo.
@@ -325,7 +326,7 @@ El motor de renombrado (`src/shared/rename`) es TypeScript puro, sin dependencia
 
 ## Dónde se guarda la configuración
 
-El tema, el idioma, las reglas, los presets, los filtros, la ordenación, los anchos y la última carpeta abierta se guardan en la carpeta de datos de la aplicación (las carpetas vigiladas en `watch-folders.json`, el modo en segundo plano en `background.json` y las preferencias de actualización en `updates.json`):
+El tema, el idioma, las reglas, los presets, los filtros, la ordenación, los anchos y la última carpeta abierta se guardan en la carpeta de datos de la aplicación (las carpetas vigiladas en `watch-folders.json`, el conteo de su numeración en `watch-counters.json`, el modo en segundo plano en `background.json` y las preferencias de actualización en `updates.json`):
 
 - **Linux:** `~/.config/rename-plus/`
 - **Windows:** `%APPDATA%\rename-plus\`

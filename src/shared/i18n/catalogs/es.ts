@@ -131,6 +131,12 @@ export const es: Messages = {
 	"watch.useCurrentEmpty":
 		"Configura las reglas de renombrado en la pantalla principal (con la vista previa) y vuelve aquí para copiarlas.",
 	"watch.renameClear": "No renombrar",
+	"watch.resetNumbering": "Reiniciar numeración",
+	"watch.resetNumberingHint": {
+		one: "1 archivo ya numerado por esta regla. El siguiente vuelve al número inicial.",
+		other: "{count} archivos ya numerados por esta regla. El siguiente vuelve al número inicial.",
+	},
+	"watch.resetNumberingEmpty": "La numeración ya está en el inicio.",
 	"watch.destination": "Mover a",
 	"watch.destinationPlaceholder": "Dejar en la misma carpeta",
 	"watch.clearDestination": "Dejar en la misma carpeta",

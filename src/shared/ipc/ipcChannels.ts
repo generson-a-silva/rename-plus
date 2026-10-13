@@ -33,6 +33,7 @@ export const IpcChannel = {
 	GetWatchFolders: "watch:get",
 	SetWatchRules: "watch:set-rules",
 	ClearWatchActivity: "watch:clear-activity",
+	ResetWatchNumbering: "watch:reset-numbering",
 	GetBackground: "background:get",
 	SetBackground: "background:set",
 	/** Evento main → renderer: itens a abrir (menu de contexto do sistema, linha de comando). */

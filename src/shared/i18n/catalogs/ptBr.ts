@@ -136,6 +136,12 @@ export const ptBr = {
 	"watch.useCurrentEmpty":
 		"Configure as regras de renomeação na tela principal (com a pré-visualização) e volte aqui para copiá-las.",
 	"watch.renameClear": "Não renomear",
+	"watch.resetNumbering": "Reiniciar numeração",
+	"watch.resetNumberingHint": {
+		one: "1 arquivo já numerado por esta regra. O próximo volta ao número inicial.",
+		other: "{count} arquivos já numerados por esta regra. O próximo volta ao número inicial.",
+	},
+	"watch.resetNumberingEmpty": "A numeração já está no início.",
 	"watch.destination": "Mover para",
 	"watch.destinationPlaceholder": "Deixar na mesma pasta",
 	"watch.clearDestination": "Deixar na mesma pasta",

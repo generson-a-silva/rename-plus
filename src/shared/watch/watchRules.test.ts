@@ -3,7 +3,9 @@ import type { FileEntry } from "../ipc";
 import {
 	createWatchRule,
 	isIncompleteDownload,
+	numberingChanged,
 	planWatchedFile,
+	ruleUsesNumbering,
 	sanitizeWatchRules,
 	type WatchRule,
 	watchRuleProblem,
@@ -77,6 +79,51 @@ describe("isIncompleteDownload", () => {
 		expect(isIncompleteDownload("arquivo.PART")).toBe(true);
 		expect(isIncompleteDownload("relatorio.pdf")).toBe(false);
 		expect(isIncompleteDownload(".tmp")).toBe(false);
+	});
+});
+
+function numberedRule(numbering: Partial<WatchRule["rename"]["numbering"]> = {}): WatchRule {
+	const base = rule();
+	return {
+		...base,
+		rename: {
+			...base.rename,
+			numbering: { ...base.rename.numbering, mode: "prefix", ...numbering },
+		},
+	};
+}
+
+describe("ruleUsesNumbering", () => {
+	it("só vale quando a numeração está ligada", () => {
+		expect(ruleUsesNumbering(rule())).toBe(false);
+		expect(ruleUsesNumbering(lowerCaseRule())).toBe(false);
+		expect(ruleUsesNumbering(numberedRule())).toBe(true);
+	});
+});
+
+describe("numberingChanged", () => {
+	it("percebe qualquer mudança nas opções de numeração", () => {
+		expect(numberingChanged(numberedRule(), numberedRule({ start: 4 }))).toBe(true);
+		expect(numberingChanged(numberedRule(), numberedRule({ increment: 2 }))).toBe(true);
+		expect(numberingChanged(numberedRule(), numberedRule({ padding: 3 }))).toBe(true);
+		expect(numberingChanged(rule(), numberedRule())).toBe(true);
+	});
+
+	it("ignora o resto da regra", () => {
+		const before = numberedRule();
+		expect(numberingChanged(before, structuredClone(before))).toBe(false);
+		expect(numberingChanged(before, { ...before, mask: "*.pdf" })).toBe(false);
+		expect(numberingChanged(before, { ...before, folder: "/tmp", destination: "/out" })).toBe(
+			false,
+		);
+		expect(numberingChanged(before, { ...before, enabled: false, name: "x", notify: true })).toBe(
+			false,
+		);
+		const otherSection: WatchRule = {
+			...before,
+			rename: { ...before.rename, case: { mode: "lower", exceptions: "" } },
+		};
+		expect(numberingChanged(before, otherSection)).toBe(false);
 	});
 });
 

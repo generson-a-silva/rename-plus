@@ -172,6 +172,7 @@ In **Settings › Watch folders**, pick a folder (e.g. Downloads): every new fil
 - File mask (`*.pdf; *.jpg`), optional destination folder, a test with a sample name and a system notification for each file.
 - Waits for the file to finish being written and ignores downloads in progress (`.crdownload`, `.part`…), hidden files and subfolders. Never overwrites: repeated names get ` (2)`.
 - Only new files are handled (what's already in the folder is left alone). The activity log shows what was done and any failures.
+- Numbering picks up where it left off, even after closing the app or restarting the computer. It goes back to the start number when you change the rule's numbering options or use **Restart numbering**.
 - **Keeps working with the app closed:** with **Keep watching when the app is closed** turned on, Rename Plus starts with your session, without a window, and stays in the tray while there are active watch folders (tray menu: open, quit). Opening the app just shows the window in that same process. With no active watch folders it exits right away, so nothing keeps running for nothing.
   - **Windows:** the installer has a "Watch folders" page to turn it on for all users (on by default; untick it to install without it). Each user can turn it off in Settings.
   - **Linux (AppImage):** there's no install step, so turn it on in Settings. It adds `~/.config/autostart/rename-plus-background.desktop` (XDG Autostart, used by KDE, GNOME, Xfce, Cinnamon…). If you move or replace the AppImage, open it once to fix the entry; opening a new AppImage while the old one runs in the background hands over to the new one.
@@ -325,7 +326,7 @@ The renaming engine (`src/shared/rename`) is plain TypeScript with no Electron d
 
 ## Where settings are stored
 
-Theme, language, rules, presets, filters, sorting, column widths and the last folder opened are saved in the app's data folder (watch folders in `watch-folders.json`, background mode in `background.json` and update preferences in `updates.json`):
+Theme, language, rules, presets, filters, sorting, column widths and the last folder opened are saved in the app's data folder (watch folders in `watch-folders.json`, their numbering count in `watch-counters.json`, background mode in `background.json` and update preferences in `updates.json`):
 
 - **Linux:** `~/.config/rename-plus/`
 - **Windows:** `%APPDATA%\rename-plus\`

@@ -96,6 +96,8 @@ export interface ElectronApi {
 	/** Salva todas as regras e reinicia o monitoramento conforme elas. */
 	setWatchRules: (rules: WatchRule[]) => Promise<WatchFoldersInfo>;
 	clearWatchActivity: () => Promise<WatchFoldersInfo>;
+	/** Faz o próximo arquivo da regra voltar ao número inicial. */
+	resetWatchNumbering: (ruleId: string) => Promise<WatchFoldersInfo>;
 	onWatchFoldersChanged: (listener: (info: WatchFoldersInfo) => void) => () => void;
 	/** Pastas monitoradas com o app fechado (início com o sistema, sem janela). */
 	getBackground: () => Promise<BackgroundInfo>;
