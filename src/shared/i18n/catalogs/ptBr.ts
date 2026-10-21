@@ -350,6 +350,8 @@ export const ptBr = {
 	"replace.title": "Substituir",
 	"replace.with": "Por",
 	"replace.matchCase": "Diferenciar maiúsculas",
+	"replace.firstOnly": "Só a 1ª ocorrência",
+	"replace.firstOnlyHint": "Troca só a primeira vez que o texto aparece (ex.: só o 1º espaço)",
 
 	// ---- Maiúsculas/minúsculas -----------------------------------------
 	"case.title": "Maiúsc./Minúsc.",

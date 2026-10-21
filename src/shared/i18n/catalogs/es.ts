@@ -345,6 +345,9 @@ export const es: Messages = {
 	"replace.title": "Reemplazar",
 	"replace.with": "Por",
 	"replace.matchCase": "Distinguir mayúsculas",
+	"replace.firstOnly": "Solo la 1.ª aparición",
+	"replace.firstOnlyHint":
+		"Reemplaza solo la primera vez que aparece el texto (p. ej., solo el 1.er espacio)",
 
 	// ---- Mayúsculas/minúsculas -----------------------------------------
 	"case.title": "Mayúsc./Minúsc.",

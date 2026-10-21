@@ -342,6 +342,9 @@ export const en: Messages = {
 	"replace.title": "Replace",
 	"replace.with": "With",
 	"replace.matchCase": "Match case",
+	"replace.firstOnly": "First occurrence only",
+	"replace.firstOnlyHint":
+		"Replaces only the first time the text appears (e.g. only the 1st space)",
 
 	// ---- Case -----------------------------------------------------------
 	"case.title": "Case",

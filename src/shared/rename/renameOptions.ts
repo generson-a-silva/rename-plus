@@ -21,6 +21,8 @@ export interface ReplaceOptions {
 	find: string;
 	with: string;
 	matchCase: boolean;
+	/** Troca só a primeira ocorrência (ex.: só o 1º espaço). */
+	firstOnly: boolean;
 }
 
 /** (4) Maiúsculas/minúsculas. */
@@ -115,7 +117,7 @@ export function createDefaultOptions(): RenameOptions {
 	return {
 		regex: { match: "", replace: "", includeExt: false, global: false, ignoreCase: false },
 		name: { mode: "keep", fixed: "" },
-		replace: { find: "", with: "", matchCase: false },
+		replace: { find: "", with: "", matchCase: false, firstOnly: false },
 		case: { mode: "same", exceptions: "" },
 		remove: {
 			first: 0,

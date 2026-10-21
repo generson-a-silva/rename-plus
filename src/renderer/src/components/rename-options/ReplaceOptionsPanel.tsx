@@ -30,11 +30,19 @@ export function ReplaceOptionsPanel({
 				value={value.with}
 				onChange={(text) => onChange({ with: text })}
 			/>
-			<CheckField
-				label={t("replace.matchCase")}
-				checked={value.matchCase}
-				onChange={(matchCase) => onChange({ matchCase })}
-			/>
+			<div className="checks">
+				<CheckField
+					label={t("replace.matchCase")}
+					checked={value.matchCase}
+					onChange={(matchCase) => onChange({ matchCase })}
+				/>
+				<CheckField
+					label={t("replace.firstOnly")}
+					title={t("replace.firstOnlyHint")}
+					checked={value.firstOnly}
+					onChange={(firstOnly) => onChange({ firstOnly })}
+				/>
+			</div>
 		</OptionPanel>
 	);
 }

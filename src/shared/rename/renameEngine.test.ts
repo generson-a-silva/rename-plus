@@ -70,6 +70,9 @@ describe("createRenamer", () => {
 		expect(rename("Foo foo.txt", { replace: { find: "foo", with: "$&", matchCase: true } })).toBe(
 			"Foo $&.txt",
 		);
+		expect(rename("a b c.txt", { replace: { find: " ", with: "-", firstOnly: true } })).toBe(
+			"a-b c.txt",
+		);
 	});
 
 	it("(4) caixa título com exceções", () => {

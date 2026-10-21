@@ -207,7 +207,10 @@ export function createRenamer(options: RenameOptions, platform = "linux"): Renam
 	const paths = getPlatformPaths(platform);
 	const regex = compileRegex(options.regex);
 	const replaceRegex = options.replace.find
-		? new RegExp(escapeRegExp(options.replace.find), options.replace.matchCase ? "g" : "gi")
+		? new RegExp(
+				escapeRegExp(options.replace.find),
+				`${options.replace.firstOnly ? "" : "g"}${options.replace.matchCase ? "" : "i"}`,
+			)
 		: null;
 
 	return (entry, context) => {
