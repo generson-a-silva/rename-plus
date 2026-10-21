@@ -1,6 +1,11 @@
 import { useI18n, useMasonryGrid } from "@hooks";
 import type { ListFilters } from "@lib";
-import { createDefaultOptions, type RenameOptions, type RenameSection } from "@shared/rename";
+import {
+	createDefaultOptions,
+	type DisabledSections,
+	type RenameOptions,
+	type RenameSection,
+} from "@shared/rename";
 import { useMemo, useRef } from "react";
 import { AddOptionsPanel } from "./AddOptionsPanel";
 import { AppendFolderOptionsPanel } from "./AppendFolderOptionsPanel";
@@ -17,9 +22,12 @@ import { ReplaceOptionsPanel } from "./ReplaceOptionsPanel";
 import type { RenameSectionPanelProps } from "./renameSectionPanelShared";
 
 interface RenameOptionsPanelsProps {
+	/** Valores dos painéis, inclusive das seções desligadas. */
 	options: RenameOptions;
+	disabledSections: DisabledSections;
 	onChange: <K extends RenameSection>(section: K, patch: Partial<RenameOptions[K]>) => void;
 	onReset: (section: RenameSection) => void;
+	onToggle: (section: RenameSection, enabled: boolean) => void;
 	filters: ListFilters;
 	onFiltersChange: (patch: Partial<ListFilters>) => void;
 	actions: RenameActionsPanelProps;
@@ -34,8 +42,10 @@ interface RenameOptionsPanelsProps {
  */
 export function RenameOptionsPanels({
 	options,
+	disabledSections,
 	onChange,
 	onReset,
+	onToggle,
 	filters,
 	onFiltersChange,
 	actions,
@@ -51,6 +61,8 @@ export function RenameOptionsPanels({
 		value: options[section],
 		onChange: (patch) => onChange(section, patch),
 		active: JSON.stringify(options[section]) !== JSON.stringify(defaults[section]),
+		enabled: !disabledSections[section],
+		onToggle: (enabled) => onToggle(section, enabled),
 		onReset: () => onReset(section),
 	});
 

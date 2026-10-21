@@ -307,6 +307,7 @@ export const en: Messages = {
 
 	// ---- Common panel options ------------------------------------------
 	"panel.reset": "Reset section",
+	"panel.toggle": "Apply this section (uncheck to turn it off without losing its values)",
 	"field.mode": "Mode",
 	"field.find": "Find",
 	"field.separator": "Separator",

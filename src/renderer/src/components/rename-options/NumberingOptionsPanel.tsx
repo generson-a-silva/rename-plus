@@ -7,11 +7,20 @@ export function NumberingOptionsPanel({
 	value,
 	onChange,
 	active,
+	enabled,
+	onToggle,
 	onReset,
 }: RenameSectionPanelProps<"numbering">) {
 	const { t } = useI18n();
 	return (
-		<OptionPanel title={t("numbering.title")} className="wide" active={active} onReset={onReset}>
+		<OptionPanel
+			title={t("numbering.title")}
+			className="wide"
+			active={active}
+			enabled={enabled}
+			onToggle={onToggle}
+			onReset={onReset}
+		>
 			<div className="grid-4">
 				<SelectField
 					label={t("field.mode")}

@@ -7,11 +7,19 @@ export function CaseOptionsPanel({
 	value,
 	onChange,
 	active,
+	enabled,
+	onToggle,
 	onReset,
 }: RenameSectionPanelProps<"case">) {
 	const { t } = useI18n();
 	return (
-		<OptionPanel title={t("case.title")} active={active} onReset={onReset}>
+		<OptionPanel
+			title={t("case.title")}
+			active={active}
+			enabled={enabled}
+			onToggle={onToggle}
+			onReset={onReset}
+		>
 			<SelectField
 				label={t("case.field")}
 				value={value.mode}

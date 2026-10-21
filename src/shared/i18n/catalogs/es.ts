@@ -310,6 +310,7 @@ export const es: Messages = {
 
 	// ---- Opciones comunes de los paneles -------------------------------
 	"panel.reset": "Restablecer sección",
+	"panel.toggle": "Aplicar esta sección (desmárquela para desactivarla sin perder los valores)",
 	"field.mode": "Modo",
 	"field.find": "Buscar",
 	"field.separator": "Separador",

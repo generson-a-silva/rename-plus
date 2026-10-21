@@ -7,11 +7,19 @@ export function AppendFolderOptionsPanel({
 	value,
 	onChange,
 	active,
+	enabled,
+	onToggle,
 	onReset,
 }: RenameSectionPanelProps<"appendFolder">) {
 	const { t } = useI18n();
 	return (
-		<OptionPanel title={t("appendFolder.title")} active={active} onReset={onReset}>
+		<OptionPanel
+			title={t("appendFolder.title")}
+			active={active}
+			enabled={enabled}
+			onToggle={onToggle}
+			onReset={onReset}
+		>
 			<SelectField
 				label={t("field.mode")}
 				value={value.mode}

@@ -7,11 +7,19 @@ export function ReplaceOptionsPanel({
 	value,
 	onChange,
 	active,
+	enabled,
+	onToggle,
 	onReset,
 }: RenameSectionPanelProps<"replace">) {
 	const { t } = useI18n();
 	return (
-		<OptionPanel title={t("replace.title")} active={active} onReset={onReset}>
+		<OptionPanel
+			title={t("replace.title")}
+			active={active}
+			enabled={enabled}
+			onToggle={onToggle}
+			onReset={onReset}
+		>
 			<TextField
 				label={t("field.find")}
 				value={value.find}

@@ -7,6 +7,9 @@ export interface RenameSectionPanelProps<K extends RenameSection> {
 	onChange: (patch: Partial<RenameOptions[K]>) => void;
 	/** A seção altera o nome (difere do padrão). */
 	active: boolean;
+	/** Caixa de seleção da seção: desmarcada, a seção não é aplicada, mas mantém os valores. */
+	enabled: boolean;
+	onToggle: (enabled: boolean) => void;
 	onReset: () => void;
 }
 

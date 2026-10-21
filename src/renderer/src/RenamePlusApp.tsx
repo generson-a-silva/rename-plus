@@ -60,8 +60,10 @@ import type {
 import {
 	buildPreview,
 	createDefaultOptions,
+	createDisabledSections,
 	type RenameOptions,
 	type RenameSection,
+	withoutDisabledSections,
 } from "@shared/rename";
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 
@@ -96,9 +98,19 @@ export function RenamePlusApp() {
 	const [currentDir, setCurrentDir] = usePersistentState<string>("lastDir", "");
 	// Os filtros não valem entre sessões: o app sempre abre só com arquivos e máscara "*".
 	const [filters, setFilters] = useState<ListFilters>(DEFAULT_FILTERS);
-	const [options, setOptions] = usePersistentState<RenameOptions>(
+	// Valores das regras como estão nos painéis, inclusive das seções desligadas.
+	const [rawOptions, setOptions] = usePersistentState<RenameOptions>(
 		"options",
 		createDefaultOptions(),
+	);
+	const [disabledSections, setDisabledSections] = usePersistentState(
+		"disabledSections",
+		createDisabledSections(),
+	);
+	// As regras que valem de fato (prévia, renomeação, presets): sem as seções desligadas.
+	const options = useMemo(
+		() => withoutDisabledSections(rawOptions, disabledSections),
+		[rawOptions, disabledSections],
 	);
 	const [sort, setSort] = usePersistentState<SortState>("sort", DEFAULT_SORT);
 	const [layout, setLayout] = usePersistentState("layout", { treeWidth: 260, panelsHeight: 340 });
@@ -404,9 +416,32 @@ export function RenamePlusApp() {
 	const resetOption = useCallback(
 		(section: RenameSection) => {
 			setOptions((prev) => ({ ...prev, [section]: createDefaultOptions()[section] }));
+			setDisabledSections((prev) => ({ ...prev, [section]: false }));
 		},
-		[setOptions],
+		[setOptions, setDisabledSections],
 	);
+
+	const toggleSection = useCallback(
+		(section: RenameSection, enabled: boolean) => {
+			setDisabledSections((prev) => ({ ...prev, [section]: !enabled }));
+		},
+		[setDisabledSections],
+	);
+
+	// Seção que voltou ao padrão some a caixa de seleção: ao ser usada de novo, já vem marcada.
+	useEffect(() => {
+		const defaults = createDefaultOptions();
+		const idle = (Object.keys(defaults) as RenameSection[]).filter(
+			(section) =>
+				disabledSections[section] &&
+				JSON.stringify(rawOptions[section]) === JSON.stringify(defaults[section]),
+		);
+		if (idle.length === 0) return;
+		setDisabledSections((prev) => ({
+			...prev,
+			...Object.fromEntries(idle.map((section) => [section, false])),
+		}));
+	}, [rawOptions, disabledSections, setDisabledSections]);
 
 	const summary = describePreview(preview, selection.size, t);
 
@@ -440,15 +475,17 @@ export function RenamePlusApp() {
 				before: activePreset ? session.before : options,
 			}));
 			setOptions(structuredClone(preset.options));
+			setDisabledSections(createDisabledSections());
 		},
-		[activePreset, options, setOptions, setPresetSession],
+		[activePreset, options, setOptions, setDisabledSections, setPresetSession],
 	);
 
 	const selectNoPreset = useCallback(() => {
 		if (!activePreset) return;
 		setOptions(structuredClone(presetSession.before));
+		setDisabledSections(createDisabledSections());
 		setPresetSession((session) => ({ ...session, activeId: "" }));
-	}, [activePreset, presetSession.before, setOptions, setPresetSession]);
+	}, [activePreset, presetSession.before, setOptions, setDisabledSections, setPresetSession]);
 
 	const updatePreset = useCallback(() => {
 		if (!activePreset) return;
@@ -672,9 +709,11 @@ export function RenamePlusApp() {
 					<span className="splitter-grip" />
 				</div>
 				<RenameOptionsPanels
-					options={options}
+					options={rawOptions}
+					disabledSections={disabledSections}
 					onChange={changeOption}
 					onReset={resetOption}
+					onToggle={toggleSection}
 					filters={filters}
 					onFiltersChange={(patch) => setFilters((prev) => ({ ...prev, ...patch }))}
 					sampleNames={sampleNames}
@@ -687,6 +726,7 @@ export function RenamePlusApp() {
 						onUndo: undo,
 						onResetAll: () => {
 							setOptions(createDefaultOptions());
+							setDisabledSections(createDisabledSections());
 							// Redefinir sai do preset: as regras padrão não são uma edição dele.
 							setPresetSession((session) => ({ ...session, activeId: "" }));
 						},

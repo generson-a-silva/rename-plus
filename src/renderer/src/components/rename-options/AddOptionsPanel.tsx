@@ -7,11 +7,19 @@ export function AddOptionsPanel({
 	value,
 	onChange,
 	active,
+	enabled,
+	onToggle,
 	onReset,
 }: RenameSectionPanelProps<"add">) {
 	const { t } = useI18n();
 	return (
-		<OptionPanel title={t("add.title")} active={active} onReset={onReset}>
+		<OptionPanel
+			title={t("add.title")}
+			active={active}
+			enabled={enabled}
+			onToggle={onToggle}
+			onReset={onReset}
+		>
 			<TextField
 				label={t("option.prefix")}
 				value={value.prefix}

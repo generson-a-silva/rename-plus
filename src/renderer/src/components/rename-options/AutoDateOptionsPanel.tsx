@@ -7,11 +7,19 @@ export function AutoDateOptionsPanel({
 	value,
 	onChange,
 	active,
+	enabled,
+	onToggle,
 	onReset,
 }: RenameSectionPanelProps<"autoDate">) {
 	const { t } = useI18n();
 	return (
-		<OptionPanel title={t("autoDate.title")} active={active} onReset={onReset}>
+		<OptionPanel
+			title={t("autoDate.title")}
+			active={active}
+			enabled={enabled}
+			onToggle={onToggle}
+			onReset={onReset}
+		>
 			<div className="grid-2">
 				<SelectField
 					label={t("field.mode")}

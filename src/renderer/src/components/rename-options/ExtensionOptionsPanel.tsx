@@ -7,11 +7,19 @@ export function ExtensionOptionsPanel({
 	value,
 	onChange,
 	active,
+	enabled,
+	onToggle,
 	onReset,
 }: RenameSectionPanelProps<"extension">) {
 	const { t } = useI18n();
 	return (
-		<OptionPanel title={t("extension.title")} active={active} onReset={onReset}>
+		<OptionPanel
+			title={t("extension.title")}
+			active={active}
+			enabled={enabled}
+			onToggle={onToggle}
+			onReset={onReset}
+		>
 			<SelectField
 				label={t("extension.field")}
 				value={value.mode}

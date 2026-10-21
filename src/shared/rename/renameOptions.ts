@@ -150,3 +150,25 @@ export function createDefaultOptions(): RenameOptions {
 		extension: { mode: "same", value: "" },
 	};
 }
+
+/** Seções desligadas pela caixa de seleção do painel (mantêm os valores, mas não são aplicadas). */
+export type DisabledSections = Record<RenameSection, boolean>;
+
+export function createDisabledSections(): DisabledSections {
+	const sections = Object.keys(createDefaultOptions()) as RenameSection[];
+	return Object.fromEntries(sections.map((section) => [section, false])) as DisabledSections;
+}
+
+/** As opções que valem de fato: cada seção desligada volta ao padrão. */
+export function withoutDisabledSections(
+	options: RenameOptions,
+	disabled: DisabledSections,
+): RenameOptions {
+	if (!Object.values(disabled).some(Boolean)) return options;
+	const defaults = createDefaultOptions();
+	const result = { ...options } as Record<RenameSection, unknown>;
+	for (const section of Object.keys(defaults) as RenameSection[]) {
+		if (disabled[section]) result[section] = defaults[section];
+	}
+	return result as unknown as RenameOptions;
+}

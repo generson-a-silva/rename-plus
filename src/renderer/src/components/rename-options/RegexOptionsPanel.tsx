@@ -14,13 +14,21 @@ export function RegexOptionsPanel({
 	value,
 	onChange,
 	active,
+	enabled,
+	onToggle,
 	onReset,
 	sampleNames,
 }: RegexOptionsPanelProps) {
 	const { t } = useI18n();
 	const [builderOpen, setBuilderOpen] = useState(false);
 	return (
-		<OptionPanel title={t("regex.title")} active={active} onReset={onReset}>
+		<OptionPanel
+			title={t("regex.title")}
+			active={active}
+			enabled={enabled}
+			onToggle={onToggle}
+			onReset={onReset}
+		>
 			<button
 				type="button"
 				className="button regex-builder-button"

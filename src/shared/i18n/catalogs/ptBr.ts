@@ -315,6 +315,7 @@ export const ptBr = {
 
 	// ---- Opções comuns dos painéis -------------------------------------
 	"panel.reset": "Redefinir seção",
+	"panel.toggle": "Aplicar esta seção (desmarque para desligá-la sem perder os valores)",
 	"field.mode": "Modo",
 	"field.find": "Buscar",
 	"field.separator": "Separador",

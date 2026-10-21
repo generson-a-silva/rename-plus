@@ -7,11 +7,19 @@ export function RemoveOptionsPanel({
 	value,
 	onChange,
 	active,
+	enabled,
+	onToggle,
 	onReset,
 }: RenameSectionPanelProps<"remove">) {
 	const { t } = useI18n();
 	return (
-		<OptionPanel title={t("remove.title")} active={active} onReset={onReset}>
+		<OptionPanel
+			title={t("remove.title")}
+			active={active}
+			enabled={enabled}
+			onToggle={onToggle}
+			onReset={onReset}
+		>
 			<div className="grid-2">
 				<NumberField
 					label={t("remove.first")}

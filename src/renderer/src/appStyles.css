@@ -811,6 +811,22 @@ button.header-cell:hover {
 	cursor: pointer;
 }
 
+/* Caixa de seleção que liga/desliga a seção, junto do título no badge. */
+.panel-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	cursor: pointer;
+}
+
+.panel-toggle-check {
+	width: 12px;
+	height: 12px;
+	margin: 0 0 0 -4px;
+	accent-color: var(--accent-fg);
+	cursor: pointer;
+}
+
 .panel-reset:hover {
 	background: rgb(255 255 255 / 0.25);
 }
@@ -818,6 +834,26 @@ button.header-cell:hover {
 .panel-body {
 	display: grid;
 	gap: 6px;
+}
+
+/* Seção desligada: mantém os valores, mas sem destaque e esmaecida. */
+.panel.active.disabled {
+	border-color: var(--border);
+	box-shadow: none;
+}
+
+.panel.active.disabled .panel-badge {
+	border-color: var(--badge-border);
+	background: var(--badge-bg);
+	color: var(--badge-fg);
+}
+
+.panel.active.disabled .panel-toggle-check {
+	accent-color: var(--accent);
+}
+
+.panel.disabled .panel-body {
+	opacity: 0.5;
 }
 
 .grid-2 {
