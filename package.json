@@ -2,6 +2,7 @@
 	"name": "rename-plus",
 	"version": "1.9.0",
 	"description": "Renomeador de arquivos e pastas em lote",
+	"homepage": "https://renameplus.app.br",
 	"author": {
 		"name": "Generson Silva"
 	},
@@ -86,6 +87,12 @@
 				"AppImage"
 			],
 			"category": "Utility",
+			"extraFiles": [
+				{
+					"from": "resources/linux/rename-plus.appdata.xml",
+					"to": "usr/share/metainfo/rename-plus.appdata.xml"
+				}
+			],
 			"icon": "resources/icons",
 			"desktop": {
 				"entry": {

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Metadados AppStream do AppImage (usr/share/metainfo): site, licença e descrição que lojas e
+     catálogos como GNOME Software, KDE Discover e AppImageHub mostram. -->
+<component type="desktop-application">
+  <id>com.renameplus.app</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-only</project_license>
+
+  <name>Rename Plus</name>
+  <summary>Batch file and folder renamer with a live preview</summary>
+  <summary xml:lang="pt_BR">Renomeador de arquivos e pastas em lote, com prévia ao vivo</summary>
+  <summary xml:lang="es">Renombrador de archivos y carpetas por lotes, con vista previa en vivo</summary>
+
+  <developer id="br.app.renameplus">
+    <name>Generson Silva</name>
+  </developer>
+
+  <description>
+    <p>
+      Rename many files and folders at once by combining rules such as RegEx, replace, case,
+      numbering, auto date and photo and music metadata, and see the new names before applying.
+    </p>
+    <p xml:lang="pt_BR">
+      Renomeie vários arquivos e pastas de uma vez combinando regras como RegEx, substituir,
+      maiúsculas e minúsculas, numeração, data automática e metadados de fotos e músicas, e veja
+      os novos nomes antes de aplicar.
+    </p>
+    <p xml:lang="es">
+      Renombra muchos archivos y carpetas a la vez combinando reglas como RegEx, reemplazar,
+      mayúsculas y minúsculas, numeración, fecha automática y metadatos de fotos y música, y mira
+      los nombres nuevos antes de aplicarlos.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">rename-plus.desktop</launchable>
+
+  <url type="homepage">https://renameplus.app.br</url>
+  <url type="bugtracker">https://github.com/generson-a-silva/rename-plus/issues</url>
+  <url type="vcs-browser">https://github.com/generson-a-silva/rename-plus</url>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>Photos renamed in batch, with a live preview of the new names</caption>
+      <image>https://raw.githubusercontent.com/generson-a-silva/rename-plus/master/docs/screenshot.png</image>
+    </screenshot>
+  </screenshots>
+
+  <categories>
+    <category>Utility</category>
+  </categories>
+
+  <content_rating type="oars-1.1"/>
+</component>
