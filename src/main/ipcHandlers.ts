@@ -12,6 +12,7 @@ import { IpcChannel } from "../shared/ipc";
 import { getAppInfo } from "./appInfo";
 import { getBackgroundInfo, setBackground } from "./backgroundService";
 import { canUndo, renameBatch, undoLastBatch } from "./batchRenamer";
+import { getFileDetails, getFileThumbnail } from "./fileDetailsService";
 import { listDirectories, listRoots, resolveDirectory } from "./fileSystemService";
 import { copyItems, createFolder, deleteItems, moveItems } from "./fileTransferService";
 import { takeLaunchRequests } from "./launchRequestQueue";
@@ -30,6 +31,7 @@ import {
 	refreshContextMenuIntegrations,
 	setContextMenuIntegration,
 } from "./shell-integration";
+import { calculateTotalSize } from "./sizeCalculator";
 import { setTheme } from "./themeSettings";
 import { checkForUpdates, getUpdateStatus, setUpdateSettings } from "./updateChecker";
 import {
@@ -55,6 +57,9 @@ function listingsOf(sender: WebContents): ListingJobs {
 	}
 	return jobs;
 }
+
+/** Somas de tamanho em andamento, pelo `id` do pedido (cancelar quando a seleção muda). */
+const sizeCalculations = new Map<number, AbortController>();
 
 export function registerIpcHandlers(): void {
 	ipcMain.handle(IpcChannel.GetAppInfo, () => getAppInfo());
@@ -96,6 +101,27 @@ export function registerIpcHandlers(): void {
 	ipcMain.on(IpcChannel.CancelListing, (event, id: number) => listingsOf(event.sender).cancel(id));
 	ipcMain.handle(IpcChannel.ListRoots, () => listRoots());
 	ipcMain.handle(IpcChannel.ResolveDirectory, (_event, target: string) => resolveDirectory(target));
+	ipcMain.handle(IpcChannel.GetFileDetails, (_event, target: string) => getFileDetails(target));
+	ipcMain.handle(IpcChannel.GetFileThumbnail, (_event, target: string) => getFileThumbnail(target));
+	ipcMain.handle(IpcChannel.CalculateSize, async (event, id: number, paths: string[]) => {
+		const { sender } = event;
+		const controller = new AbortController();
+		sizeCalculations.set(id, controller);
+		try {
+			return await calculateTotalSize(paths, {
+				signal: controller.signal,
+				onProgress: (total) => {
+					if (!sender.isDestroyed()) sender.send(IpcChannel.SizeProgress, { id, total });
+				},
+			});
+		} catch (error) {
+			if (controller.signal.aborted) return null;
+			throw error;
+		} finally {
+			sizeCalculations.delete(id);
+		}
+	});
+	ipcMain.on(IpcChannel.CancelSize, (_event, id: number) => sizeCalculations.get(id)?.abort());
 
 	ipcMain.handle(IpcChannel.Rename, (_event, operations: RenameOperation[]) =>
 		renameBatch(operations),

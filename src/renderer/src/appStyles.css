@@ -2600,3 +2600,145 @@ a.welcome-card:hover .button {
 	display: flex;
 	gap: 8px;
 }
+
+/* ---- Painel de detalhes ---------------------------------------------- */
+
+.details-panel {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 6px;
+	min-width: 0;
+	min-height: 0;
+	overflow: auto;
+	padding: 16px 12px;
+	background: var(--surface);
+	border-left: 1px solid var(--border);
+}
+
+/* Sem encolher: com pouca altura o painel rola, em vez de a imagem cobrir o nome. */
+.details-panel > * {
+	flex-shrink: 0;
+}
+
+.details-preview {
+	display: grid;
+	place-items: center;
+	width: 100%;
+	min-height: 120px;
+	margin-bottom: 6px;
+}
+
+.details-preview img,
+.details-preview video {
+	max-width: 100%;
+	max-height: 280px;
+	object-fit: contain;
+}
+
+/*
+ * Prévia sendo gerada: três pontos que passam do cinza para a cor de destaque e voltam,
+ * um após o outro, com aceleração quadrática (ease-in-out quad) nas duas direções.
+ */
+.loading-dots {
+	display: inline-flex;
+	gap: 10px;
+}
+
+.loading-dots span {
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	background: var(--border-strong);
+	animation: loading-dot 1.2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite alternate;
+}
+
+/* Atrasos negativos: a onda já começa em andamento, sem pontos parados no início. */
+.loading-dots span:nth-child(1) {
+	animation-delay: -0.8s;
+}
+
+.loading-dots span:nth-child(2) {
+	animation-delay: -0.4s;
+}
+
+@keyframes loading-dot {
+	to {
+		background: var(--accent);
+	}
+}
+
+/* Página de PDF: borda e sombra para a folha branca não sumir no fundo claro. */
+.details-preview .details-page {
+	border: 1px solid var(--border);
+	box-shadow: 0 1px 4px rgb(0 0 0 / 0.15);
+}
+
+.details-name {
+	max-width: 100%;
+	font-weight: 600;
+	font-size: 14px;
+	text-align: center;
+	overflow-wrap: anywhere;
+	user-select: text;
+}
+
+.details-new-name {
+	max-width: 100%;
+	color: var(--changed);
+	text-align: center;
+	overflow-wrap: anywhere;
+	user-select: text;
+}
+
+.details-fields {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
+	gap: 2px 8px;
+	/* Só a largura do conteúdo: o painel centraliza o bloco, como no Dolphin. */
+	width: fit-content;
+	max-width: 100%;
+	margin: 10px 0 0;
+}
+
+.details-fields dt {
+	color: var(--muted);
+	text-align: right;
+	white-space: nowrap;
+}
+
+.details-fields dd {
+	margin: 0;
+	overflow-wrap: anywhere;
+	user-select: text;
+}
+
+.details-empty {
+	margin: auto 0;
+	color: var(--muted);
+	text-align: center;
+}
+
+/* Vários itens selecionados: folhas empilhadas com a quantidade num selo. */
+.details-multiple {
+	position: relative;
+	color: var(--icon-file);
+}
+
+.details-count {
+	position: absolute;
+	right: -6px;
+	bottom: 4px;
+	min-width: 28px;
+	padding: 2px 8px;
+	border-radius: 999px;
+	background: var(--accent);
+	color: var(--accent-fg);
+	font-weight: 600;
+	text-align: center;
+}
+
+.details-calculating {
+	color: var(--muted);
+	font-style: italic;
+}

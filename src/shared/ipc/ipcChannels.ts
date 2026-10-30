@@ -10,6 +10,10 @@ export const IpcChannel = {
 	CancelListing: "fs:listing-cancel",
 	ListRoots: "fs:list-roots",
 	ResolveDirectory: "fs:resolve-directory",
+	GetFileDetails: "fs:file-details",
+	GetFileThumbnail: "fs:file-thumbnail",
+	CalculateSize: "fs:size-calculate",
+	CancelSize: "fs:size-cancel",
 	Rename: "rename:execute",
 	Undo: "rename:undo",
 	CanUndo: "rename:can-undo",
@@ -42,6 +46,8 @@ export const IpcChannel = {
 	UpdateStatus: "update:status",
 	/** Evento main → renderer: itens e situação de uma listagem (`ListingEvent`). */
 	ListingEvent: "fs:listing-event",
+	/** Evento main → renderer: total parcial de uma soma de tamanhos (`SizeProgress`). */
+	SizeProgress: "fs:size-progress",
 	/** Evento main → renderer: regras, situação ou atividade das pastas monitoradas mudaram. */
 	WatchFoldersChanged: "watch:changed",
 } as const;

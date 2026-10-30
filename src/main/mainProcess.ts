@@ -14,6 +14,7 @@ import { registerIpcHandlers } from "./ipcHandlers";
 import { parseLaunchArguments } from "./launchArguments";
 import { asLaunchRequest, queueLaunchRequest } from "./launchRequestQueue";
 import { loadSavedLocale } from "./localePreference";
+import { handleLocalFileProtocol, registerLocalFileScheme } from "./localFileProtocol";
 import { setMainLocale } from "./mainLocale";
 import { loadTheme, windowBackground } from "./themeSettings";
 import { startUpdateChecks } from "./updateChecker";
@@ -156,11 +157,13 @@ function handOver(incoming: InstanceIdentity): void {
 }
 
 function startApp(): void {
+	registerLocalFileScheme();
 	app.whenReady().then(async () => {
 		// Idioma escolhido na interface (salvo); na primeira vez, o do sistema.
 		setMainLocale(loadSavedLocale() ?? resolveLocale(app.getLocale()));
 		loadTheme();
 		registerIpcHandlers();
+		handleLocalFileProtocol();
 		startWatchFolders();
 		await initBackground({ open: showWindow, hasWindow: () => mainWindow !== null });
 		if (!startInBackground) {

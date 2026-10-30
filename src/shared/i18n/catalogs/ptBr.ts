@@ -276,6 +276,8 @@ export const ptBr = {
 	"toolbar.invert": "Inverter seleção",
 	"toolbar.showHidden": "Mostrar itens ocultos (Ctrl+H)",
 	"toolbar.hideHidden": "Ocultar itens ocultos (Ctrl+H)",
+	"toolbar.showDetails": "Mostrar painel de detalhes",
+	"toolbar.hideDetails": "Ocultar painel de detalhes",
 
 	// ---- Lista de arquivos ----------------------------------------------
 	"list.label": "Arquivos",
@@ -292,6 +294,38 @@ export const ptBr = {
 	"columns.resizeHint": "Arraste para ajustar a largura · duplo clique para ajustar ao conteúdo",
 	"fileType.folder": "Pasta",
 	"fileType.file": "Arquivo",
+
+	// ---- Painel de detalhes ---------------------------------------------
+	"details.label": "Detalhes",
+	"details.empty": "Selecione um item para ver os detalhes.",
+	"details.selected": { one: "{count} item selecionado", other: "{count} itens selecionados" },
+	"details.type": "Tipo",
+	"details.size": "Tamanho",
+	"details.calculating": "calculando…",
+	"details.contents": "Conteúdo",
+	"details.modified": "Modificado",
+	"details.accessed": "Acessado",
+	"details.created": "Criado",
+	"details.owner": "Proprietário",
+	"details.dimensions": "Dimensões",
+	"details.duration": "Duração",
+	"details.pages": "Páginas",
+	"details.newName": "Novo nome",
+	"details.unreadable": "Sem permissão de leitura",
+	"details.typeWithExt": "{kind} {ext}",
+	"fileKind.image": "Imagem",
+	"fileKind.video": "Vídeo",
+	"fileKind.audio": "Áudio",
+	"fileKind.archive": "Arquivo compactado",
+	"fileKind.pdf": "Documento",
+	"fileKind.document": "Documento",
+	"fileKind.spreadsheet": "Planilha",
+	"fileKind.presentation": "Apresentação",
+	"fileKind.text": "Texto",
+	"fileKind.code": "Código-fonte",
+	"fileKind.executable": "Executável",
+	"fileKind.font": "Fonte",
+	"fileKind.file": "Arquivo",
 
 	// ---- Barra de status ------------------------------------------------
 	"status.items": { one: "{count} item", other: "{count} itens" },
@@ -312,6 +346,7 @@ export const ptBr = {
 	// ---- Layout ---------------------------------------------------------
 	"layout.treeSplitter": "Arraste para redimensionar a árvore de pastas",
 	"layout.panelsSplitter": "Arraste para redimensionar (até metade da área)",
+	"layout.detailsSplitter": "Arraste para redimensionar o painel de detalhes",
 
 	// ---- Opções comuns dos painéis -------------------------------------
 	"panel.reset": "Redefinir seção",

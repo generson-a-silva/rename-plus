@@ -77,3 +77,35 @@ export type ListingEvent =
 	| { id: number; type: "done"; count: number; memoryExhausted: boolean }
 	| { id: number; type: "cancelled"; count: number }
 	| { id: number; type: "error"; message: string };
+
+/** Miniatura do painel de detalhes, como `data:` URL (permitida pela CSP da interface). */
+export interface FileThumbnail {
+	url: string;
+	/** Dimensões da imagem original, quando conhecidas (a miniatura pode estar reduzida). */
+	width: number | null;
+	height: number | null;
+	/** A miniatura é o próprio arquivo, sem redução: as dimensões saem dela ao carregar. */
+	isOriginal: boolean;
+}
+
+/** Informações do painel de detalhes que a listagem não traz. */
+export interface FileDetails {
+	atimeMs: number;
+	/** Usuário dono (Linux/macOS): o nome ou, se não for encontrado, o número; `null` no Windows. */
+	owner: string | null;
+	/** Itens dentro da pasta (sem contar subpastas); `null` para arquivos ou pasta ilegível. */
+	itemCount: number | null;
+}
+
+/** Soma dos tamanhos de uma seleção (o conteúdo das pastas incluído). */
+export interface SizeTotal {
+	bytes: number;
+	files: number;
+	folders: number;
+}
+
+/** Total parcial de uma soma em andamento, identificada pelo `id` do pedido. */
+export interface SizeProgress {
+	id: number;
+	total: SizeTotal;
+}

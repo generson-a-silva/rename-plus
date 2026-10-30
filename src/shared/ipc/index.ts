@@ -9,11 +9,15 @@ export type {
 	DirEntry,
 	EntryGroup,
 	EntryTuple,
+	FileDetails,
 	FileEntry,
 	FileSystemRoot,
+	FileThumbnail,
 	ListingEvent,
 	ListOptions,
 	MemoryReport,
+	SizeProgress,
+	SizeTotal,
 } from "./fileSystemTypes";
 export { IpcChannel } from "./ipcChannels";
 export type {

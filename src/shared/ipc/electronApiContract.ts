@@ -8,10 +8,14 @@ import type { ConfirmRequest } from "./dialogTypes";
 import type { FileOperationResult } from "./fileOperationTypes";
 import type {
 	DirEntry,
+	FileDetails,
 	FileSystemRoot,
+	FileThumbnail,
 	ListingEvent,
 	ListOptions,
 	MemoryReport,
+	SizeProgress,
+	SizeTotal,
 } from "./fileSystemTypes";
 import type {
 	LaunchRequest,
@@ -50,6 +54,20 @@ export interface ElectronApi {
 	listRoots: () => Promise<FileSystemRoot[]>;
 	/** Caminho absoluto e canônico da pasta, ou `null` se não existir/não for pasta. */
 	resolveDirectory: (path: string) => Promise<string | null>;
+	/** Data de acesso, dono e itens da pasta (painel de detalhes); `null` se o item não existir mais. */
+	getFileDetails: (path: string) => Promise<FileDetails | null>;
+	/**
+	 * Miniatura do arquivo (imagens, miniatura embutida em documentos, LibreOffice, sistema).
+	 * Vídeos e PDFs a interface gera sozinha, pelo protocolo de `@shared/preview`.
+	 */
+	getFileThumbnail: (path: string) => Promise<FileThumbnail | null>;
+	/**
+	 * Soma o tamanho dos itens, com o conteúdo das pastas. Os totais parciais chegam por
+	 * `onSizeProgress` com o mesmo `id`; devolve `null` se for cancelada.
+	 */
+	calculateSize: (id: number, paths: string[]) => Promise<SizeTotal | null>;
+	cancelSizeCalculation: (id: number) => void;
+	onSizeProgress: (listener: (progress: SizeProgress) => void) => () => void;
 	rename: (operations: RenameOperation[]) => Promise<RenameResult>;
 	undo: () => Promise<RenameResult>;
 	canUndo: () => Promise<boolean>;

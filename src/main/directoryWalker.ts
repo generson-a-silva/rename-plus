@@ -16,7 +16,7 @@ export interface WalkOptions extends ListOptions {
 }
 
 /** Executa `task` para cada item com no máximo `limit` ao mesmo tempo, mantendo a ordem. */
-async function mapLimit<T, R>(
+export async function mapLimit<T, R>(
 	items: readonly T[],
 	limit: number,
 	task: (item: T) => Promise<R>,

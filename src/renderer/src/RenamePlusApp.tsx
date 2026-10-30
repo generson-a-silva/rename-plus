@@ -1,5 +1,6 @@
 import {
 	DropOverlay,
+	FileDetailsPanel,
 	FileListView,
 	FolderTreeView,
 	NavigationToolbar,
@@ -113,7 +114,12 @@ export function RenamePlusApp() {
 		[rawOptions, disabledSections],
 	);
 	const [sort, setSort] = usePersistentState<SortState>("sort", DEFAULT_SORT);
-	const [layout, setLayout] = usePersistentState("layout", { treeWidth: 260, panelsHeight: 340 });
+	const [layout, setLayout] = usePersistentState("layout", {
+		treeWidth: 260,
+		panelsHeight: 340,
+		detailsWidth: 280,
+	});
+	const [showDetails, setShowDetails] = usePersistentState("showDetails", false);
 
 	const [selection, setSelection] = useState<Set<string>>(() => new Set());
 	const [message, setMessage] = useState<StatusMessage | null>(null);
@@ -324,6 +330,11 @@ export function RenamePlusApp() {
 		() => buildPreview(selectedEntries, listing.entries, deferredOptions, PREVIEW_CONTEXT),
 		[selectedEntries, listing.entries, deferredOptions],
 	);
+	// Novo nome no painel de detalhes: só quando há um único item selecionado.
+	const [singleSelected] = selectedEntries.length === 1 ? selectedEntries : [];
+	const singleItem = singleSelected && preview.items.get(singleSelected.path);
+	const detailsNewName =
+		singleItem && singleItem.status !== "unchanged" ? singleItem.newName : null;
 
 	// --- Ações ---------------------------------------------------------------
 	const applyResult = useCallback(
@@ -617,6 +628,14 @@ export function RenamePlusApp() {
 		max: 600,
 		onChange: (treeWidth) => setLayout((prev) => ({ ...prev, treeWidth })),
 	});
+	const startDetailsResize = useResizableSplitter({
+		axis: "x",
+		value: layout.detailsWidth,
+		min: 200,
+		max: 600,
+		direction: -1,
+		onChange: (detailsWidth) => setLayout((prev) => ({ ...prev, detailsWidth })),
+	});
 	// A área de filtros pode ocupar até metade da área de trabalho. O valor salvo é
 	// preservado: se a janela encolher, a área encolhe junto e volta ao crescer.
 	const workspaceRef = useRef<HTMLDivElement>(null);
@@ -652,6 +671,8 @@ export function RenamePlusApp() {
 				onSelectNone={() => setSelection(new Set())}
 				showHidden={filters.hidden}
 				onToggleHidden={toggleHidden}
+				showDetails={showDetails}
+				onToggleDetails={() => setShowDetails((show) => !show)}
 				onOpenSettings={() => setSettingsOpen(true)}
 				onOpenWelcome={() => setWelcome("start")}
 				onInvert={() =>
@@ -668,7 +689,9 @@ export function RenamePlusApp() {
 			>
 				<div
 					className="browser"
-					style={{ gridTemplateColumns: `${layout.treeWidth}px 5px minmax(0, 1fr)` }}
+					style={{
+						gridTemplateColumns: `${layout.treeWidth}px 5px minmax(0, 1fr)${showDetails ? ` 5px ${layout.detailsWidth}px` : ""}`,
+					}}
 				>
 					<FolderTreeView
 						roots={roots}
@@ -700,6 +723,18 @@ export function RenamePlusApp() {
 						}
 						onContextMenu={commands.openListMenu}
 					/>
+					{showDetails && (
+						<>
+							<div
+								className="splitter vertical"
+								title={t("layout.detailsSplitter")}
+								onPointerDown={startDetailsResize}
+							>
+								<span className="splitter-grip" />
+							</div>
+							<FileDetailsPanel selected={selectedEntries} newName={detailsNewName} />
+						</>
+					)}
 				</div>
 				<div
 					className="splitter horizontal"

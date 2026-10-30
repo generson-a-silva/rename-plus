@@ -271,6 +271,8 @@ export const es: Messages = {
 	"toolbar.invert": "Invertir selección",
 	"toolbar.showHidden": "Mostrar elementos ocultos (Ctrl+H)",
 	"toolbar.hideHidden": "Ocultar elementos ocultos (Ctrl+H)",
+	"toolbar.showDetails": "Mostrar panel de detalles",
+	"toolbar.hideDetails": "Ocultar panel de detalles",
 
 	// ---- Lista de archivos ----------------------------------------------
 	"list.label": "Archivos",
@@ -287,6 +289,41 @@ export const es: Messages = {
 	"columns.resizeHint": "Arrastra para ajustar el ancho · doble clic para ajustar al contenido",
 	"fileType.folder": "Carpeta",
 	"fileType.file": "Archivo",
+
+	// ---- Panel de detalles ----------------------------------------------
+	"details.label": "Detalles",
+	"details.empty": "Selecciona un elemento para ver sus detalles.",
+	"details.selected": {
+		one: "{count} elemento seleccionado",
+		other: "{count} elementos seleccionados",
+	},
+	"details.type": "Tipo",
+	"details.size": "Tamaño",
+	"details.calculating": "calculando…",
+	"details.contents": "Contenido",
+	"details.modified": "Modificado",
+	"details.accessed": "Accedido",
+	"details.created": "Creado",
+	"details.owner": "Propietario",
+	"details.dimensions": "Dimensiones",
+	"details.duration": "Duración",
+	"details.pages": "Páginas",
+	"details.newName": "Nuevo nombre",
+	"details.unreadable": "Sin permiso de lectura",
+	"details.typeWithExt": "{kind} {ext}",
+	"fileKind.image": "Imagen",
+	"fileKind.video": "Vídeo",
+	"fileKind.audio": "Audio",
+	"fileKind.archive": "Archivo comprimido",
+	"fileKind.pdf": "Documento",
+	"fileKind.document": "Documento",
+	"fileKind.spreadsheet": "Hoja de cálculo",
+	"fileKind.presentation": "Presentación",
+	"fileKind.text": "Texto",
+	"fileKind.code": "Código fuente",
+	"fileKind.executable": "Ejecutable",
+	"fileKind.font": "Fuente",
+	"fileKind.file": "Archivo",
 
 	// ---- Barra de estado ------------------------------------------------
 	"status.items": { one: "{count} elemento", other: "{count} elementos" },
@@ -307,6 +344,7 @@ export const es: Messages = {
 	// ---- Diseño ---------------------------------------------------------
 	"layout.treeSplitter": "Arrastra para redimensionar el árbol de carpetas",
 	"layout.panelsSplitter": "Arrastra para redimensionar (hasta la mitad del área)",
+	"layout.detailsSplitter": "Arrastra para redimensionar el panel de detalles",
 
 	// ---- Opciones comunes de los paneles -------------------------------
 	"panel.reset": "Restablecer sección",

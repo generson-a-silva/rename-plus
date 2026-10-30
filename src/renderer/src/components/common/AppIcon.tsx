@@ -42,6 +42,8 @@ const PATHS = {
 	chat: "M4 5h16v11H10l-6 4z",
 	shield: "M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6zM9 12l2 2 4-4",
 	info: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v5M12 8h.01",
+	/** Janela com painel lateral à direita (painel de detalhes). */
+	details: "M3 4h18v16H3zM15 4v16M17.5 8h1M17.5 11h1M17.5 14h1",
 } as const;
 
 export type AppIconName = keyof typeof PATHS;

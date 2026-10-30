@@ -268,6 +268,8 @@ export const en: Messages = {
 	"toolbar.invert": "Invert selection",
 	"toolbar.showHidden": "Show hidden items (Ctrl+H)",
 	"toolbar.hideHidden": "Hide hidden items (Ctrl+H)",
+	"toolbar.showDetails": "Show details panel",
+	"toolbar.hideDetails": "Hide details panel",
 
 	// ---- File list ------------------------------------------------------
 	"list.label": "Files",
@@ -284,6 +286,38 @@ export const en: Messages = {
 	"columns.resizeHint": "Drag to adjust the width · double-click to fit the content",
 	"fileType.folder": "Folder",
 	"fileType.file": "File",
+
+	// ---- Details panel --------------------------------------------------
+	"details.label": "Details",
+	"details.empty": "Select an item to see its details.",
+	"details.selected": { one: "{count} item selected", other: "{count} items selected" },
+	"details.type": "Type",
+	"details.size": "Size",
+	"details.calculating": "calculating…",
+	"details.contents": "Contents",
+	"details.modified": "Modified",
+	"details.accessed": "Accessed",
+	"details.created": "Created",
+	"details.owner": "Owner",
+	"details.dimensions": "Dimensions",
+	"details.duration": "Duration",
+	"details.pages": "Pages",
+	"details.newName": "New name",
+	"details.unreadable": "No read permission",
+	"details.typeWithExt": "{ext} {kind}",
+	"fileKind.image": "image",
+	"fileKind.video": "video",
+	"fileKind.audio": "audio",
+	"fileKind.archive": "archive",
+	"fileKind.pdf": "document",
+	"fileKind.document": "document",
+	"fileKind.spreadsheet": "spreadsheet",
+	"fileKind.presentation": "presentation",
+	"fileKind.text": "text",
+	"fileKind.code": "source code",
+	"fileKind.executable": "executable",
+	"fileKind.font": "font",
+	"fileKind.file": "file",
 
 	// ---- Status bar -----------------------------------------------------
 	"status.items": { one: "{count} item", other: "{count} items" },
@@ -304,6 +338,7 @@ export const en: Messages = {
 	// ---- Layout ---------------------------------------------------------
 	"layout.treeSplitter": "Drag to resize the folder tree",
 	"layout.panelsSplitter": "Drag to resize (up to half of the area)",
+	"layout.detailsSplitter": "Drag to resize the details panel",
 
 	// ---- Common panel options ------------------------------------------
 	"panel.reset": "Reset section",

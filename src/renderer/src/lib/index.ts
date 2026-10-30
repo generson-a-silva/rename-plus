@@ -23,6 +23,7 @@ export {
 export { insertItem, moveItem } from "./listReorder";
 export { loadStored, mergeDefaults, saveStored } from "./localPreferencesStorage";
 export { diffNames, type NameDiffSegment } from "./nameDiff";
+export { type PdfPreview, renderPdfPreview } from "./pdfPreview";
 export {
 	findMatchingPreset,
 	findPresetByName,

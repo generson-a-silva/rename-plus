@@ -20,6 +20,7 @@ export { useMasonryGrid } from "./useMasonryGrid";
 export { usePersistentState } from "./usePersistentState";
 export { type RenamePresetsState, useRenamePresets } from "./useRenamePresets";
 export { useResizableSplitter } from "./useResizableSplitter";
+export { type SelectionSize, useSelectionSize } from "./useSelectionSize";
 export { type TextPromptRequest, useTextPrompt } from "./useTextPrompt";
 export { useThemeMode } from "./useThemeMode";
 export { type UpdateStatusState, useUpdateStatus } from "./useUpdateStatus";
