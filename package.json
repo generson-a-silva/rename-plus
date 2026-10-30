@@ -97,6 +97,7 @@
 			"desktop": {
 				"entry": {
 					"StartupWMClass": "rename-plus",
+					"StartupNotify": "true",
 					"X-AppImage-Version": ""
 				}
 			}
