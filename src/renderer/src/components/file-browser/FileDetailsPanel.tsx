@@ -1,6 +1,8 @@
 import { useI18n, useSelectionSize } from "@hooks";
 import { fileExtensionLabel, fileKind } from "@lib";
-import type { FileDetails, FileEntry } from "@shared/ipc";
+import type { FileDetails, FileEntry, FileMetadata } from "@shared/ipc";
+import { metadataKindOf } from "@shared/metadata";
+import { cameraName, METADATA_TEMPLATE_FIELDS, type MetadataFieldName } from "@shared/rename";
 import { type ReactNode, useEffect, useState } from "react";
 import { FilePreview, type PreviewInfo } from "./FilePreview";
 
@@ -13,10 +15,35 @@ interface FileDetailsPanelProps {
 	selected: readonly FileEntry[];
 	/** Novo nome que o item selecionado vai receber (`null` se não muda ou se são vários). */
 	newName: string | null;
+	/** Põe o campo (ex.: "{artist}") no modelo do painel Metadados. */
+	onInsertMetadataField: (token: string) => void;
 }
 
+/** Campos mostrados no painel (dimensões e duração já vêm da prévia). */
+const DETAIL_FIELDS: readonly MetadataFieldName[] = [
+	"date",
+	"camera",
+	"lens",
+	"iso",
+	"aperture",
+	"focal",
+	"artist",
+	"albumartist",
+	"album",
+	"title",
+	"track",
+	"disc",
+	"year",
+	"genre",
+];
+const TOKENS = new Map(METADATA_TEMPLATE_FIELDS.map((field) => [field.name, field.token]));
+
 /** Painel à direita da lista: miniatura e informações do item, como o painel de detalhes do Dolphin. */
-export function FileDetailsPanel({ selected, newName }: FileDetailsPanelProps) {
+export function FileDetailsPanel({
+	selected,
+	newName,
+	onInsertMetadataField,
+}: FileDetailsPanelProps) {
 	const { t, formatDateTime, formatNumber, formatSize } = useI18n();
 	const entry = selected.length === 1 ? (selected[0] ?? null) : null;
 	const selectionSize = useSelectionSize(selected, selected.length > 1);
@@ -24,7 +51,11 @@ export function FileDetailsPanel({ selected, newName }: FileDetailsPanelProps) {
 	const [loaded, setLoaded] = useState<{ key: string; details: FileDetails | null } | null>(null);
 	// O que a prévia descobriu (dimensões, duração, páginas), também por arquivo e versão.
 	const [preview, setPreview] = useState<{ key: string; info: PreviewInfo } | null>(null);
+	const [metadata, setMetadata] = useState<{ key: string; value: FileMetadata | null } | null>(
+		null,
+	);
 	const key = entry ? `${entry.path}\n${entry.mtimeMs}` : "";
+	const hasMetadata = entry !== null && !entry.isDir && metadataKindOf(entry.name) !== null;
 
 	useEffect(() => {
 		if (!entry) return;
@@ -38,6 +69,19 @@ export function FileDetailsPanel({ selected, newName }: FileDetailsPanelProps) {
 			window.clearTimeout(timer);
 		};
 	}, [entry, key]);
+
+	useEffect(() => {
+		if (!entry || !hasMetadata) return;
+		let current = true;
+		const timer = window.setTimeout(async () => {
+			const value = await window.api.getFileMetadata(entry.path);
+			if (current) setMetadata({ key, value });
+		}, LOAD_DELAY_MS);
+		return () => {
+			current = false;
+			window.clearTimeout(timer);
+		};
+	}, [entry, key, hasMetadata]);
 
 	if (!entry) {
 		return (
@@ -72,6 +116,26 @@ export function FileDetailsPanel({ selected, newName }: FileDetailsPanelProps) {
 		: t(`fileKind.${kind as Exclude<typeof kind, "folder">}`);
 	const typeLabel = ext ? t("details.typeWithExt", { kind: kindLabel, ext }) : kindLabel;
 	const { width, height, duration, pages } = preview?.key === key ? preview.info : {};
+	const fileMetadata = hasMetadata && metadata?.key === key ? metadata.value : null;
+
+	/** Valor de um campo como aparece no painel; `null` se o arquivo não o tem. */
+	const metadataValue = (meta: FileMetadata, field: MetadataFieldName): string | null => {
+		switch (field) {
+			case "date":
+				return meta.takenAt === null ? null : formatDateTime(meta.takenAt);
+			case "camera":
+				// O mesmo texto que o campo {camera} põe no nome.
+				return cameraName(meta);
+			case "aperture":
+				return meta.aperture === null ? null : `f/${formatNumber(meta.aperture)}`;
+			case "focal":
+				return meta.focalLength === null ? null : `${formatNumber(meta.focalLength)} mm`;
+			default: {
+				const value = meta[METADATA_KEYS[field]];
+				return value === null ? null : String(value);
+			}
+		}
+	};
 
 	return (
 		<aside className="details-panel" aria-label={t("details.label")}>
@@ -116,6 +180,31 @@ export function FileDetailsPanel({ selected, newName }: FileDetailsPanelProps) {
 				)}
 				{pages !== undefined && <Field label={t("details.pages")}>{formatNumber(pages)}</Field>}
 			</dl>
+			{fileMetadata && (
+				<>
+					<div className="details-section">{t("details.metadata")}</div>
+					<dl className="details-fields">
+						{DETAIL_FIELDS.map((field) => {
+							const value = metadataValue(fileMetadata, field);
+							const token = TOKENS.get(field) ?? "";
+							return (
+								value !== null && (
+									<Field key={field} label={t(`metadataField.${field}`)}>
+										<button
+											type="button"
+											className="details-metadata-value"
+											title={t("details.insertField", { field: token })}
+											onClick={() => onInsertMetadataField(token)}
+										>
+											{value}
+										</button>
+									</Field>
+								)
+							);
+						})}
+					</dl>
+				</>
+			)}
 		</aside>
 	);
 }
@@ -143,6 +232,28 @@ function MultipleItemsIcon({ count }: { count: string }) {
 		</div>
 	);
 }
+
+/** Propriedade de `FileMetadata` lida pelos campos sem formatação própria. */
+const METADATA_KEYS = {
+	make: "cameraMake",
+	model: "cameraModel",
+	lens: "lens",
+	iso: "iso",
+	width: "width",
+	height: "height",
+	artist: "artist",
+	albumartist: "albumArtist",
+	album: "album",
+	title: "title",
+	track: "track",
+	disc: "disc",
+	year: "year",
+	genre: "genre",
+	duration: "duration",
+} as const satisfies Record<
+	Exclude<MetadataFieldName, "date" | "camera" | "aperture" | "focal">,
+	keyof FileMetadata
+>;
 
 function Field({ label, children }: { label: string; children: ReactNode }) {
 	return (

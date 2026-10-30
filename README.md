@@ -140,7 +140,7 @@ Rename Plus is an independent project, written from scratch:
 - it is **not affiliated with** or endorsed by its authors;
 - it is **not a full replacement**: see [what Rename Plus doesn't do](#what-rename-plus-doesnt-do).
 
-If you're on Windows and need advanced features such as EXIF/ID3 metadata, JavaScript scripting or CSV import, take a look at Bulk Rename Utility.
+If you're on Windows and need advanced features such as JavaScript scripting or CSV import, take a look at Bulk Rename Utility.
 
 ## Features
 
@@ -150,11 +150,12 @@ If you're on Windows and need advanced features such as EXIF/ID3 metadata, JavaS
 |---|---|
 | **RegEx** | Find and replace with regular expressions, with capture groups (`$1`, `$2`…), an option to include the extension, global replacement and case-insensitive matching. The **Visual builder** lets you put the expression together from drag-and-drop blocks, without typing RegEx. |
 | **Name** | Keep, remove, replace with a fixed name or reverse the original name. |
+| **Metadata** | Builds the name from information inside the file, with a template such as `{track:2} - {artist} - {title}`: date taken, camera, lens, ISO, aperture and focal length from photos (EXIF); artist, album, title, track, disc, year, genre and duration from music (MP3, FLAC, OGG, M4A…). Replaces the name or goes in as a prefix/suffix. Forbidden characters in values (`AC/DC`) become `-`; an empty field is either an error or a fallback text. Values in the details panel go into the template with one click. |
 | **Replace** | Plain text replacement, case-sensitive or not. |
 | **Case** | lowercase, UPPERCASE, Title Case and Sentence case, with a list of words to leave untouched. |
 | **Remove** | First/last N characters, a range of positions, specific characters and words, crop before/after a piece of text, digits, accents, symbols, non-ASCII characters, double spaces, leading/trailing spaces and leading dots. |
 | **Add** | Prefix, suffix, insertion at a position (negative counts from the end) and splitting joined words (`MyPhoto` → `My Photo`). |
-| **Auto date** | Modified, created or current date, as a prefix or suffix, in any format (`YYYY-MM-DD`, `DD.MM.YY`…). |
+| **Auto date** | Modified, created, current or photo taken (EXIF) date, as a prefix or suffix, in any format (`YYYY-MM-DD`, `DD.MM.YY`…). |
 | **Folder name** | Adds the name of one or more parent folders. |
 | **Numbering** | Prefix, suffix, both or at a position; start, step, zero padding; `1, 2, 3`, `a, b, c`, `A, B, C` and `I, II, III` styles; restart in each folder. |
 | **Extension** | Keep, lowercase, UPPERCASE, Title, remove, replace with a fixed one or append an extra one. |
@@ -227,7 +228,7 @@ Right-click the list or the tree to open with the default app, show in the file 
 Rules are always applied in this order, each one on the result of the previous one:
 
 ```
-RegEx → Name → Replace → Case → Remove → Add
+RegEx → Name → Metadata → Replace → Case → Remove → Add
       → Auto date → Folder name → Numbering → Extension
 ```
 
@@ -239,7 +240,7 @@ For folders, the dot is **not** treated as an extension separator (`v1.2` stays 
 
 To be clear about the current scope:
 
-- **Doesn't read file metadata:** no EXIF from photos, ID3 from music or document properties to build names.
+- **Reads metadata from photos and music only:** not from videos or document properties, doesn't turn photo GPS into a city name and never writes metadata to files.
 - **Doesn't run scripts** (e.g. JavaScript) or import lists of file names from CSV.
 - **Doesn't move or copy parts of the name** from one position to another (Bulk Rename Utility's "Move/Copy" panel).
 - **Doesn't change dates, attributes or permissions** of files; only names.

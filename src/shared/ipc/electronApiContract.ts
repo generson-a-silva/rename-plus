@@ -17,6 +17,7 @@ import type {
 	SizeProgress,
 	SizeTotal,
 } from "./fileSystemTypes";
+import type { FileMetadata, MetadataProgress, MetadataResult } from "./metadataTypes";
 import type {
 	LaunchRequest,
 	ShellIntegrationInfo,
@@ -68,6 +69,15 @@ export interface ElectronApi {
 	calculateSize: (id: number, paths: string[]) => Promise<SizeTotal | null>;
 	cancelSizeCalculation: (id: number) => void;
 	onSizeProgress: (listener: (progress: SizeProgress) => void) => () => void;
+	/** Metadados de uma foto ou música (painel de detalhes); `null` se não houver. */
+	getFileMetadata: (path: string) => Promise<FileMetadata | null>;
+	/**
+	 * Lê os metadados de vários arquivos. Os resultados chegam aos poucos por
+	 * `onMetadataProgress` com o mesmo `id` e, no fim, todos juntos; `null` se for cancelada.
+	 */
+	readMetadata: (id: number, paths: string[]) => Promise<MetadataResult[] | null>;
+	cancelMetadata: (id: number) => void;
+	onMetadataProgress: (listener: (progress: MetadataProgress) => void) => () => void;
 	rename: (operations: RenameOperation[]) => Promise<RenameResult>;
 	undo: () => Promise<RenameResult>;
 	canUndo: () => Promise<boolean>;

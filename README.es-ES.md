@@ -140,7 +140,7 @@ Rename Plus es un proyecto independiente, escrito desde cero:
 - **no está afiliado** a sus autores ni cuenta con su respaldo;
 - **no es un sustituto completo**: consulta [lo que Rename Plus no hace](#lo-que-rename-plus-no-hace).
 
-Si usas Windows y necesitas funciones avanzadas como metadatos EXIF/ID3, scripts en JavaScript o importación de CSV, echa un vistazo a Bulk Rename Utility.
+Si usas Windows y necesitas funciones avanzadas como scripts en JavaScript o importación de CSV, echa un vistazo a Bulk Rename Utility.
 
 ## Funciones
 
@@ -150,11 +150,12 @@ Si usas Windows y necesitas funciones avanzadas como metadatos EXIF/ID3, scripts
 |---|---|
 | **RegEx** | Buscar y reemplazar con expresiones regulares, con grupos de captura (`$1`, `$2`…), opción de incluir la extensión, reemplazo global y sin distinguir mayúsculas. El **Constructor visual** arma la expresión con bloques que se arrastran, sin escribir RegEx. |
 | **Nombre** | Mantener, quitar, cambiar por un nombre fijo o invertir el nombre original. |
+| **Metadatos** | Forma el nombre con información de dentro del archivo, con una plantilla como `{track:2} - {artist} - {title}`: fecha, cámara, lente, ISO, apertura y distancia focal de las fotos (EXIF); artista, álbum, título, pista, disco, año, género y duración de la música (MP3, FLAC, OGG, M4A…). Reemplaza el nombre o entra como prefijo/sufijo. Los caracteres prohibidos de los valores (`AC/DC`) se convierten en `-`; un campo vacío es un error o un texto alternativo. Los valores del panel de detalles entran en la plantilla con un clic. |
 | **Reemplazar** | Reemplazo de texto literal, distinguiendo mayúsculas o no. |
 | **Mayúsc./Minúsc.** | minúsculas, MAYÚSCULAS, Título y Oración, con una lista de palabras de excepción. |
 | **Quitar** | Primeros/últimos N caracteres, un intervalo por posición, caracteres y palabras concretos, recortar antes/después de un texto, dígitos, tildes, símbolos, caracteres no ASCII, espacios dobles, espacios en los extremos y puntos iniciales. |
 | **Añadir** | Prefijo, sufijo, inserción en una posición (negativa cuenta desde el final) y separación de palabras unidas (`MiFoto` → `Mi Foto`). |
-| **Fecha automática** | Fecha de modificación, de creación o actual, como prefijo o sufijo, en el formato que quieras (`YYYY-MM-DD`, `DD.MM.YY`…). |
+| **Fecha automática** | Fecha de modificación, de creación, actual o en que se tomó la foto (EXIF), como prefijo o sufijo, en el formato que quieras (`YYYY-MM-DD`, `DD.MM.YY`…). |
 | **Nombre de la carpeta** | Añade el nombre de una o más carpetas superiores. |
 | **Numeración** | Prefijo, sufijo, ambos o en una posición; inicio, incremento, ceros a la izquierda; estilos `1, 2, 3`, `a, b, c`, `A, B, C` e `I, II, III`; reinicio por carpeta. |
 | **Extensión** | Mantener, minúsculas, MAYÚSCULAS, Título, quitar, cambiar por una fija o añadir una extra. |
@@ -227,7 +228,7 @@ Clic derecho en la lista o en el árbol para abrir con la aplicación predetermi
 Las reglas se aplican siempre en este orden, cada una sobre el resultado de la anterior:
 
 ```
-RegEx → Nombre → Reemplazar → Mayúsc./Minúsc. → Quitar → Añadir
+RegEx → Nombre → Metadatos → Reemplazar → Mayúsc./Minúsc. → Quitar → Añadir
       → Fecha automática → Nombre de la carpeta → Numeración → Extensión
 ```
 
@@ -239,7 +240,7 @@ En las carpetas, el punto **no** se trata como separador de extensión (`v1.2` s
 
 Para dejar claro el alcance actual:
 
-- **No lee metadatos de archivos:** no usa EXIF de fotos, ID3 de música ni propiedades de documentos para formar nombres.
+- **Lee metadatos solo de fotos y música:** no los de vídeos ni las propiedades de documentos, no convierte el GPS de las fotos en ciudad y nunca escribe metadatos en los archivos.
 - **No ejecuta scripts** (p. ej., JavaScript) ni importa listas de nombres de archivos desde CSV.
 - **No mueve ni copia partes del nombre** de una posición a otra (el panel «Mover/Copiar» de Bulk Rename Utility).
 - **No cambia fechas, atributos ni permisos** de los archivos; solo los nombres.

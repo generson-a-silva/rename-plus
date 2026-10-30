@@ -14,6 +14,9 @@ export const IpcChannel = {
 	GetFileThumbnail: "fs:file-thumbnail",
 	CalculateSize: "fs:size-calculate",
 	CancelSize: "fs:size-cancel",
+	GetFileMetadata: "fs:metadata-get",
+	ReadMetadata: "fs:metadata-read",
+	CancelMetadata: "fs:metadata-cancel",
 	Rename: "rename:execute",
 	Undo: "rename:undo",
 	CanUndo: "rename:can-undo",
@@ -51,6 +54,8 @@ export const IpcChannel = {
 	ListingEvent: "fs:listing-event",
 	/** Evento main → renderer: total parcial de uma soma de tamanhos (`SizeProgress`). */
 	SizeProgress: "fs:size-progress",
+	/** Evento main → renderer: metadados lidos de uma leitura em lote (`MetadataProgress`). */
+	MetadataProgress: "fs:metadata-progress",
 	/** Evento main → renderer: regras, situação ou atividade das pastas monitoradas mudaram. */
 	WatchFoldersChanged: "watch:changed",
 } as const;

@@ -591,6 +591,12 @@ button.header-cell:hover {
 	font-weight: 600;
 }
 
+/* Nome que depende de metadados ainda não lidos. */
+.pending-name {
+	color: var(--muted);
+	font-style: italic;
+}
+
 .cell {
 	display: flex;
 	align-items: center;
@@ -2711,6 +2717,37 @@ a.welcome-card:hover .button {
 	margin: 0;
 	overflow-wrap: anywhere;
 	user-select: text;
+}
+
+.details-section {
+	margin-top: 14px;
+	color: var(--muted);
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+/* Valor dos metadados: clicar põe o campo no modelo do painel Metadados. */
+.details-metadata-value {
+	padding: 0;
+	border: none;
+	background: none;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	overflow-wrap: anywhere;
+	cursor: pointer;
+}
+
+.details-metadata-value:hover {
+	color: var(--accent);
+	text-decoration: underline;
+}
+
+.details-metadata-value:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 1px;
 }
 
 .details-empty {

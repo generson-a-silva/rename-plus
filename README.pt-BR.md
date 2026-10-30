@@ -140,7 +140,7 @@ O Rename Plus é um projeto independente, escrito do zero:
 - **não é afiliado** aos seus autores nem endossado por eles;
 - **não é um substituto completo:** veja [o que o Rename Plus não faz](#o-que-o-rename-plus-não-faz).
 
-Se você usa Windows e precisa de recursos avançados como metadados EXIF/ID3, scripts em JavaScript ou importação de CSV, conheça o Bulk Rename Utility.
+Se você usa Windows e precisa de recursos avançados como scripts em JavaScript ou importação de CSV, conheça o Bulk Rename Utility.
 
 ## Funcionalidades
 
@@ -150,11 +150,12 @@ Se você usa Windows e precisa de recursos avançados como metadados EXIF/ID3, s
 |---|---|
 | **RegEx** | Buscar e substituir com expressões regulares, com grupos de captura (`$1`, `$2`…), opção de incluir a extensão, substituição global e sem diferenciar maiúsculas. O **construtor visual** monta a expressão com blocos arrastáveis, sem digitar RegEx. |
 | **Nome** | Manter, remover, trocar por um nome fixo ou inverter o nome original. |
+| **Metadados** | Monta o nome com informações de dentro do arquivo, por um modelo como `{track:2} - {artist} - {title}`: data, câmera, lente, ISO, abertura e distância focal das fotos (EXIF); artista, álbum, título, faixa, disco, ano, gênero e duração das músicas (MP3, FLAC, OGG, M4A…). Substitui o nome ou entra como prefixo/sufixo. Caracteres proibidos dos valores (`AC/DC`) viram `-`; campo vazio vira erro ou um texto alternativo. Os valores do painel de detalhes entram no modelo com um clique. |
 | **Substituir** | Substituição de texto literal, com ou sem diferenciar maiúsculas. |
 | **Maiúsc./Minúsc.** | minúsculas, MAIÚSCULAS, Título e Frase, com lista de palavras de exceção. |
 | **Remover** | Primeiros/últimos N caracteres, intervalo por posição, caracteres e palavras específicos, cortar antes/depois de um texto, dígitos, acentos, símbolos, caracteres não ASCII, espaços duplos, espaços nas pontas e pontos iniciais. |
 | **Adicionar** | Prefixo, sufixo, inserção em uma posição (negativa conta do fim) e separação de palavras coladas (`MinhaFoto` → `Minha Foto`). |
-| **Data automática** | Data de modificação, criação ou atual, como prefixo ou sufixo, em formato livre (`YYYY-MM-DD`, `DD.MM.YY`…). |
+| **Data automática** | Data de modificação, criação, atual ou em que a foto foi tirada (EXIF), como prefixo ou sufixo, em formato livre (`YYYY-MM-DD`, `DD.MM.YY`…). |
 | **Nome da pasta** | Acrescenta o nome de uma ou mais pastas ancestrais. |
 | **Numeração** | Prefixo, sufixo, ambos ou em uma posição; início, incremento, zeros à esquerda; estilos `1, 2, 3`, `a, b, c`, `A, B, C` e `I, II, III`; reinício por pasta. |
 | **Extensão** | Manter, minúsculas, MAIÚSCULAS, Título, remover, trocar por uma fixa ou acrescentar uma extra. |
@@ -227,7 +228,7 @@ Botão direito na lista ou na árvore para abrir com o aplicativo padrão, mostr
 As regras são aplicadas sempre nesta ordem, uma sobre o resultado da anterior:
 
 ```
-RegEx → Nome → Substituir → Maiúsc./Minúsc. → Remover → Adicionar
+RegEx → Nome → Metadados → Substituir → Maiúsc./Minúsc. → Remover → Adicionar
       → Data automática → Nome da pasta → Numeração → Extensão
 ```
 
@@ -239,7 +240,7 @@ Em pastas, o ponto **não** é tratado como separador de extensão (`v1.2` conti
 
 Para deixar claro o escopo atual:
 
-- **Não lê metadados de arquivos:** não usa EXIF de fotos, ID3 de músicas nem propriedades de documentos para montar nomes.
+- **Lê metadados só de fotos e músicas:** não usa os de vídeos nem as propriedades de documentos, não converte o GPS das fotos em cidade e nunca grava metadados nos arquivos.
 - **Não executa scripts** (ex.: JavaScript) nem importa listas de nomes de arquivos CSV.
 - **Não move nem copia partes do nome** de uma posição para outra (o painel "Mover/Copiar" do Bulk Rename Utility).
 - **Não altera datas, atributos nem permissões** dos arquivos; só os nomes.

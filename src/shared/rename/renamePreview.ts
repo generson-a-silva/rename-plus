@@ -1,11 +1,12 @@
 import type { MessageRef } from "../i18n";
-import type { FileEntry } from "../ipc";
+import type { FileEntry, FileMetadata } from "../ipc";
 import { getPlatformPaths } from "../paths";
 import { validateFileName } from "./fileNameValidation";
-import { createRenamer, RenameConfigError } from "./renameEngine";
-import type { RenameOptions } from "./renameOptions";
+import { createRenamer, RenameConfigError, RenameItemError } from "./renameEngine";
+import { needsMetadata, type RenameOptions } from "./renameOptions";
 
-export type PreviewStatus = "unchanged" | "ok" | "error";
+/** `pending`: o nome depende de metadados que ainda estão sendo lidos. */
+export type PreviewStatus = "unchanged" | "ok" | "error" | "pending";
 
 export interface PreviewItem {
 	newName: string;
@@ -21,25 +22,33 @@ export interface Preview {
 	configError: MessageRef | null;
 	changed: number;
 	errors: number;
+	/** Itens esperando os metadados: enquanto houver, não dá para renomear. */
+	pending: number;
 }
 
 export interface PreviewContext {
 	/** Valor de `process.platform`: define as regras de nome e se maiúsculas importam. */
 	platform?: string;
 	now?: Date;
+	/**
+	 * Metadados já lidos, pelo caminho do item (`null`: lido, sem nada). Com uma regra que
+	 * usa metadados, os itens que faltam aqui ficam `pending`.
+	 */
+	metadata?: ReadonlyMap<string, FileMetadata | null>;
 }
 
 /**
  * Calcula os novos nomes de `selected` (na ordem recebida) e detecta conflitos:
  * nomes inválidos, nomes duplicados no lote e colisões com itens existentes
  * em `all` que não fazem parte do lote. No Windows, nomes que diferem só em
- * maiúsculas/minúsculas contam como o mesmo arquivo.
+ * maiúsculas/minúsculas contam como o mesmo arquivo. Itens que o motor recusa (ex.: sem
+ * um campo dos metadados) viram erro com o motivo.
  */
 export function buildPreview(
 	selected: readonly FileEntry[],
 	all: readonly FileEntry[],
 	options: RenameOptions,
-	{ platform = "linux", now = new Date() }: PreviewContext = {},
+	{ platform = "linux", now = new Date(), metadata }: PreviewContext = {},
 ): Preview {
 	const paths = getPlatformPaths(platform);
 	const items = new Map<string, PreviewItem>();
@@ -48,7 +57,7 @@ export function buildPreview(
 		renamer = createRenamer(options, platform);
 	} catch (error) {
 		if (error instanceof RenameConfigError) {
-			return { items, configError: error.ref, changed: 0, errors: 0 };
+			return { items, configError: error.ref, changed: 0, errors: 0, pending: 0 };
 		}
 		throw error;
 	}
@@ -57,12 +66,31 @@ export function buildPreview(
 	const targets = new Map<string, number>();
 	const targetKey = (entry: FileEntry, name: string) => paths.key(paths.join(entry.dir, name));
 	const batch = new Set(selected.map((entry) => paths.key(entry.path)));
+	const usesMetadata = needsMetadata(options);
+	let pending = 0;
 
 	selected.forEach((entry, index) => {
 		const folderIndex = folderCounters.get(entry.dir) ?? 0;
 		folderCounters.set(entry.dir, folderIndex + 1);
 
-		const newName = renamer(entry, { index, folderIndex, now });
+		if (usesMetadata && !metadata?.has(entry.path)) {
+			items.set(entry.path, { newName: "", status: "pending", message: null });
+			pending++;
+			return;
+		}
+		let newName: string;
+		try {
+			newName = renamer(entry, {
+				index,
+				folderIndex,
+				now,
+				metadata: metadata?.get(entry.path) ?? null,
+			});
+		} catch (error) {
+			if (!(error instanceof RenameItemError)) throw error;
+			items.set(entry.path, { newName: "", status: "error", message: error.ref });
+			return;
+		}
 		const status: PreviewStatus = newName === entry.name ? "unchanged" : "ok";
 		items.set(entry.path, { newName, status, message: null });
 
@@ -78,7 +106,11 @@ export function buildPreview(
 
 	for (const entry of selected) {
 		const item = items.get(entry.path);
-		if (!item) continue;
+		if (!item || item.status === "pending") continue;
+		if (item.status === "error") {
+			errors++;
+			continue;
+		}
 		const target = targetKey(entry, item.newName);
 		const invalid = validateFileName(item.newName, platform);
 
@@ -98,5 +130,5 @@ export function buildPreview(
 		}
 	}
 
-	return { items, configError: null, changed, errors };
+	return { items, configError: null, changed, errors, pending };
 }

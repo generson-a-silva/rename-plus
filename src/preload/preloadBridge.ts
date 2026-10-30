@@ -18,6 +18,9 @@ const C = {
 	GetFileThumbnail: "fs:file-thumbnail",
 	CalculateSize: "fs:size-calculate",
 	CancelSize: "fs:size-cancel",
+	GetFileMetadata: "fs:metadata-get",
+	ReadMetadata: "fs:metadata-read",
+	CancelMetadata: "fs:metadata-cancel",
 	Rename: "rename:execute",
 	Undo: "rename:undo",
 	CanUndo: "rename:can-undo",
@@ -51,6 +54,7 @@ const C = {
 	UpdateStatus: "update:status",
 	ListingEvent: "fs:listing-event",
 	SizeProgress: "fs:size-progress",
+	MetadataProgress: "fs:metadata-progress",
 	WatchFoldersChanged: "watch:changed",
 } as const satisfies typeof IpcChannel;
 
@@ -88,6 +92,10 @@ const api: ElectronApi = {
 	calculateSize: (id, paths) => ipcRenderer.invoke(C.CalculateSize, id, paths),
 	cancelSizeCalculation: (id) => ipcRenderer.send(C.CancelSize, id),
 	onSizeProgress: (listener) => subscribe(C.SizeProgress, listener),
+	getFileMetadata: (path) => ipcRenderer.invoke(C.GetFileMetadata, path),
+	readMetadata: (id, paths) => ipcRenderer.invoke(C.ReadMetadata, id, paths),
+	cancelMetadata: (id) => ipcRenderer.send(C.CancelMetadata, id),
+	onMetadataProgress: (listener) => subscribe(C.MetadataProgress, listener),
 	rename: (operations) => ipcRenderer.invoke(C.Rename, operations),
 	undo: () => ipcRenderer.invoke(C.Undo),
 	canUndo: () => ipcRenderer.invoke(C.CanUndo),

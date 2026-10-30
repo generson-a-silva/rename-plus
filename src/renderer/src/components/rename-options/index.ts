@@ -4,6 +4,7 @@ export { AutoDateOptionsPanel } from "./AutoDateOptionsPanel";
 export { CaseOptionsPanel } from "./CaseOptionsPanel";
 export { ExtensionOptionsPanel } from "./ExtensionOptionsPanel";
 export { ListFiltersPanel } from "./ListFiltersPanel";
+export { MetadataOptionsPanel } from "./MetadataOptionsPanel";
 export { NameOptionsPanel } from "./NameOptionsPanel";
 export { NumberingOptionsPanel } from "./NumberingOptionsPanel";
 export { PresetManagerDialog } from "./PresetManagerDialog";

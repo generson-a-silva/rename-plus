@@ -10,6 +10,7 @@ import {
 	type WatchRuleStatus,
 } from "../shared/ipc";
 import { getPlatformPaths } from "../shared/paths";
+import { needsMetadata } from "../shared/rename";
 import {
 	numberingChanged,
 	planWatchedFile,
@@ -20,6 +21,7 @@ import {
 import { describeFileSystemError } from "./fileSystemErrors";
 import { findAvailablePath, move } from "./fileTransferService";
 import { tMain, tMainRef } from "./mainLocale";
+import { readMetadata } from "./metadataReader";
 import { broadcast, readSettingsFile, writeSettingsFile } from "./settingsFile";
 
 const SETTINGS_FILE = "watch-folders.json";
@@ -177,7 +179,9 @@ async function processFile(file: string, stats: fs.Stats): Promise<void> {
 	for (const rule of rulesFor(dir)) {
 		const index = counters.get(rule.id) ?? 0;
 		const restart = restarts.get(rule.id) ?? 0;
-		const plan = planWatchedFile(rule, entry, index, new Date(), process.platform);
+		// O arquivo já parou de mudar: a leitura não pega uma cópia pela metade.
+		const metadata = needsMetadata(rule.rename) ? await readMetadata(file) : null;
+		const plan = planWatchedFile(rule, entry, index, new Date(), process.platform, metadata);
 		if (plan.kind === "skip") continue;
 		if (plan.kind === "error") {
 			record(rule, file, null, tMainRef(plan.error));

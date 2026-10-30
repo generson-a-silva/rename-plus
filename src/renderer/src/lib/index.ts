@@ -25,6 +25,12 @@ export { type AppIconName, ICON_PATHS } from "./iconPaths";
 export { insertItem, moveItem } from "./listReorder";
 export { loadStored, mergeDefaults, saveStored } from "./localPreferencesStorage";
 export { withMenuIcons } from "./menuIcons";
+export {
+	isFreshRead,
+	type MetadataReadPlan,
+	planMetadataReads,
+	type ReadStamp,
+} from "./metadataReads";
 export { diffNames, type NameDiffSegment } from "./nameDiff";
 export { type PdfPreview, renderPdfPreview } from "./pdfPreview";
 export {

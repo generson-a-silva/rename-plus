@@ -1,11 +1,12 @@
 import type { MessageRef } from "../i18n";
-import type { FileEntry } from "../ipc";
+import type { FileEntry, FileMetadata } from "../ipc";
 import { getPlatformPaths } from "../paths";
 import {
 	createDefaultOptions,
 	createMaskFilter,
 	createRenamer,
 	RenameConfigError,
+	RenameItemError,
 	type RenameOptions,
 	validateFileName,
 } from "../rename";
@@ -120,7 +121,8 @@ export type WatchPlan =
 
 /**
  * Decide o que fazer com um arquivo que chegou na pasta da regra. `index` é a
- * posição do arquivo entre os processados pela regra (usada pela numeração).
+ * posição do arquivo entre os processados pela regra (usada pela numeração);
+ * `metadata`, o que foi lido do arquivo quando a regra usa metadados.
  */
 export function planWatchedFile(
 	rule: WatchRule,
@@ -128,6 +130,7 @@ export function planWatchedFile(
 	index: number,
 	now: Date,
 	platform: string,
+	metadata: FileMetadata | null = null,
 ): WatchPlan {
 	if (entry.isDir || entry.name.startsWith(".") || isIncompleteDownload(entry.name)) {
 		return { kind: "skip" };
@@ -136,9 +139,12 @@ export function planWatchedFile(
 
 	let name: string;
 	try {
-		name = createRenamer(rule.rename, platform)(entry, { index, folderIndex: index, now });
+		const context = { index, folderIndex: index, now, metadata };
+		name = createRenamer(rule.rename, platform)(entry, context);
 	} catch (error) {
-		if (error instanceof RenameConfigError) return { kind: "error", error: error.ref };
+		if (error instanceof RenameConfigError || error instanceof RenameItemError) {
+			return { kind: "error", error: error.ref };
+		}
 		throw error;
 	}
 	const invalid = validateFileName(name, platform);

@@ -317,6 +317,8 @@ export const ptBr = {
 	"details.duration": "Duração",
 	"details.pages": "Páginas",
 	"details.newName": "Novo nome",
+	"details.metadata": "Metadados",
+	"details.insertField": "Clique para inserir {field} no modelo do painel Metadados",
 	"details.unreadable": "Sem permissão de leitura",
 	"details.typeWithExt": "{kind} {ext}",
 	"fileKind.image": "Imagem",
@@ -442,8 +444,42 @@ export const ptBr = {
 	"autoDate.modified": "Modificação",
 	"autoDate.created": "Criação",
 	"autoDate.current": "Atual",
+	"autoDate.taken": "Foto (EXIF)",
 	"autoDate.format": "Formato",
 	"autoDate.formatHint": "Tokens: YYYY, YY, MM, DD, HH, mm, ss",
+
+	// ---- Metadados ------------------------------------------------------
+	"metadata.title": "Metadados",
+	"metadata.replace": "Substituir nome",
+	"metadata.template": "Modelo",
+	"metadata.templateHint":
+		"Campos entre chaves. {track:2} põe zeros à esquerda; {date:YYYY-MM-DD} escolhe o formato da data.",
+	"metadata.insertField": "Inserir campo",
+	"metadata.photoFields": "Foto",
+	"metadata.audioFields": "Música",
+	"metadata.missing": "Campo vazio",
+	"metadata.missingError": "Erro (não renomeia)",
+	"metadata.missingFallback": "Texto alternativo",
+	"metadata.fallback": "Texto alternativo",
+	"metadataField.date": "Data da foto",
+	"metadataField.camera": "Câmera",
+	"metadataField.make": "Marca",
+	"metadataField.model": "Modelo",
+	"metadataField.lens": "Lente",
+	"metadataField.iso": "ISO",
+	"metadataField.aperture": "Abertura (f)",
+	"metadataField.focal": "Distância focal (mm)",
+	"metadataField.width": "Largura",
+	"metadataField.height": "Altura",
+	"metadataField.artist": "Artista",
+	"metadataField.albumartist": "Artista do álbum",
+	"metadataField.album": "Álbum",
+	"metadataField.title": "Título",
+	"metadataField.track": "Faixa",
+	"metadataField.disc": "Disco",
+	"metadataField.year": "Ano",
+	"metadataField.genre": "Gênero",
+	"metadataField.duration": "Duração",
 
 	// ---- Nome da pasta --------------------------------------------------
 	"appendFolder.title": "Nome da pasta",
@@ -527,12 +563,19 @@ export const ptBr = {
 	},
 	"preview.duplicate": "Nome duplicado no lote",
 	"preview.exists": "Já existe um item com esse nome",
+	"preview.readingMetadata": "lendo metadados…",
+	"preview.readingMetadataCount": {
+		one: "Lendo os metadados de {count} item…",
+		other: "Lendo os metadados de {count} itens…",
+	},
 
 	// ---- Renomear / desfazer -------------------------------------------
 	"rename.fixConflicts": {
 		one: "Corrija {count} conflito antes de renomear (destacado em vermelho).",
 		other: "Corrija {count} conflitos antes de renomear (destacados em vermelho).",
 	},
+	"rename.waitMetadata": "Espere terminar a leitura dos metadados.",
+
 	"rename.confirm": { one: "Renomear {count} item?", other: "Renomear {count} itens?" },
 	"rename.confirmMore": "… e mais {count}",
 	"rename.dontAskAgain": "Não exibir esta confirmação novamente",
@@ -617,6 +660,10 @@ export const ptBr = {
 	"validation.trailingDotSpace": "Não pode terminar com ponto ou espaço",
 	"validation.tooManyChars": "Excede {max} caracteres",
 	"engine.invalidRegex": "RegEx inválida: {detail}",
+	"engine.unknownMetadataField": "Campo desconhecido no modelo: {field}",
+	"engine.invalidMetadataField": "Formato inválido no campo {field}",
+	"engine.missingMetadata": "Sem {field} nos metadados",
+	"engine.missingTakenDate": "Sem a data da foto nos metadados",
 
 	// ---- Erros do sistema de arquivos (processo principal) ------------
 	"fs.EBUSY": "O item está em uso por outro programa",

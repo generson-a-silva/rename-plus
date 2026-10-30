@@ -34,6 +34,7 @@ export function AutoDateOptionsPanel({
 						["modified", t("autoDate.modified")],
 						["created", t("autoDate.created")],
 						["current", t("autoDate.current")],
+						["taken", t("autoDate.taken")],
 					]}
 					onChange={(type) => onChange({ type })}
 				/>

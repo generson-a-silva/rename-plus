@@ -315,6 +315,8 @@ export const es: Messages = {
 	"details.duration": "Duración",
 	"details.pages": "Páginas",
 	"details.newName": "Nuevo nombre",
+	"details.metadata": "Metadatos",
+	"details.insertField": "Haz clic para insertar {field} en la plantilla del panel Metadatos",
 	"details.unreadable": "Sin permiso de lectura",
 	"details.typeWithExt": "{kind} {ext}",
 	"fileKind.image": "Imagen",
@@ -441,8 +443,42 @@ export const es: Messages = {
 	"autoDate.modified": "Modificación",
 	"autoDate.created": "Creación",
 	"autoDate.current": "Actual",
+	"autoDate.taken": "Foto (EXIF)",
 	"autoDate.format": "Formato",
 	"autoDate.formatHint": "Tokens: YYYY, YY, MM, DD, HH, mm, ss",
+
+	// ---- Metadatos ------------------------------------------------------
+	"metadata.title": "Metadatos",
+	"metadata.replace": "Reemplazar nombre",
+	"metadata.template": "Plantilla",
+	"metadata.templateHint":
+		"Campos entre llaves. {track:2} añade ceros a la izquierda; {date:YYYY-MM-DD} elige el formato de la fecha.",
+	"metadata.insertField": "Insertar campo",
+	"metadata.photoFields": "Foto",
+	"metadata.audioFields": "Música",
+	"metadata.missing": "Campo vacío",
+	"metadata.missingError": "Error (no renombra)",
+	"metadata.missingFallback": "Texto alternativo",
+	"metadata.fallback": "Texto alternativo",
+	"metadataField.date": "Fecha de la foto",
+	"metadataField.camera": "Cámara",
+	"metadataField.make": "Marca",
+	"metadataField.model": "Modelo",
+	"metadataField.lens": "Lente",
+	"metadataField.iso": "ISO",
+	"metadataField.aperture": "Apertura (f)",
+	"metadataField.focal": "Distancia focal (mm)",
+	"metadataField.width": "Ancho",
+	"metadataField.height": "Alto",
+	"metadataField.artist": "Artista",
+	"metadataField.albumartist": "Artista del álbum",
+	"metadataField.album": "Álbum",
+	"metadataField.title": "Título",
+	"metadataField.track": "Pista",
+	"metadataField.disc": "Disco",
+	"metadataField.year": "Año",
+	"metadataField.genre": "Género",
+	"metadataField.duration": "Duración",
 
 	// ---- Nombre de la carpeta -------------------------------------------
 	"appendFolder.title": "Nombre de la carpeta",
@@ -526,12 +562,19 @@ export const es: Messages = {
 	},
 	"preview.duplicate": "Nombre duplicado en el lote",
 	"preview.exists": "Ya existe un elemento con ese nombre",
+	"preview.readingMetadata": "leyendo metadatos…",
+	"preview.readingMetadataCount": {
+		one: "Leyendo los metadatos de {count} elemento…",
+		other: "Leyendo los metadatos de {count} elementos…",
+	},
 
 	// ---- Renombrar / deshacer -------------------------------------------
 	"rename.fixConflicts": {
 		one: "Corrige {count} conflicto antes de renombrar (marcado en rojo).",
 		other: "Corrige {count} conflictos antes de renombrar (marcados en rojo).",
 	},
+	"rename.waitMetadata": "Espera a que terminen de leerse los metadatos.",
+
 	"rename.confirm": { one: "¿Renombrar {count} elemento?", other: "¿Renombrar {count} elementos?" },
 	"rename.confirmMore": "… y {count} más",
 	"rename.dontAskAgain": "No volver a mostrar esta confirmación",
@@ -618,6 +661,10 @@ export const es: Messages = {
 	"validation.trailingDotSpace": "No puede terminar en punto o espacio",
 	"validation.tooManyChars": "Supera {max} caracteres",
 	"engine.invalidRegex": "RegEx no válida: {detail}",
+	"engine.unknownMetadataField": "Campo desconocido en la plantilla: {field}",
+	"engine.invalidMetadataField": "Formato no válido en el campo {field}",
+	"engine.missingMetadata": "Sin {field} en los metadatos",
+	"engine.missingTakenDate": "Sin la fecha de la foto en los metadatos",
 
 	// ---- Errores del sistema de archivos (proceso principal) ----------
 	"fs.EBUSY": "Otro programa está usando el elemento",

@@ -309,6 +309,8 @@ export const en: Messages = {
 	"details.duration": "Duration",
 	"details.pages": "Pages",
 	"details.newName": "New name",
+	"details.metadata": "Metadata",
+	"details.insertField": "Click to insert {field} in the Metadata panel template",
 	"details.unreadable": "No read permission",
 	"details.typeWithExt": "{ext} {kind}",
 	"fileKind.image": "image",
@@ -435,8 +437,42 @@ export const en: Messages = {
 	"autoDate.modified": "Modified",
 	"autoDate.created": "Created",
 	"autoDate.current": "Current",
+	"autoDate.taken": "Photo (EXIF)",
 	"autoDate.format": "Format",
 	"autoDate.formatHint": "Tokens: YYYY, YY, MM, DD, HH, mm, ss",
+
+	// ---- Metadata -------------------------------------------------------
+	"metadata.title": "Metadata",
+	"metadata.replace": "Replace name",
+	"metadata.template": "Template",
+	"metadata.templateHint":
+		"Fields in braces. {track:2} adds leading zeros; {date:YYYY-MM-DD} picks the date format.",
+	"metadata.insertField": "Insert field",
+	"metadata.photoFields": "Photo",
+	"metadata.audioFields": "Music",
+	"metadata.missing": "Empty field",
+	"metadata.missingError": "Error (don't rename)",
+	"metadata.missingFallback": "Fallback text",
+	"metadata.fallback": "Fallback text",
+	"metadataField.date": "Date taken",
+	"metadataField.camera": "Camera",
+	"metadataField.make": "Make",
+	"metadataField.model": "Model",
+	"metadataField.lens": "Lens",
+	"metadataField.iso": "ISO",
+	"metadataField.aperture": "Aperture (f)",
+	"metadataField.focal": "Focal length (mm)",
+	"metadataField.width": "Width",
+	"metadataField.height": "Height",
+	"metadataField.artist": "Artist",
+	"metadataField.albumartist": "Album artist",
+	"metadataField.album": "Album",
+	"metadataField.title": "Title",
+	"metadataField.track": "Track",
+	"metadataField.disc": "Disc",
+	"metadataField.year": "Year",
+	"metadataField.genre": "Genre",
+	"metadataField.duration": "Duration",
 
 	// ---- Folder name ----------------------------------------------------
 	"appendFolder.title": "Folder name",
@@ -520,12 +556,19 @@ export const en: Messages = {
 	},
 	"preview.duplicate": "Duplicate name in the batch",
 	"preview.exists": "An item with this name already exists",
+	"preview.readingMetadata": "reading metadata…",
+	"preview.readingMetadataCount": {
+		one: "Reading metadata of {count} item…",
+		other: "Reading metadata of {count} items…",
+	},
 
 	// ---- Rename / undo --------------------------------------------------
 	"rename.fixConflicts": {
 		one: "Fix {count} conflict before renaming (highlighted in red).",
 		other: "Fix {count} conflicts before renaming (highlighted in red).",
 	},
+	"rename.waitMetadata": "Wait for the metadata to finish loading.",
+
 	"rename.confirm": { one: "Rename {count} item?", other: "Rename {count} items?" },
 	"rename.confirmMore": "… and {count} more",
 	"rename.dontAskAgain": "Don't show this confirmation again",
@@ -610,6 +653,10 @@ export const en: Messages = {
 	"validation.trailingDotSpace": "Cannot end with a dot or a space",
 	"validation.tooManyChars": "Exceeds {max} characters",
 	"engine.invalidRegex": "Invalid RegEx: {detail}",
+	"engine.unknownMetadataField": "Unknown field in template: {field}",
+	"engine.invalidMetadataField": "Invalid format in field {field}",
+	"engine.missingMetadata": "No {field} in the metadata",
+	"engine.missingTakenDate": "No date taken in the metadata",
 
 	// ---- File system errors (main process) -----------------------------
 	"fs.EBUSY": "The item is in use by another program",

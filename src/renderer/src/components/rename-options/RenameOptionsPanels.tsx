@@ -13,6 +13,7 @@ import { AutoDateOptionsPanel } from "./AutoDateOptionsPanel";
 import { CaseOptionsPanel } from "./CaseOptionsPanel";
 import { ExtensionOptionsPanel } from "./ExtensionOptionsPanel";
 import { ListFiltersPanel } from "./ListFiltersPanel";
+import { MetadataOptionsPanel } from "./MetadataOptionsPanel";
 import { NameOptionsPanel } from "./NameOptionsPanel";
 import { NumberingOptionsPanel } from "./NumberingOptionsPanel";
 import { RegexOptionsPanel } from "./RegexOptionsPanel";
@@ -73,6 +74,7 @@ export function RenameOptionsPanels({
 				<div ref={panelsRef} className="panels">
 					<RegexOptionsPanel {...sectionProps("regex")} sampleNames={sampleNames} />
 					<NameOptionsPanel {...sectionProps("name")} />
+					<MetadataOptionsPanel {...sectionProps("metadata")} />
 					<ReplaceOptionsPanel {...sectionProps("replace")} />
 					<CaseOptionsPanel {...sectionProps("case")} />
 					<RemoveOptionsPanel {...sectionProps("remove")} />

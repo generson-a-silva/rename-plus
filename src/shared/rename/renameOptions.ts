@@ -66,7 +66,8 @@ export interface AddOptions {
 /** (7) Data automática. */
 export interface AutoDateOptions {
 	mode: Placement;
-	type: "modified" | "created" | "current";
+	/** `taken`: data em que a foto foi tirada (EXIF); sem ela no arquivo, o item vira erro. */
+	type: "modified" | "created" | "current" | "taken";
 	/** Tokens: YYYY, YY, MM, DD, HH, mm, ss. */
 	format: string;
 	separator: string;
@@ -97,9 +98,22 @@ export interface ExtensionOptions {
 	value: string;
 }
 
+/** (11) Nome a partir dos metadados (fotos e músicas); aplicado logo depois de (2) Nome. */
+export interface MetadataOptions {
+	mode: "none" | "replace" | "prefix" | "suffix";
+	/** Ex.: "{track:2} - {artist} - {title}". */
+	template: string;
+	/** Entre o modelo e o nome, em `prefix`/`suffix`. */
+	separator: string;
+	/** Campo vazio: o item vira erro (não é renomeado) ou recebe `fallback`. */
+	missing: "error" | "fallback";
+	fallback: string;
+}
+
 export interface RenameOptions {
 	regex: RegexOptions;
 	name: NameOptions;
+	metadata: MetadataOptions;
 	replace: ReplaceOptions;
 	case: CaseOptions;
 	remove: RemoveOptions;
@@ -117,6 +131,13 @@ export function createDefaultOptions(): RenameOptions {
 	return {
 		regex: { match: "", replace: "", includeExt: false, global: false, ignoreCase: false },
 		name: { mode: "keep", fixed: "" },
+		metadata: {
+			mode: "none",
+			template: "{track:2} - {artist} - {title}",
+			separator: "_",
+			missing: "error",
+			fallback: "",
+		},
 		replace: { find: "", with: "", matchCase: false, firstOnly: false },
 		case: { mode: "same", exceptions: "" },
 		remove: {
@@ -151,6 +172,14 @@ export function createDefaultOptions(): RenameOptions {
 		},
 		extension: { mode: "same", value: "" },
 	};
+}
+
+/** As opções usam informações de dentro dos arquivos (só então elas são lidas). */
+export function needsMetadata(options: RenameOptions): boolean {
+	return (
+		options.metadata.mode !== "none" ||
+		(options.autoDate.mode !== "none" && options.autoDate.type === "taken")
+	);
 }
 
 /** Seções desligadas pela caixa de seleção do painel (mantêm os valores, mas não são aplicadas). */

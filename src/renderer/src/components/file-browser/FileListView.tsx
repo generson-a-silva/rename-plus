@@ -229,6 +229,8 @@ export function FileListView(props: FileListViewProps) {
 							<span className="cell-text">
 								{column.id === "newName" && nameDiff ? (
 									<DiffText segments={nameDiff.after} kind="added" />
+								) : column.id === "newName" && status === "pending" ? (
+									<span className="pending-name">{i18n.t("preview.readingMetadata")}</span>
 								) : (
 									text
 								)}

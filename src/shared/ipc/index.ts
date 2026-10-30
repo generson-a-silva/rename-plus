@@ -20,6 +20,7 @@ export type {
 	SizeTotal,
 } from "./fileSystemTypes";
 export { IpcChannel } from "./ipcChannels";
+export type { FileMetadata, MetadataProgress, MetadataResult } from "./metadataTypes";
 export type {
 	ContextMenuStatus,
 	ContextMenuTarget,

@@ -19,6 +19,7 @@ import { SettingsSection, SettingsSubsection } from "./SettingsSection";
 const SECTION_TITLES: Record<RenameSection, MessageKey> = {
 	regex: "regex.title",
 	name: "name.title",
+	metadata: "metadata.title",
 	replace: "replace.title",
 	case: "case.title",
 	remove: "remove.title",

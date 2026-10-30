@@ -25,6 +25,7 @@ import {
 	usePersistentState,
 	useRenamePresets,
 	useResizableSplitter,
+	useSelectionMetadata,
 	useSkipRenameConfirmation,
 	useTextPrompt,
 	useThemeMode,
@@ -60,9 +61,12 @@ import type {
 	RenameResult,
 } from "@shared/ipc";
 import {
+	appendTemplateField,
 	buildPreview,
 	createDefaultOptions,
 	createDisabledSections,
+	needsMetadata,
+	type PreviewContext,
 	type RenameOptions,
 	type RenameSection,
 	withoutDisabledSections,
@@ -328,9 +332,19 @@ export function RenamePlusApp() {
 	);
 
 	const deferredOptions = useDeferredValue(options);
+	// Só lê os metadados quando uma regra ligada usa: sem ela, a seleção não custa nada a mais.
+	// As duas versões das opções: a prévia (adiada) ainda pode depender dos metadados.
+	const metadata = useSelectionMetadata(
+		selectedEntries,
+		needsMetadata(options) || needsMetadata(deferredOptions),
+	);
+	const previewContext = useMemo(
+		(): PreviewContext => (metadata ? { ...PREVIEW_CONTEXT, metadata } : PREVIEW_CONTEXT),
+		[metadata],
+	);
 	const preview = useMemo(
-		() => buildPreview(selectedEntries, listing.entries, deferredOptions, PREVIEW_CONTEXT),
-		[selectedEntries, listing.entries, deferredOptions],
+		() => buildPreview(selectedEntries, listing.entries, deferredOptions, previewContext),
+		[selectedEntries, listing.entries, deferredOptions, previewContext],
 	);
 	// Novo nome no painel de detalhes: só quando há um único item selecionado.
 	const [singleSelected] = selectedEntries.length === 1 ? selectedEntries : [];
@@ -356,9 +370,13 @@ export function RenamePlusApp() {
 
 	const rename = useCallback(async () => {
 		// Recalcula com as opções atuais (a pré-visualização pode estar adiada).
-		const fresh = buildPreview(selectedEntries, listing.entries, options, PREVIEW_CONTEXT);
+		const fresh = buildPreview(selectedEntries, listing.entries, options, previewContext);
 		if (fresh.configError) {
 			setMessage({ kind: "error", text: tr(fresh.configError) });
+			return;
+		}
+		if (fresh.pending > 0) {
+			setMessage({ kind: "info", text: t("rename.waitMetadata") });
 			return;
 		}
 		if (fresh.errors > 0) {
@@ -410,6 +428,7 @@ export function RenamePlusApp() {
 		selectedEntries,
 		listing.entries,
 		options,
+		previewContext,
 		skipRenameConfirmation,
 		setSkipRenameConfirmation,
 		applyResult,
@@ -439,6 +458,25 @@ export function RenamePlusApp() {
 			setOptions((prev) => ({ ...prev, [section]: { ...prev[section], ...patch } }));
 		},
 		[setOptions],
+	);
+
+	/**
+	 * Campo clicado no painel de detalhes: vai para o fim do modelo, e a seção liga se estava
+	 * desmarcada. Sem uso ("Nenhum"), o modelo vira só esse campo, substituindo o nome.
+	 */
+	const insertMetadataField = useCallback(
+		(token: string) => {
+			setOptions((prev) => {
+				const { template, mode } = prev.metadata;
+				const metadata =
+					mode === "none"
+						? { ...prev.metadata, template: token, mode: "replace" as const }
+						: { ...prev.metadata, template: appendTemplateField(template, token) };
+				return { ...prev, metadata };
+			});
+			setDisabledSections((prev) => ({ ...prev, metadata: false }));
+		},
+		[setOptions, setDisabledSections],
 	);
 
 	const resetOption = useCallback(
@@ -749,7 +787,11 @@ export function RenamePlusApp() {
 							>
 								<span className="splitter-grip" />
 							</div>
-							<FileDetailsPanel selected={selectedEntries} newName={detailsNewName} />
+							<FileDetailsPanel
+								selected={selectedEntries}
+								newName={detailsNewName}
+								onInsertMetadataField={insertMetadataField}
+							/>
 						</>
 					)}
 				</div>
@@ -770,7 +812,11 @@ export function RenamePlusApp() {
 					onFiltersChange={(patch) => setFilters((prev) => ({ ...prev, ...patch }))}
 					sampleNames={sampleNames}
 					actions={{
-						canRename: preview.changed > 0 && preview.errors === 0 && !preview.configError,
+						canRename:
+							preview.changed > 0 &&
+							preview.errors === 0 &&
+							preview.pending === 0 &&
+							!preview.configError,
 						canUndo,
 						busy,
 						summary,

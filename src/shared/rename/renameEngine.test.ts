@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { FileEntry } from "../ipc";
+import type { FileEntry, FileMetadata } from "../ipc";
 import { validateFileName } from "./fileNameValidation";
-import { createRenamer, RenameConfigError } from "./renameEngine";
+import { emptyMetadata } from "./metadataTemplate";
+import { createRenamer, RenameConfigError, RenameItemError } from "./renameEngine";
 import { createDefaultOptions, type RenameOptions } from "./renameOptions";
 import { buildPreview } from "./renamePreview";
 
@@ -199,6 +200,109 @@ describe("buildPreview", () => {
 	it("reporta erro de configuração sem lançar exceção", () => {
 		const preview = buildPreview([entry("a")], [], options({ regex: { match: "[" } }));
 		expect(preview.configError?.key).toBe("engine.invalidRegex");
+	});
+});
+
+describe("metadados", () => {
+	const song: FileMetadata = {
+		...emptyMetadata(),
+		artist: "Legião Urbana",
+		title: "Tempo Perdido",
+		track: 3,
+	};
+	const takenAt = new Date(2024, 5, 12, 14, 32, 5).getTime();
+	const withMeta = (patch: Patch, metadata: FileMetadata | null, name = "track03.mp3") =>
+		createRenamer(options(patch))(entry(name), { ...ctx, metadata });
+
+	it("(11) substitui o nome pelo modelo, antes das outras regras", () => {
+		const patch: Patch = {
+			name: { mode: "fixed", fixed: "ignorado" },
+			metadata: { mode: "replace", template: "{track:2} - {artist} - {title}" },
+			case: { mode: "upper" },
+		};
+		expect(withMeta(patch, song)).toBe("03 - LEGIÃO URBANA - TEMPO PERDIDO.mp3");
+	});
+
+	it("(11) põe o modelo antes ou depois do nome, com o separador", () => {
+		const prefix: Patch = { metadata: { mode: "prefix", template: "{artist}", separator: " - " } };
+		expect(withMeta(prefix, song)).toBe("Legião Urbana - track03.mp3");
+		const suffix: Patch = { metadata: { mode: "suffix", template: "{track}", separator: "_" } };
+		expect(withMeta(suffix, song)).toBe("track03_3.mp3");
+	});
+
+	it("(11) combina com a numeração", () => {
+		const patch: Patch = {
+			metadata: { mode: "replace", template: "{title}" },
+			numbering: { mode: "prefix", separator: ". " },
+		};
+		expect(withMeta(patch, song)).toBe("1. Tempo Perdido.mp3");
+	});
+
+	it("(11) campo vazio lança RenameItemError", () => {
+		const patch: Patch = { metadata: { mode: "replace", template: "{album}" } };
+		expect(() => withMeta(patch, song)).toThrow(RenameItemError);
+		expect(() => withMeta(patch, null)).toThrow(RenameItemError);
+	});
+
+	it("(11) modelo com campo desconhecido gera RenameConfigError", () => {
+		expect(() =>
+			createRenamer(options({ metadata: { mode: "replace", template: "{x}" } })),
+		).toThrow(RenameConfigError);
+	});
+
+	it("(7) usa a data da foto", () => {
+		const patch: Patch = {
+			autoDate: { mode: "prefix", type: "taken", format: "YYYY-MM-DD HH.mm.ss", separator: " " },
+		};
+		expect(withMeta(patch, { ...emptyMetadata(), takenAt }, "IMG_2041.JPG")).toBe(
+			"2024-06-12 14.32.05 IMG_2041.JPG",
+		);
+		expect(() => withMeta(patch, emptyMetadata(), "IMG_2041.JPG")).toThrow(RenameItemError);
+	});
+
+	it("(7) tipo desconhecido (configuração antiga ou corrompida) usa a modificação", () => {
+		const type = "inexistente" as RenameOptions["autoDate"]["type"];
+		expect(rename("a.txt", { autoDate: { mode: "prefix", type, format: "YYYY" } })).toBe(
+			"2024_a.txt",
+		);
+	});
+
+	it("a prévia marca o item sem o campo como erro", () => {
+		const a = entry("a.mp3");
+		const preview = buildPreview(
+			[a],
+			[a],
+			options({ metadata: { mode: "replace", template: "{artist}" } }),
+			{ metadata: new Map([[a.path, null]]) },
+		);
+		expect(preview.items.get(a.path)).toMatchObject({
+			status: "error",
+			message: { key: "engine.missingMetadata", params: { field: "{artist}" } },
+		});
+		expect(preview.errors).toBe(1);
+	});
+
+	it("a prévia espera os metadados que ainda não chegaram", () => {
+		const a = entry("a.mp3");
+		const b = entry("b.mp3");
+		const preview = buildPreview(
+			[a, b],
+			[a, b],
+			options({ metadata: { mode: "replace", template: "{title}" } }),
+			{ metadata: new Map([[a.path, song]]) },
+		);
+		expect(preview.items.get(a.path)).toMatchObject({ newName: "Tempo Perdido.mp3", status: "ok" });
+		expect(preview.items.get(b.path)).toMatchObject({ newName: "", status: "pending" });
+		expect(preview.pending).toBe(1);
+		expect(preview.changed).toBe(1);
+		expect(preview.errors).toBe(0);
+	});
+
+	it("sem regra de metadados, nada fica esperando", () => {
+		const a = entry("a.mp3");
+		const preview = buildPreview([a], [a], options({ case: { mode: "upper" } }));
+		expect(preview.pending).toBe(0);
+		expect(preview.items.get(a.path)?.status).toBe("ok");
 	});
 });
 

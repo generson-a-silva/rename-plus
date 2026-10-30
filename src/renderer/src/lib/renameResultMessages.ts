@@ -13,6 +13,7 @@ export function describeRenameFailure(result: RenameResult, t: Translator): stri
 export function describePreview(preview: Preview, selectedCount: number, t: Translator): string {
 	if (preview.configError) return t(preview.configError.key, preview.configError.params);
 	if (preview.errors > 0) return t("preview.conflicts", { count: preview.errors });
+	if (preview.pending > 0) return t("preview.readingMetadataCount", { count: preview.pending });
 	if (selectedCount === 0) return t("preview.selectItems");
 	if (preview.changed > 0) return t("preview.willRename", { count: preview.changed });
 	return t("preview.nothingToChange");

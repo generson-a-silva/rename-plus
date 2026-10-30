@@ -1,11 +1,13 @@
-import type { MessageRef } from "../i18n";
-import type { FileEntry } from "../ipc";
+import type { FileEntry, FileMetadata } from "../ipc";
 import { getPlatformPaths, type PlatformPaths } from "../paths";
+import { compileMetadataTemplate, type MetadataTemplate } from "./metadataTemplate";
+import { RenameConfigError, RenameItemError } from "./renameErrors";
 import type {
 	AddOptions,
 	AutoDateOptions,
 	CaseOptions,
 	ExtensionOptions,
+	MetadataOptions,
 	NumberingOptions,
 	RemoveOptions,
 	RenameOptions,
@@ -31,16 +33,17 @@ export interface RenameContext {
 	/** Posição do item dentro da própria pasta (0-based). */
 	folderIndex: number;
 	now: Date;
+	/** Metadados do item (`null`: nada lido); só usados pelas regras que dependem deles. */
+	metadata?: FileMetadata | null;
 }
 
+/**
+ * Calcula o novo nome de um item. Lança `RenameItemError` quando aquele item não pode
+ * ser renomeado (ex.: falta um campo nos metadados).
+ */
 export type Renamer = (entry: FileEntry, context: RenameContext) => string;
 
-/** Opções que impedem calcular os nomes (ex.: RegEx malformada); `ref` descreve o motivo. */
-export class RenameConfigError extends Error {
-	constructor(readonly ref: MessageRef) {
-		super(ref.key);
-	}
-}
+export { RenameConfigError, RenameItemError };
 
 function compileRegex(options: RenameOptions["regex"]): RegExp | null {
 	if (!options.match) return null;
@@ -126,17 +129,37 @@ function place(text: string, value: string, mode: "prefix" | "suffix", separator
 	return mode === "prefix" ? value + separator + text : text + separator + value;
 }
 
+function applyMetadata(
+	text: string,
+	template: MetadataTemplate | null,
+	options: MetadataOptions,
+	metadata: FileMetadata | null,
+): string {
+	if (!template || options.mode === "none") return text;
+	const value = template(metadata, options);
+	return options.mode === "replace" ? value : place(text, value, options.mode, options.separator);
+}
+
+/** Data usada pela Data automática; um tipo desconhecido (configuração antiga) usa a modificação. */
+function dateOf(entry: FileEntry, type: AutoDateOptions["type"], context: RenameContext): Date {
+	if (type === "current") return context.now;
+	if (type === "created") return new Date(entry.birthtimeMs);
+	if (type === "taken") {
+		const takenAt = context.metadata?.takenAt;
+		if (takenAt == null) throw new RenameItemError({ key: "engine.missingTakenDate" });
+		return new Date(takenAt);
+	}
+	return new Date(entry.mtimeMs);
+}
+
 function applyAutoDate(
 	text: string,
 	entry: FileEntry,
 	options: AutoDateOptions,
-	now: Date,
+	context: RenameContext,
 ): string {
 	if (options.mode === "none") return text;
-	const date =
-		options.type === "current"
-			? now
-			: new Date(options.type === "created" ? entry.birthtimeMs : entry.mtimeMs);
+	const date = dateOf(entry, options.type, context);
 	return place(text, formatDate(date, options.format), options.mode, options.separator);
 }
 
@@ -200,8 +223,8 @@ function applyExtension(ext: string, options: ExtensionOptions): string {
 
 /**
  * Cria a função que calcula o novo nome de um item, aplicando as seções na
- * mesma ordem do Bulk Rename Utility. Lança `RenameConfigError` se as opções
- * forem inválidas (ex.: RegEx malformada).
+ * mesma ordem do Bulk Rename Utility (com os metadados logo depois do Nome). Lança
+ * `RenameConfigError` se as opções forem inválidas (ex.: RegEx malformada).
  */
 export function createRenamer(options: RenameOptions, platform = "linux"): Renamer {
 	const paths = getPlatformPaths(platform);
@@ -212,6 +235,8 @@ export function createRenamer(options: RenameOptions, platform = "linux"): Renam
 				`${options.replace.firstOnly ? "" : "g"}${options.replace.matchCase ? "" : "i"}`,
 			)
 		: null;
+	const metadataTemplate =
+		options.metadata.mode === "none" ? null : compileMetadataTemplate(options.metadata.template);
 
 	return (entry, context) => {
 		let { base, ext } = splitName(entry.name, entry.isDir);
@@ -242,13 +267,16 @@ export function createRenamer(options: RenameOptions, platform = "linux"): Renam
 				break;
 		}
 
+		// (11) Metadados: logo depois do Nome, para as regras seguintes valerem sobre o resultado.
+		base = applyMetadata(base, metadataTemplate, options.metadata, context.metadata ?? null);
+
 		// (3) Substituir — a string de substituição é literal (sem padrões `$`).
 		if (replaceRegex) base = base.replace(replaceRegex, () => options.replace.with);
 
 		base = applyCase(base, options.case); // (4)
 		base = applyRemove(base, options.remove); // (5)
 		base = applyAdd(base, options.add); // (6)
-		base = applyAutoDate(base, entry, options.autoDate, context.now); // (7)
+		base = applyAutoDate(base, entry, options.autoDate, context); // (7)
 		base = applyAppendFolder(base, entry, options.appendFolder, paths); // (8)
 		base = applyNumbering(base, options.numbering, context); // (9)
 		if (!entry.isDir) ext = applyExtension(ext, options.extension); // (10)

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { FileEntry } from "../ipc";
+import { emptyMetadata } from "../rename";
 import {
 	createWatchRule,
 	isIncompleteDownload,
@@ -128,6 +129,27 @@ describe("numberingChanged", () => {
 });
 
 describe("planWatchedFile", () => {
+	it("usa os metadados recebidos e recusa o arquivo sem o campo", () => {
+		const base = rule();
+		const songRule: WatchRule = {
+			...base,
+			rename: {
+				...base.rename,
+				metadata: { ...base.rename.metadata, mode: "replace", template: "{artist} - {title}" },
+			},
+		};
+		const song = { ...emptyMetadata(), artist: "AC/DC", title: "Thunderstruck" };
+		expect(planWatchedFile(songRule, entry("x.mp3"), 0, NOW, "linux", song)).toEqual({
+			kind: "move",
+			name: "AC-DC - Thunderstruck.mp3",
+			dir: "/home/user/Downloads",
+		});
+		expect(planWatchedFile(songRule, entry("x.mp3"), 0, NOW, "linux", null)).toEqual({
+			kind: "error",
+			error: { key: "engine.missingMetadata", params: { field: "{artist}" } },
+		});
+	});
+
 	it("renomeia na mesma pasta", () => {
 		expect(planWatchedFile(lowerCaseRule(), entry("Foto.JPG"), 0, NOW, "linux")).toEqual({
 			kind: "move",

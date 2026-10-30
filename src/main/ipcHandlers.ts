@@ -20,6 +20,7 @@ import { takeLaunchRequests } from "./launchRequestQueue";
 import { ListingJobs } from "./listingJobs";
 import { saveLocale } from "./localePreference";
 import { setMainLocale, tMain } from "./mainLocale";
+import { readMetadata, readMetadataBatch } from "./metadataReader";
 import {
 	copyText,
 	openPath,
@@ -82,6 +83,15 @@ async function confirm(sender: WebContents, request: ConfirmRequest): Promise<Co
 
 /** Somas de tamanho em andamento, pelo `id` do pedido (cancelar quando a seleção muda). */
 const sizeCalculations = new Map<number, AbortController>();
+/** Leituras de metadados em andamento, pelo `id` do pedido. */
+const metadataReads = new Map<number, AbortController>();
+
+/** Caminhos vindos da interface: só textos não vazios (o resto é descartado). */
+function pathList(value: unknown): string[] {
+	return Array.isArray(value)
+		? value.filter((item): item is string => typeof item === "string" && item !== "")
+		: [];
+}
 
 export function registerIpcHandlers(): void {
 	ipcMain.handle(IpcChannel.GetAppInfo, () => getAppInfo());
@@ -144,6 +154,28 @@ export function registerIpcHandlers(): void {
 		}
 	});
 	ipcMain.on(IpcChannel.CancelSize, (_event, id: number) => sizeCalculations.get(id)?.abort());
+	ipcMain.handle(IpcChannel.GetFileMetadata, (_event, target: unknown) =>
+		typeof target === "string" ? readMetadata(target) : null,
+	);
+	ipcMain.handle(IpcChannel.ReadMetadata, async (event, id: number, paths: unknown) => {
+		const { sender } = event;
+		const controller = new AbortController();
+		metadataReads.set(id, controller);
+		try {
+			return await readMetadataBatch(pathList(paths), {
+				signal: controller.signal,
+				onProgress: (results) => {
+					if (!sender.isDestroyed()) sender.send(IpcChannel.MetadataProgress, { id, results });
+				},
+			});
+		} catch (error) {
+			if (controller.signal.aborted) return null;
+			throw error;
+		} finally {
+			metadataReads.delete(id);
+		}
+	});
+	ipcMain.on(IpcChannel.CancelMetadata, (_event, id: number) => metadataReads.get(id)?.abort());
 
 	ipcMain.handle(IpcChannel.Rename, (_event, operations: RenameOperation[]) =>
 		renameBatch(operations),

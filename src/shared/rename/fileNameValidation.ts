@@ -37,6 +37,20 @@ function validateWindowsName(name: string): MessageRef | null {
 }
 
 /**
+ * Troca por `-` o que não pode entrar num nome em nenhum sistema (os proibidos no Windows,
+ * que incluem as barras, e os de controle). Usado em textos vindos de fora, como as tags
+ * de uma música ("AC/DC"), para o nome ficar igual no Linux e no Windows.
+ */
+export function sanitizeNamePart(text: string): string {
+	let result = "";
+	for (const char of text) {
+		const forbidden = WINDOWS_FORBIDDEN_CHARS.has(char) || (char.codePointAt(0) ?? 0) < 32;
+		result += forbidden ? "-" : char;
+	}
+	return result;
+}
+
+/**
  * Descreve por que `name` não pode ser usado como nome de arquivo no sistema
  * indicado (valor de `process.platform`), ou `null` se for válido. O texto é
  * traduzido por quem exibe (`MessageRef`).
