@@ -577,6 +577,15 @@ button.header-cell:hover {
 	background: var(--error-soft);
 }
 
+/* Hover também nos selecionados: um tom mais forte da própria cor da linha. */
+.file-row.selected:hover {
+	background: color-mix(in srgb, var(--accent-soft) 80%, var(--accent));
+}
+
+.file-row.error:hover {
+	background: color-mix(in srgb, var(--error-soft) 85%, var(--error));
+}
+
 .file-row.error .new-name {
 	color: var(--error);
 	font-weight: 600;
