@@ -4,6 +4,7 @@ import path from "node:path";
 import { Readable } from "node:stream";
 import { protocol } from "electron";
 import {
+	HEIC_EXTENSIONS,
 	LOCAL_FILE_SCHEME,
 	localFilePath,
 	PDF_EXTENSIONS,
@@ -19,6 +20,8 @@ const CONTENT_TYPES: Record<string, string> = {
 	webm: "video/webm",
 	ogv: "video/ogg",
 	pdf: "application/pdf",
+	heic: "image/heic",
+	heif: "image/heif",
 };
 
 /** Precisa rodar antes de `app.whenReady()`. */
@@ -39,7 +42,7 @@ export function registerLocalFileScheme(): void {
 }
 
 /**
- * Entrega vídeos e PDFs à interface, com suporte a `Range`: sem ele o vídeo não pula para
+ * Entrega vídeos, PDFs e fotos HEIC à interface, com suporte a `Range`: sem ele o vídeo não pula para
  * o meio (o `net.fetch` de `file://` responde sempre o arquivo inteiro, sem tamanho).
  */
 export function handleLocalFileProtocol(): void {
@@ -50,7 +53,7 @@ export function handleLocalFileProtocol(): void {
 			request.method !== "GET" ||
 			!file ||
 			!path.isAbsolute(file) ||
-			!(VIDEO_EXTENSIONS.has(ext) || PDF_EXTENSIONS.has(ext))
+			!(VIDEO_EXTENSIONS.has(ext) || PDF_EXTENSIONS.has(ext) || HEIC_EXTENSIONS.has(ext))
 		) {
 			return new Response(null, { status: 403 });
 		}

@@ -6,10 +6,13 @@ import { type NativeImage, nativeImage } from "electron";
 import type { FileDetails, FileThumbnail } from "../shared/ipc";
 import {
 	EMBEDDED_THUMBNAIL_EXTENSIONS,
+	FFMPEG_EXTENSIONS,
 	LIBREOFFICE_EXTENSIONS,
 	RESIZABLE_IMAGE_EXTENSIONS,
 } from "../shared/preview";
+import { renderWithFfmpeg } from "./ffmpegRenderer";
 import { renderWithLibreOffice } from "./libreOfficeRenderer";
+import { renderWithSystemThumbnailer } from "./systemThumbnailers";
 import { readZipEntry } from "./zipEntryReader";
 
 /** Lado maior da miniatura: folga para o painel largo em telas de alta densidade. */
@@ -94,6 +97,7 @@ async function createThumbnail(file: string, stats: Stats): Promise<FileThumbnai
 			url: `data:${inlineType};base64,${data.toString("base64")}`,
 			width: null,
 			height: null,
+			duration: null,
 			isOriginal: true,
 		};
 	}
@@ -101,7 +105,7 @@ async function createThumbnail(file: string, stats: Stats): Promise<FileThumbnai
 		if (stats.size > MAX_IMAGE_BYTES) return null;
 		const image = nativeImage.createFromBuffer(await fs.readFile(file));
 		// Dimensões da imagem original; a miniatura sai reduzida.
-		return scaledThumbnail(image, ext === "png" ? "png" : "jpeg", true);
+		return scaledThumbnail(image, ext === "png" ? "png" : "jpeg", image.getSize());
 	}
 	if (EMBEDDED_THUMBNAIL_EXTENSIONS.has(ext)) {
 		const embedded = await readZipEntry(file, EMBEDDED_THUMBNAIL_ENTRIES).catch(() => null);
@@ -115,15 +119,25 @@ async function createThumbnail(file: string, stats: Stats): Promise<FileThumbnai
 			.catch(() => null);
 		if (image && !image.isEmpty()) return scaledThumbnail(image, "png");
 	}
+	// Linux: os geradores que o KDE/GNOME usam (HEIC, AVIF, vídeos…), se instalados.
+	const system = await renderWithSystemThumbnailer(file, THUMBNAIL_SIZE);
+	const fromSystem = system && scaledThumbnail(nativeImage.createFromBuffer(system), "png");
+	if (fromSystem) return fromSystem;
+	if (FFMPEG_EXTENSIONS.has(ext)) {
+		const frame = await renderWithFfmpeg(file, THUMBNAIL_SIZE);
+		const thumbnail =
+			frame && scaledThumbnail(nativeImage.createFromBuffer(frame.png), "png", frame);
+		if (thumbnail) return thumbnail;
+	}
 	if (LIBREOFFICE_EXTENSIONS.has(ext)) return renderWithLibreOfficeCached(file, stats);
 	return null;
 }
 
-/** Reduz para o tamanho do painel; com `withSize`, informa as dimensões originais. */
+/** Reduz para o tamanho do painel; `original` traz as dimensões/duração do arquivo, se conhecidas. */
 function scaledThumbnail(
 	image: NativeImage,
 	format: "png" | "jpeg",
-	withSize = false,
+	original: { width?: number | null; height?: number | null; duration?: number | null } = {},
 ): FileThumbnail | null {
 	if (image.isEmpty()) return null;
 	const { width, height } = image.getSize();
@@ -136,9 +150,13 @@ function scaledThumbnail(
 		format === "png"
 			? scaled.toDataURL()
 			: `data:image/jpeg;base64,${scaled.toJPEG(85).toString("base64")}`;
-	return withSize
-		? { url, width, height, isOriginal: false }
-		: { url, width: null, height: null, isOriginal: false };
+	return {
+		url,
+		width: original.width ?? null,
+		height: original.height ?? null,
+		duration: original.duration ?? null,
+		isOriginal: false,
+	};
 }
 
 /** Conversões do LibreOffice já feitas (cada uma leva 1–2 s), pelo arquivo e sua versão. */

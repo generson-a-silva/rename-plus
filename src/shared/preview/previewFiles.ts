@@ -1,7 +1,7 @@
 /**
- * Pré-visualização de vídeos e PDFs no painel de detalhes: a interface os abre por um
- * protocolo próprio do app (o `file://` não serve: a página roda em sandbox e, em
- * desenvolvimento, nem é servida de `file://`). Só as extensões abaixo são entregues.
+ * Pré-visualização de vídeos, PDFs e fotos HEIC no painel de detalhes: a interface os
+ * abre por um protocolo próprio do app (o `file://` não serve: a página roda em sandbox
+ * e, em desenvolvimento, nem é servida de `file://`). Só essas extensões são entregues.
  */
 export const LOCAL_FILE_SCHEME = "rename-plus-file";
 
@@ -36,6 +36,17 @@ export const LIBREOFFICE_EXTENSIONS = words(
 	"doc dot docx docm dotx odt ott xls xlt xlsx xlsm xltx ods ots ppt pps pot pptx pptm ppsx potx odp otp",
 );
 
+/** Fotos HEIC/HEIF: decodificadas na interface pela libheif (WebAssembly). */
+export const HEIC_EXTENSIONS = words("heic heif");
+
+/**
+ * O que o FFmpeg instalado no sistema ainda consegue abrir quando o Chromium não abre:
+ * vídeos em HEVC, AVI, WMV etc., e HEIC (segunda tentativa, se a libheif falhar).
+ */
+export const FFMPEG_EXTENSIONS = words(
+	"mp4 m4v mov mkv webm ogv avi wmv asf flv f4v mpg mpeg m2v vob ts mts m2ts 3gp 3g2 divx xvid heic heif",
+);
+
 /**
  * Extensões para as quais vale esperar uma prévia (a interface mostra "carregando").
  * No Windows/macOS o sistema ainda pode gerar miniaturas de outros tipos; esses aparecem
@@ -44,6 +55,8 @@ export const LIBREOFFICE_EXTENSIONS = words(
 export function hasPreview(ext: string): boolean {
 	return [
 		VIDEO_EXTENSIONS,
+		FFMPEG_EXTENSIONS,
+		HEIC_EXTENSIONS,
 		PDF_EXTENSIONS,
 		RESIZABLE_IMAGE_EXTENSIONS,
 		INLINE_IMAGE_EXTENSIONS,

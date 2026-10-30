@@ -47,6 +47,7 @@
 		"cross-env": "^10.1.0",
 		"electron": "^44.5.1",
 		"electron-builder": "^26.15.3",
+		"libheif-js": "^1.23.5",
 		"pdfjs-dist": "^6.4.299",
 		"typescript": "^7.0.2",
 		"vite": "^8.3.2",

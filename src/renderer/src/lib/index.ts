@@ -20,6 +20,7 @@ export {
 	relativePath,
 	treeRootFor,
 } from "./filePathUtils";
+export { type HeicPreview, renderHeicPreview } from "./heicPreview";
 export { insertItem, moveItem } from "./listReorder";
 export { loadStored, mergeDefaults, saveStored } from "./localPreferencesStorage";
 export { diffNames, type NameDiffSegment } from "./nameDiff";

@@ -84,6 +84,8 @@ export interface FileThumbnail {
 	/** Dimensões da imagem original, quando conhecidas (a miniatura pode estar reduzida). */
 	width: number | null;
 	height: number | null;
+	/** Duração em segundos, quando a miniatura é o frame de um vídeo (FFmpeg). */
+	duration: number | null;
 	/** A miniatura é o próprio arquivo, sem redução: as dimensões saem dela ao carregar. */
 	isOriginal: boolean;
 }
