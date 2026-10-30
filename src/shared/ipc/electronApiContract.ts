@@ -4,7 +4,7 @@ import type { AppInfo } from "./appInfoTypes";
 import type { BackgroundInfo } from "./backgroundTypes";
 import type { RenameOperation, RenameResult } from "./batchRenameTypes";
 import type { ContextMenuItem } from "./contextMenuTypes";
-import type { ConfirmRequest } from "./dialogTypes";
+import type { ConfirmRequest, ConfirmResult } from "./dialogTypes";
 import type { FileOperationResult } from "./fileOperationTypes";
 import type {
 	DirEntry,
@@ -73,6 +73,8 @@ export interface ElectronApi {
 	canUndo: () => Promise<boolean>;
 	pickFolder: (defaultPath: string) => Promise<string | null>;
 	confirm: (request: ConfirmRequest) => Promise<boolean>;
+	/** Como `confirm`, informando também se a caixa de seleção (`request.checkbox`) ficou marcada. */
+	confirmWithCheckbox: (request: ConfirmRequest) => Promise<ConfirmResult>;
 	/** Exibe um menu de contexto nativo e devolve o `id` do item clicado (ou `null`). */
 	showContextMenu: (items: ContextMenuItem[]) => Promise<string | null>;
 	/** Abre com o aplicativo padrão do sistema. Devolve a mensagem de erro, se houver. */
@@ -120,4 +122,7 @@ export interface ElectronApi {
 	/** Pastas monitoradas com o app fechado (início com o sistema, sem janela). */
 	getBackground: () => Promise<BackgroundInfo>;
 	setBackground: (enabled: boolean) => Promise<BackgroundInfo>;
+	/** Renomear sem a janela de confirmação (preferência das configurações). */
+	getSkipRenameConfirmation: () => Promise<boolean>;
+	setSkipRenameConfirmation: (skip: boolean) => Promise<boolean>;
 }

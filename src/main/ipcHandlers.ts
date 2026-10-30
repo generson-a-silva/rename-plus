@@ -2,6 +2,7 @@ import os from "node:os";
 import { app, BrowserWindow, dialog, ipcMain, type WebContents } from "electron";
 import type {
 	ConfirmRequest,
+	ConfirmResult,
 	ContextMenuItem,
 	ListingEvent,
 	ListOptions,
@@ -26,6 +27,7 @@ import {
 	showInFolder,
 	trashItems,
 } from "./nativeShellService";
+import { getSkipRenameConfirmation, setSkipRenameConfirmation } from "./renameConfirmation";
 import {
 	getShellIntegrationInfo,
 	refreshContextMenuIntegrations,
@@ -56,6 +58,26 @@ function listingsOf(sender: WebContents): ListingJobs {
 		jobs = created;
 	}
 	return jobs;
+}
+
+/** Diálogo nativo de confirmação (Cancelar / ação), com caixa de seleção opcional. */
+async function confirm(sender: WebContents, request: ConfirmRequest): Promise<ConfirmResult> {
+	const win = BrowserWindow.fromWebContents(sender);
+	const options: Electron.MessageBoxOptions = {
+		type: request.severity ?? "question",
+		buttons: [tMain("common.cancel"), request.confirmLabel ?? tMain("common.confirm")],
+		defaultId: 1,
+		cancelId: 0,
+		message: request.message,
+		...(request.detail ? { detail: request.detail } : {}),
+		...(request.checkbox
+			? { checkboxLabel: request.checkbox.label, checkboxChecked: request.checkbox.checked }
+			: {}),
+	};
+	const { response, checkboxChecked } = win
+		? await dialog.showMessageBox(win, options)
+		: await dialog.showMessageBox(options);
+	return { confirmed: response === 1, checked: checkboxChecked };
 }
 
 /** Somas de tamanho em andamento, pelo `id` do pedido (cancelar quando a seleção muda). */
@@ -139,20 +161,11 @@ export function registerIpcHandlers(): void {
 	});
 
 	ipcMain.handle(IpcChannel.Confirm, async (event, request: ConfirmRequest) => {
-		const win = BrowserWindow.fromWebContents(event.sender);
-		const options: Electron.MessageBoxOptions = {
-			type: request.severity ?? "question",
-			buttons: [tMain("common.cancel"), request.confirmLabel ?? tMain("common.confirm")],
-			defaultId: 1,
-			cancelId: 0,
-			message: request.message,
-			...(request.detail ? { detail: request.detail } : {}),
-		};
-		const { response } = win
-			? await dialog.showMessageBox(win, options)
-			: await dialog.showMessageBox(options);
-		return response === 1;
+		return (await confirm(event.sender, request)).confirmed;
 	});
+	ipcMain.handle(IpcChannel.ConfirmWithCheckbox, (event, request: ConfirmRequest) =>
+		confirm(event.sender, request),
+	);
 
 	ipcMain.handle(IpcChannel.ShowContextMenu, (event, items: ContextMenuItem[]) =>
 		showContextMenu(BrowserWindow.fromWebContents(event.sender), items),
@@ -192,4 +205,8 @@ export function registerIpcHandlers(): void {
 	);
 	ipcMain.handle(IpcChannel.GetBackground, () => getBackgroundInfo());
 	ipcMain.handle(IpcChannel.SetBackground, (_event, enabled: unknown) => setBackground(enabled));
+	ipcMain.handle(IpcChannel.GetSkipRenameConfirmation, () => getSkipRenameConfirmation());
+	ipcMain.handle(IpcChannel.SetSkipRenameConfirmation, (_event, skip: unknown) =>
+		setSkipRenameConfirmation(skip),
+	);
 }

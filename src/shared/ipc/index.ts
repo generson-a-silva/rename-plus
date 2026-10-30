@@ -2,7 +2,7 @@ export type { AppInfo } from "./appInfoTypes";
 export type { BackgroundInfo } from "./backgroundTypes";
 export type { RenameFailure, RenameOperation, RenameResult } from "./batchRenameTypes";
 export type { ContextMenuItem } from "./contextMenuTypes";
-export type { ConfirmRequest } from "./dialogTypes";
+export type { ConfirmRequest, ConfirmResult } from "./dialogTypes";
 export type { ElectronApi } from "./electronApiContract";
 export type { FileOperationFailure, FileOperationResult } from "./fileOperationTypes";
 export type {

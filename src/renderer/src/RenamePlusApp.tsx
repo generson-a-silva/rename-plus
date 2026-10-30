@@ -25,6 +25,7 @@ import {
 	usePersistentState,
 	useRenamePresets,
 	useResizableSplitter,
+	useSkipRenameConfirmation,
 	useTextPrompt,
 	useThemeMode,
 	useUpdateStatus,
@@ -126,6 +127,7 @@ export function RenamePlusApp() {
 	const [busy, setBusy] = useState(false);
 	const [canUndo, setCanUndo] = useState(false);
 	const [settingsOpen, setSettingsOpen] = useState(false);
+	const [skipRenameConfirmation, setSkipRenameConfirmation] = useSkipRenameConfirmation();
 	// As boas-vindas abrem sozinhas só na primeira execução; depois, pelo botão da barra.
 	const [welcomeSeen, setWelcomeSeen] = usePersistentState("welcomeSeen", false);
 	/** Boas-vindas abertas: do início ou direto no slide de apoio ao projeto. */
@@ -377,19 +379,24 @@ export function RenamePlusApp() {
 			return;
 		}
 
-		const sample = operations
-			.slice(0, 6)
-			.map((op) => `${baseName(op.from)}  →  ${baseName(op.to)}`)
-			.join("\n");
-		const confirmed = await window.api.confirm({
-			message: t("rename.confirm", { count: operations.length }),
-			detail:
-				operations.length > 6
-					? `${sample}\n${t("rename.confirmMore", { count: operations.length - 6 })}`
-					: sample,
-			confirmLabel: t("actions.rename"),
-		});
-		if (!confirmed) return;
+		if (!skipRenameConfirmation) {
+			const sample = operations
+				.slice(0, 6)
+				.map((op) => `${baseName(op.from)}  →  ${baseName(op.to)}`)
+				.join("\n");
+			const answer = await window.api.confirmWithCheckbox({
+				message: t("rename.confirm", { count: operations.length }),
+				detail:
+					operations.length > 6
+						? `${sample}\n${t("rename.confirmMore", { count: operations.length - 6 })}`
+						: sample,
+				confirmLabel: t("actions.rename"),
+				checkbox: { label: t("rename.dontAskAgain"), checked: false },
+			});
+			if (!answer.confirmed) return;
+			// Só vale ao confirmar: marcar e cancelar não muda a preferência.
+			if (answer.checked) setSkipRenameConfirmation(true);
+		}
 
 		setBusy(true);
 		try {
@@ -399,7 +406,17 @@ export function RenamePlusApp() {
 			setBusy(false);
 			await refreshUndo();
 		}
-	}, [selectedEntries, listing.entries, options, applyResult, refreshUndo, t, tr]);
+	}, [
+		selectedEntries,
+		listing.entries,
+		options,
+		skipRenameConfirmation,
+		setSkipRenameConfirmation,
+		applyResult,
+		refreshUndo,
+		t,
+		tr,
+	]);
 
 	const undo = useCallback(async () => {
 		const confirmed = await window.api.confirm({
@@ -808,6 +825,8 @@ export function RenamePlusApp() {
 				updates={updates}
 				renameOptions={options}
 				presets={presets.presets}
+				skipRenameConfirmation={skipRenameConfirmation}
+				onSkipRenameConfirmationChange={setSkipRenameConfirmation}
 			/>
 			<WelcomeDialog
 				open={welcome !== null}

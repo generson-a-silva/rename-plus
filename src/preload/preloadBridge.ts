@@ -23,6 +23,7 @@ const C = {
 	CanUndo: "rename:can-undo",
 	PickFolder: "dialog:pick-folder",
 	Confirm: "dialog:confirm",
+	ConfirmWithCheckbox: "dialog:confirm-checkbox",
 	ShowContextMenu: "dialog:show-context-menu",
 	OpenPath: "shell:open-path",
 	ShowInFolder: "shell:show-in-folder",
@@ -44,6 +45,8 @@ const C = {
 	ResetWatchNumbering: "watch:reset-numbering",
 	GetBackground: "background:get",
 	SetBackground: "background:set",
+	GetSkipRenameConfirmation: "rename:get-skip-confirmation",
+	SetSkipRenameConfirmation: "rename:set-skip-confirmation",
 	LaunchRequest: "launch:request",
 	UpdateStatus: "update:status",
 	ListingEvent: "fs:listing-event",
@@ -90,6 +93,7 @@ const api: ElectronApi = {
 	canUndo: () => ipcRenderer.invoke(C.CanUndo),
 	pickFolder: (defaultPath) => ipcRenderer.invoke(C.PickFolder, defaultPath),
 	confirm: (request) => ipcRenderer.invoke(C.Confirm, request),
+	confirmWithCheckbox: (request) => ipcRenderer.invoke(C.ConfirmWithCheckbox, request),
 	showContextMenu: (items) => ipcRenderer.invoke(C.ShowContextMenu, items),
 	openPath: (path) => ipcRenderer.invoke(C.OpenPath, path),
 	showInFolder: (path) => ipcRenderer.invoke(C.ShowInFolder, path),
@@ -117,6 +121,8 @@ const api: ElectronApi = {
 	onWatchFoldersChanged: (listener) => subscribe(C.WatchFoldersChanged, listener),
 	getBackground: () => ipcRenderer.invoke(C.GetBackground),
 	setBackground: (enabled) => ipcRenderer.invoke(C.SetBackground, enabled),
+	getSkipRenameConfirmation: () => ipcRenderer.invoke(C.GetSkipRenameConfirmation),
+	setSkipRenameConfirmation: (skip) => ipcRenderer.invoke(C.SetSkipRenameConfirmation, skip),
 };
 
 contextBridge.exposeInMainWorld("api", api);

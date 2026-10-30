@@ -6,6 +6,7 @@ import type { RenameOptions } from "@shared/rename";
 import { useEffect, useId, useRef } from "react";
 import { AppearanceSection } from "./AppearanceSection";
 import { ContextMenuIntegrationSection } from "./ContextMenuIntegrationSection";
+import { RenameSettingsSection } from "./RenameSettingsSection";
 import { UpdatesSection } from "./UpdatesSection";
 import { WatchFoldersSection } from "./WatchFoldersSection";
 
@@ -19,11 +20,14 @@ interface SettingsDialogProps {
 	renameOptions: RenameOptions;
 	/** Presets de renomeação, que podem ser escolhidos nas regras das pastas monitoradas. */
 	presets: readonly RenamePreset[];
+	/** Renomear sem a janela de confirmação. */
+	skipRenameConfirmation: boolean;
+	onSkipRenameConfirmationChange: (skip: boolean) => void;
 }
 
 /**
  * Janela modal de configurações, organizada em seções (aparência, pastas monitoradas,
- * menu de contexto do sistema, atualizações).
+ * menu de contexto do sistema, renomeação, atualizações).
  */
 export function SettingsDialog({
 	open,
@@ -33,6 +37,8 @@ export function SettingsDialog({
 	updates,
 	renameOptions,
 	presets,
+	skipRenameConfirmation,
+	onSkipRenameConfirmationChange,
 }: SettingsDialogProps) {
 	const { t } = useI18n();
 	const dialogRef = useRef<HTMLDialogElement>(null);
@@ -73,6 +79,10 @@ export function SettingsDialog({
 						<AppearanceSection theme={theme} onThemeChange={onThemeChange} />
 						<WatchFoldersSection currentOptions={renameOptions} presets={presets} />
 						<ContextMenuIntegrationSection />
+						<RenameSettingsSection
+							skipConfirmation={skipRenameConfirmation}
+							onSkipConfirmationChange={onSkipRenameConfirmationChange}
+						/>
 						<UpdatesSection updates={updates} />
 					</div>
 					<footer className="settings-footer">

@@ -55,6 +55,12 @@ export const en: Messages = {
 	"integration.warningDevelopment": "Development mode: the options will run {command}",
 	"integration.unsupported": "The system context menu is not supported on this platform yet.",
 
+	// ---- Renaming (settings) --------------------------------------------
+	"renameSettings.title": "Renaming",
+	"renameSettings.skipConfirmation": "Don't show the confirmation when renaming",
+	"renameSettings.skipConfirmationHint":
+		"When checked, the confirmation is not shown: items are renamed right away (Undo is still available).",
+
 	// ---- Updates --------------------------------------------------------
 	"updates.title": "Updates",
 	"updates.description":
@@ -522,6 +528,7 @@ export const en: Messages = {
 	},
 	"rename.confirm": { one: "Rename {count} item?", other: "Rename {count} items?" },
 	"rename.confirmMore": "… and {count} more",
+	"rename.dontAskAgain": "Don't show this confirmation again",
 	"rename.done": { one: "{count} item renamed.", other: "{count} items renamed." },
 	"rename.failedNothing": "Nothing was renamed.",
 	"rename.failedItem": "Nothing was renamed — {name}: {error}",

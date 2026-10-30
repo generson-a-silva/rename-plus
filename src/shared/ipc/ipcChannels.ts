@@ -19,6 +19,7 @@ export const IpcChannel = {
 	CanUndo: "rename:can-undo",
 	PickFolder: "dialog:pick-folder",
 	Confirm: "dialog:confirm",
+	ConfirmWithCheckbox: "dialog:confirm-checkbox",
 	ShowContextMenu: "dialog:show-context-menu",
 	OpenPath: "shell:open-path",
 	ShowInFolder: "shell:show-in-folder",
@@ -40,6 +41,8 @@ export const IpcChannel = {
 	ResetWatchNumbering: "watch:reset-numbering",
 	GetBackground: "background:get",
 	SetBackground: "background:set",
+	GetSkipRenameConfirmation: "rename:get-skip-confirmation",
+	SetSkipRenameConfirmation: "rename:set-skip-confirmation",
 	/** Evento main → renderer: itens a abrir (menu de contexto do sistema, linha de comando). */
 	LaunchRequest: "launch:request",
 	/** Evento main → renderer: a situação da verificação de atualizações mudou. */

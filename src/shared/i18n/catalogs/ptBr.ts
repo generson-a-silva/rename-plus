@@ -62,6 +62,12 @@ export const ptBr = {
 	"integration.unsupported":
 		"O menu de contexto do sistema ainda não é suportado nesta plataforma.",
 
+	// ---- Renomeação (configurações) ------------------------------------
+	"renameSettings.title": "Renomeação",
+	"renameSettings.skipConfirmation": "Não exibir a confirmação ao renomear",
+	"renameSettings.skipConfirmationHint":
+		"Quando marcado, não exibe a confirmação: os itens são renomeados direto (Desfazer continua disponível).",
+
 	// ---- Atualizações ---------------------------------------------------
 	"updates.title": "Atualizações",
 	"updates.description":
@@ -529,6 +535,7 @@ export const ptBr = {
 	},
 	"rename.confirm": { one: "Renomear {count} item?", other: "Renomear {count} itens?" },
 	"rename.confirmMore": "… e mais {count}",
+	"rename.dontAskAgain": "Não exibir esta confirmação novamente",
 	"rename.done": { one: "{count} item renomeado.", other: "{count} itens renomeados." },
 	"rename.failedNothing": "Nada foi renomeado.",
 	"rename.failedItem": "Nada foi renomeado — {name}: {error}",

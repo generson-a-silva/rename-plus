@@ -56,6 +56,12 @@ export const es: Messages = {
 	"integration.unsupported":
 		"El menú contextual del sistema aún no es compatible con esta plataforma.",
 
+	// ---- Renombrado (configuración) -------------------------------------
+	"renameSettings.title": "Renombrado",
+	"renameSettings.skipConfirmation": "No mostrar la confirmación al renombrar",
+	"renameSettings.skipConfirmationHint":
+		"Si está marcado, no se muestra la confirmación: los elementos se renombran directamente (Deshacer sigue disponible).",
+
 	// ---- Actualizaciones ------------------------------------------------
 	"updates.title": "Actualizaciones",
 	"updates.description":
@@ -528,6 +534,7 @@ export const es: Messages = {
 	},
 	"rename.confirm": { one: "¿Renombrar {count} elemento?", other: "¿Renombrar {count} elementos?" },
 	"rename.confirmMore": "… y {count} más",
+	"rename.dontAskAgain": "No volver a mostrar esta confirmación",
 	"rename.done": { one: "{count} elemento renombrado.", other: "{count} elementos renombrados." },
 	"rename.failedNothing": "No se renombró nada.",
 	"rename.failedItem": "No se renombró nada — {name}: {error}",
