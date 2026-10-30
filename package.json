@@ -68,6 +68,7 @@
 		"productName": "Rename Plus",
 		"copyright": "Copyright © 2026 Generson Silva",
 		"artifactName": "${name}-${version}-${os}-${arch}.${ext}",
+		"afterAllArtifactBuild": "scripts/appimage/embedUpdateInfo.mjs",
 		"directories": {
 			"output": "build",
 			"buildResources": "resources"

@@ -17,7 +17,9 @@ jobs:
         include:
           - os: ubuntu-latest
             platform: --linux
-            files: build/*.AppImage
+            files: |
+              build/*.AppImage
+              build/*.AppImage.zsync
           - os: windows-latest
             platform: --win
             files: build/*.exe
@@ -34,6 +36,10 @@ jobs:
 
       - name: Dependências
         run: npm ci
+
+      - name: zsyncmake (atualização do AppImage)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y zsync
 
       - name: Conferir tag x versão do package.json
         shell: bash
