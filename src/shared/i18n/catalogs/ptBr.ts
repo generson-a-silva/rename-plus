@@ -711,6 +711,12 @@ export const ptBr = {
 	"welcome.regex.point1": "Blocos como Texto exato, Números, Letras e Separador",
 	"welcome.regex.point2": "Exemplos prontos: IMG_1234 → Foto 1234, inverter datas…",
 	"welcome.regex.point3": "Teste nos arquivos selecionados ou num nome digitado",
+	"welcome.metadata.title": "Renomeie pelos metadados",
+	"welcome.metadata.body":
+		"Use a data em que a foto foi tirada, a câmera ou o artista, o álbum e a faixa de uma música para montar o nome.",
+	"welcome.metadata.point1": "Modelos como {track:2} - {artist} - {title}",
+	"welcome.metadata.point2": "EXIF de fotos (JPEG, HEIC, RAW) e tags de músicas (MP3, FLAC, M4A…)",
+	"welcome.metadata.point3": "Arquivo sem o campo não é renomeado, sem surpresas",
 	"welcome.watch.title": "Pastas monitoradas",
 	"welcome.watch.body":
 		"Arquivos novos que chegam numa pasta (como Downloads) são renomeados e, se quiser, movidos automaticamente.",

@@ -41,6 +41,8 @@ export const ICON_PATHS = {
 	star: "M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9z",
 	heart: "M12 20s-7-4.4-9-9.2A5 5 0 0 1 12 7a5 5 0 0 1 9 3.8C19 15.6 12 20 12 20z",
 	chat: "M4 5h16v11H10l-6 4z",
+	/** Etiqueta (metadados: tags das músicas e EXIF das fotos). */
+	tag: "M3 4h8l10 10-7 7L3 11zM7.5 7.5h.01",
 	shield: "M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6zM9 12l2 2 4-4",
 	info: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v5M12 8h.01",
 	/** Janela com painel lateral à direita (painel de detalhes). */

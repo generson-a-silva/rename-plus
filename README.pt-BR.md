@@ -83,6 +83,16 @@ Os prints mostram a interface em português. O app também está disponível em 
   </tr>
   <tr>
     <td width="50%" valign="top">
+      <a href="docs/screenshots/pt-BR/metadados.png"><img src="docs/screenshots/pt-BR/metadados.png" alt="Faixas 'Track01.mp3' a 'Track07.mp3' renomeadas pelas tags para nomes como '01 - The Midnight Orchestra - Opening Theme.mp3', com o painel Metadados no modo Substituir nome"></a>
+      <p><b>Metadados de músicas.</b> Faixas sem nome ganham faixa, artista e título lidos das tags, pelo modelo <code>{track:2} - {artist} - {title}</code> do painel Metadados.</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/pt-BR/metadados-fotos.png"><img src="docs/screenshots/pt-BR/metadados-fotos.png" alt="Foto renomeada para '2024-06-12 15.25.08 IMG_2058.jpg' pela data do EXIF, com o painel de detalhes mostrando câmera FUJIFILM X-T30, lente, ISO, abertura e distância focal"></a>
+      <p><b>Metadados de fotos.</b> A Data automática usa a data em que a foto foi tirada (EXIF). O painel de detalhes mostra a câmera, a lente e outros campos; clique num valor para pôr o campo no modelo.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
       <a href="docs/screenshots/pt-BR/erros.png"><img src="docs/screenshots/pt-BR/erros.png" alt="Painel de ações mostrando 'RegEx inválida: Unterminated group' e barra de status com 'Pasta não encontrada'"></a>
       <p><b>Mensagens de erro.</b> Uma RegEx inválida é explicada no painel de ações; caminhos inexistentes digitados na barra de endereço aparecem em vermelho na barra de status.</p>
     </td>

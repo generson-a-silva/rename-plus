@@ -83,6 +83,16 @@ Las capturas muestran la interfaz en español. La aplicación también está dis
   </tr>
   <tr>
     <td width="50%" valign="top">
+      <a href="docs/screenshots/es-ES/metadados.png"><img src="docs/screenshots/es-ES/metadados.png" alt="Pistas 'Track01.mp3' a 'Track07.mp3' renombradas con sus etiquetas a nombres como '01 - The Midnight Orchestra - Opening Theme.mp3', con el panel Metadatos en Reemplazar nombre"></a>
+      <p><b>Metadatos de música.</b> Las pistas sin nombre reciben el número, el artista y el título de sus etiquetas, con la plantilla <code>{track:2} - {artist} - {title}</code> del panel Metadatos.</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/es-ES/metadados-fotos.png"><img src="docs/screenshots/es-ES/metadados-fotos.png" alt="Foto renombrada a '2024-06-12 15.25.08 IMG_2058.jpg' con la fecha del EXIF, con el panel de detalles mostrando una cámara FUJIFILM X-T30, la lente, el ISO, la apertura y la distancia focal"></a>
+      <p><b>Metadatos de fotos.</b> La Fecha automática usa la fecha en que se tomó la foto (EXIF). El panel de detalles muestra la cámara, la lente y otros campos; haz clic en un valor para añadirlo a la plantilla.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
       <a href="docs/screenshots/es-ES/erros.png"><img src="docs/screenshots/es-ES/erros.png" alt="Panel de acciones con 'RegEx no válida: Unterminated group' y la barra de estado con 'Carpeta no encontrada'"></a>
       <p><b>Mensajes de error.</b> Una RegEx no válida se explica en el panel de acciones; las rutas inexistentes escritas en la barra de direcciones aparecen en rojo en la barra de estado.</p>
     </td>

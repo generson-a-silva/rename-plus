@@ -16,6 +16,7 @@ import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { APP_DIR, AppDriver, CATALOGS, LOCALE_NAMES, sleep, touch } from "../lib/appDriver.mjs";
+import { writeId3Mp3 } from "../lib/demoMedia.mjs";
 
 const OUT_DIR = path.join(APP_DIR, "src/renderer/src/assets/welcome");
 const WORK_DIR = "/tmp/rename-plus-welcome";
@@ -56,7 +57,16 @@ const DEMO_NAMES = {
 	},
 };
 
-/** Pasta pessoal fictícia: fotos de viagem, Downloads e uma pasta de destino. */
+/** Faixas de um CD copiado sem nomes ("Track01.mp3"), com artista, álbum e título nas tags. */
+const SONGS = {
+	artist: "The Midnight Orchestra",
+	album: "Live Sessions",
+	year: 2022,
+	genre: "Jazz",
+	titles: ["Opening Theme", "City Lights", "After Hours", "Slow Dance", "Encore"],
+};
+
+/** Pasta pessoal fictícia: fotos de viagem, músicas com tags, Downloads e uma pasta de destino. */
 function createDemoFiles(home, names) {
 	fs.rmSync(home, { recursive: true, force: true });
 	const photos = path.join(home, names.photos, names.trip);
@@ -67,10 +77,21 @@ function createDemoFiles(home, names) {
 	touch(path.join(photos, "IMG_2052.JPG"), 2_400_000, new Date(base + 9 * 3_600_000));
 	for (const dir of ["Downloads", names.music, names.videos])
 		fs.mkdirSync(path.join(home, dir), { recursive: true });
+	const music = path.join(home, names.music);
+	SONGS.titles.forEach((title, i) => {
+		writeId3Mp3(path.join(music, `Track${String(i + 1).padStart(2, "0")}.mp3`), {
+			...SONGS,
+			size: 5_600_000 + i * 410_000,
+			date: new Date(base + i * 60_000),
+			title,
+			track: i + 1,
+			disc: 1,
+		});
+	});
 	touch(path.join(home, "Downloads", "notes.txt"), 4, new Date(base - 86_400_000));
 	const invoices = path.join(home, names.documents, names.invoices);
 	fs.mkdirSync(invoices, { recursive: true });
-	return { photos, invoices, downloads: path.join(home, "Downloads") };
+	return { photos, music, invoices, downloads: path.join(home, "Downloads") };
 }
 
 // --- Sessão de gravação --------------------------------------------------
@@ -220,6 +241,32 @@ const SCRIPTS = {
 		await r.moveTo(".file-rows", { dx: 60, dy: -20 });
 		await sleep(1200);
 		await r.finish("regex");
+	},
+
+	/**
+	 * Metadados: as faixas "Track01.mp3" ganham faixa, artista e título das tags; depois um
+	 * modelo mais curto e o ano, inserido pelo menu "Inserir campo".
+	 */
+	async metadata(r) {
+		await r.reset(r.paths.music);
+		await r.tagPanels();
+		await r.selectAll();
+		await r.startRecording();
+		await sleep(600);
+		await r.select(r.field("metadata.title", "select", 0), "replace");
+		await r.waitFor(`!document.querySelector(".pending-name")`);
+		await r.moveTo(".file-rows", { dx: 60, dy: -20 });
+		await sleep(1600);
+		// Um modelo mais curto, para o nome com o ano caber na coluna Novo nome.
+		await r.click(r.field("metadata.title", "input", 1));
+		await r.key("a", "KeyA", 65, 2);
+		await r.key("Backspace", "Backspace", 8);
+		await r.type("{track:2}. {title}", 60);
+		// Lista "Inserir campo": a segunda do painel (a primeira é o modo).
+		await r.select(r.field("metadata.title", "select", 1), "{year}");
+		await r.moveTo(".file-rows", { dx: 60, dy: -20 });
+		await sleep(1800);
+		await r.finish("metadata");
 	},
 
 	/**

@@ -83,6 +83,16 @@ The screenshots show the English interface. The app is also available in Portugu
   </tr>
   <tr>
     <td width="50%" valign="top">
+      <a href="docs/screenshots/metadados.png"><img src="docs/screenshots/metadados.png" alt="Tracks 'Track01.mp3' to 'Track07.mp3' renamed from their tags to names such as '01 - The Midnight Orchestra - Opening Theme.mp3', with the Metadata panel set to Replace name"></a>
+      <p><b>Music metadata.</b> Untitled tracks get the track number, artist and title from their tags, using the <code>{track:2} - {artist} - {title}</code> template in the Metadata panel.</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="docs/screenshots/metadados-fotos.png"><img src="docs/screenshots/metadados-fotos.png" alt="Photo renamed to '2024-06-12 15.25.08 IMG_2058.jpg' from its EXIF date, with the details panel showing a FUJIFILM X-T30 camera, lens, ISO, aperture and focal length"></a>
+      <p><b>Photo metadata.</b> Auto date uses the date the photo was taken (EXIF). The details panel shows the camera, lens and other fields; click a value to add that field to the template.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
       <a href="docs/screenshots/erros.png"><img src="docs/screenshots/erros.png" alt="Actions panel showing 'Invalid RegEx: Unterminated group' and the status bar with 'Folder not found' in the status bar"></a>
       <p><b>Error messages.</b> An invalid RegEx is explained in the actions panel; a path typed in the address bar that doesn't exist is reported in red in the status bar.</p>
     </td>

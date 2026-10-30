@@ -54,6 +54,13 @@ const FEATURE_SLIDES: readonly FeatureSlide[] = [
 		points: ["welcome.regex.point1", "welcome.regex.point2", "welcome.regex.point3"],
 	},
 	{
+		id: "metadata",
+		icon: "tag",
+		title: "welcome.metadata.title",
+		body: "welcome.metadata.body",
+		points: ["welcome.metadata.point1", "welcome.metadata.point2", "welcome.metadata.point3"],
+	},
+	{
 		id: "watch",
 		icon: "inbox",
 		title: "welcome.watch.title",

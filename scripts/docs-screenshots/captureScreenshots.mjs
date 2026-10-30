@@ -11,6 +11,7 @@ import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { APP_DIR, AppDriver, CATALOGS, sleep, touch } from "../lib/appDriver.mjs";
+import { writeExifJpeg, writeId3Mp3 } from "../lib/demoMedia.mjs";
 
 const WORK_DIR = "/tmp/rename-plus-docs";
 const HOME = "/tmp/rename-plus-demo/home";
@@ -35,6 +36,7 @@ const NAMES = {
 		family: "Família",
 		familyFiles: ["DSC00412.jpg", "DSC00413.jpg", "DSC00420.jpg", "foto.jpg", "Natal 2023.jpg"],
 		music: "Músicas",
+		untitledCd: "CD sem título",
 		videos: "Vídeos",
 		documents: "Documentos",
 		downloads: "Downloads",
@@ -67,6 +69,7 @@ const NAMES = {
 			"Christmas 2023.jpg",
 		],
 		music: "Music",
+		untitledCd: "Untitled CD",
 		videos: "Videos",
 		documents: "Documents",
 		downloads: "Downloads",
@@ -89,6 +92,7 @@ const NAMES = {
 		family: "Familia",
 		familyFiles: ["DSC00412.jpg", "DSC00413.jpg", "DSC00420.jpg", "foto.jpg", "Navidad 2023.jpg"],
 		music: "Música",
+		untitledCd: "CD sin título",
 		videos: "Vídeos",
 		documents: "Documentos",
 		downloads: "Descargas",
@@ -110,6 +114,33 @@ const ALBUM = "the midnight orchestra - live sessions";
 const TRACKS = {
 	cd1: ["01_opening_theme.MP3", "02_city_lights.MP3", "03_after_hours.MP3", "04_slow_dance.MP3"],
 	cd2: ["01_encore.MP3", "02_last_train_home.MP3", "03_closing_credits.MP3"],
+};
+
+/** Faixas de um CD copiado sem nomes: as tags (ID3) têm artista, álbum e título. */
+const UNTITLED_CD = {
+	artist: "The Midnight Orchestra",
+	album: "Live Sessions",
+	year: 2022,
+	genre: "Jazz",
+	titles: [
+		"Opening Theme",
+		"City Lights",
+		"After Hours",
+		"Slow Dance",
+		"Encore",
+		"Last Train Home",
+		"Closing Credits",
+	],
+};
+
+/** Câmera das fotos da viagem (EXIF). */
+const TRIP_CAMERA = {
+	make: "FUJIFILM",
+	model: "X-T30",
+	lens: "XF18-55mmF2.8-4 R LM OIS",
+	iso: 200,
+	fNumber: 5.6,
+	focal: 23,
 };
 
 /** Fotos da viagem: [arquivo, MB, dia de junho, hora, minuto]. */
@@ -140,8 +171,12 @@ const FAMILY_PHOTOS = [
 function createDemoFiles(home, n) {
 	fs.rmSync(path.dirname(home), { recursive: true, force: true });
 	const trip = path.join(home, n.pictures, n.trip);
-	for (const [name, mb, day, hour, minute] of TRIP_PHOTOS)
-		touch(path.join(trip, name), Math.round(mb * MB), new Date(2024, 5, day, hour, minute));
+	// Fotos com EXIF: a data em que foram tiradas é a da modificação, com segundos.
+	for (const [i, [name, mb, day, hour, minute]] of TRIP_PHOTOS.entries()) {
+		const taken = new Date(2024, 5, day, hour, minute, (i * 17) % 60);
+		const size = Math.round(mb * MB);
+		writeExifJpeg(path.join(trip, name), { size, date: taken, taken, ...TRIP_CAMERA });
+	}
 	touch(path.join(trip, n.itinerary), 180 * 1024, new Date(2024, 4, 28, 20, 14));
 
 	const family = path.join(home, n.pictures, n.family);
@@ -158,12 +193,26 @@ function createDemoFiles(home, n) {
 		}
 	}
 
+	const untitledCd = path.join(home, n.music, n.untitledCd);
+	UNTITLED_CD.titles.forEach((title, i) => {
+		const track = i + 1;
+		writeId3Mp3(path.join(untitledCd, `Track${String(track).padStart(2, "0")}.mp3`), {
+			...UNTITLED_CD,
+			size: Math.round((5.4 + ((i * 7) % 5) * 0.8) * MB),
+			date: new Date(2025, 0, 18, 21, 4 + i),
+			title,
+			track,
+			disc: 1,
+		});
+	});
+
 	for (const dir of [n.videos, n.downloads, path.join(n.documents, n.invoices)])
 		fs.mkdirSync(path.join(home, dir), { recursive: true });
 	return {
 		trip,
 		family,
 		album,
+		untitledCd,
 		downloads: path.join(home, n.downloads),
 		invoices: path.join(home, n.documents, n.invoices),
 	};
@@ -187,8 +236,13 @@ class DocsDriver extends AppDriver {
 	}
 
 	/** Abre `dir` com tudo zerado, sem cursor desenhado, e marca os painéis. */
-	async open(dir, { subfolders = false, sort, theme = "dark", minRows = 1 } = {}) {
+	async open(
+		dir,
+		{ subfolders = false, sort, theme = "dark", minRows = 1, showDetails, columnWidths } = {},
+	) {
 		const stored = { layout: LAYOUT, theme };
+		if (showDetails) stored.showDetails = true;
+		if (columnWidths) stored.columnWidths = columnWidths;
 		if (sort) stored.sort = sort;
 		// Os filtros não ficam salvos entre sessões: o modo Subpastas é marcado na própria tela.
 		await this.reset(dir, { minRows: subfolders ? 0 : minRows, cursor: false, stored });
@@ -423,6 +477,40 @@ const SHOTS = {
 		const existing = `${d.n.conflictFixed}.jpg`;
 		await d.selectRows(d.n.familyFiles.filter((name) => name !== existing));
 		await d.out("conflitos");
+	},
+
+	/** Metadados: faixas sem nome ("Track01.mp3") renomeadas pelas tags, com o modelo padrão. */
+	async metadados(d) {
+		// Coluna Novo nome mais larga: os nomes com artista e título são compridos.
+		await d.open(d.paths.untitledCd, { columnWidths: { name: 170, newName: 480 } });
+		await d.fill(d.field("metadata.title", "select", 0), "replace");
+		await d.selectAll();
+		await d.waitFor(
+			`!document.querySelector(".pending-name") && document.querySelectorAll(".file-row.ok").length === ${UNTITLED_CD.titles.length}`,
+		);
+		await d.out("metadados");
+	},
+
+	/**
+	 * Data da foto (EXIF) na Data automática, com o painel de detalhes mostrando a câmera,
+	 * a lente e os outros campos da foto selecionada.
+	 */
+	async "metadados-fotos"(d) {
+		await d.open(d.paths.trip, { showDetails: true, columnWidths: { name: 170, newName: 330 } });
+		await d.fill(d.field("autoDate.title", "select", 0), "prefix");
+		await d.fill(d.field("autoDate.title", "select", 1), "taken");
+		await d.fill(d.field("autoDate.title", "input", 0), "YYYY-MM-DD HH.mm.ss");
+		await d.fill(d.field("autoDate.title", "input", 1), " ");
+		await d.fill(d.field("extension.title", "select", 0), "lower");
+		await d.selectRows([TRIP_PHOTOS[4][0]]);
+		await d.waitFor(`document.querySelectorAll(".details-metadata-value").length >= 6`);
+		// Rola o painel de detalhes até a seção Metadados, logo abaixo do novo nome.
+		await d.eval(`(() => {
+			const panel = document.querySelector(".details-panel");
+			const section = panel.querySelector(".details-section");
+			panel.scrollTop += section.getBoundingClientRect().top - panel.getBoundingClientRect().top - 150;
+		})()`);
+		await d.out("metadados-fotos");
 	},
 
 	/** Modo Subpastas com as faixas de dois CDs, no tema claro. */

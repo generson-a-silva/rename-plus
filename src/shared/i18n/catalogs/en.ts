@@ -704,6 +704,13 @@ export const en: Messages = {
 	"welcome.regex.point1": "Blocks like Exact text, Numbers, Letters and Separator",
 	"welcome.regex.point2": "Ready-made examples: IMG_1234 → Photo 1234, swap dates…",
 	"welcome.regex.point3": "Test on the selected files or on a typed name",
+	"welcome.metadata.title": "Rename from metadata",
+	"welcome.metadata.body":
+		"Build names from the date a photo was taken, the camera, or the artist, album and track of a song.",
+	"welcome.metadata.point1": "Templates such as {track:2} - {artist} - {title}",
+	"welcome.metadata.point2":
+		"EXIF from photos (JPEG, HEIC, RAW) and tags from music (MP3, FLAC, M4A…)",
+	"welcome.metadata.point3": "A file missing a field isn't renamed: no surprises",
 	"welcome.watch.title": "Watch folders",
 	"welcome.watch.body":
 		"New files arriving in a folder (like Downloads) are renamed and, if you want, moved automatically.",

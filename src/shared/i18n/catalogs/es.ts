@@ -712,6 +712,13 @@ export const es: Messages = {
 	"welcome.regex.point1": "Bloques como Texto exacto, Números, Letras y Separador",
 	"welcome.regex.point2": "Ejemplos listos: IMG_1234 → Foto 1234, invertir fechas…",
 	"welcome.regex.point3": "Prueba en los archivos seleccionados o en un nombre escrito",
+	"welcome.metadata.title": "Renombra con los metadatos",
+	"welcome.metadata.body":
+		"Usa la fecha en que se tomó la foto, la cámara o el artista, el álbum y la pista de una canción para formar el nombre.",
+	"welcome.metadata.point1": "Plantillas como {track:2} - {artist} - {title}",
+	"welcome.metadata.point2":
+		"EXIF de fotos (JPEG, HEIC, RAW) y etiquetas de música (MP3, FLAC, M4A…)",
+	"welcome.metadata.point3": "Un archivo sin el campo no se renombra: sin sorpresas",
 	"welcome.watch.title": "Carpetas vigiladas",
 	"welcome.watch.body":
 		"Los archivos nuevos que llegan a una carpeta (como Descargas) se renombran y, si quieres, se mueven automáticamente.",
