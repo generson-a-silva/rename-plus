@@ -10,4 +10,6 @@ export type ContextMenuItem =
 			checked?: boolean;
 			/** Atalho exibido ao lado do item (só informativo), ex.: "CmdOrCtrl+C". */
 			accelerator?: string;
+			/** Ícone em PNG (`data:` URL) desenhado em escala 2x: 32 px para 16 px no menu. */
+			icon?: string;
 	  };

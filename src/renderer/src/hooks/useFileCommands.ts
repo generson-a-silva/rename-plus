@@ -4,6 +4,7 @@ import {
 	buildListBackgroundMenu,
 	type FileCommand,
 	matchFileShortcut,
+	withMenuIcons,
 } from "@lib";
 import type { FileEntry } from "@shared/ipc";
 import { useCallback, useEffect } from "react";
@@ -143,7 +144,9 @@ export function useFileCommands(options: FileCommandsOptions) {
 					hasEntries: visibleEntries.length > 0,
 					showHidden,
 				});
-				const command = (await window.api.showContextMenu(items)) as FileCommand | null;
+				const command = (await window.api.showContextMenu(
+					withMenuIcons(items),
+				)) as FileCommand | null;
 				if (command) await run(command, { kind: "background" });
 				return;
 			}
@@ -156,7 +159,9 @@ export function useFileCommands(options: FileCommandsOptions) {
 				canPaste,
 				showHidden,
 			});
-			const command = (await window.api.showContextMenu(items)) as FileCommand | null;
+			const command = (await window.api.showContextMenu(
+				withMenuIcons(items),
+			)) as FileCommand | null;
 			if (command) await run(command, { kind: "entries", entries });
 		},
 		[canPaste, run, selectedEntries, selection, setSelection, showHidden, t, visibleEntries],
@@ -166,7 +171,7 @@ export function useFileCommands(options: FileCommandsOptions) {
 		async (path: string) => {
 			const isRoot = rootPaths.includes(path);
 			const command = (await window.api.showContextMenu(
-				buildFolderMenu(t, { isRoot, canPaste, showHidden }),
+				withMenuIcons(buildFolderMenu(t, { isRoot, canPaste, showHidden })),
 			)) as FileCommand | null;
 			if (command) await run(command, { kind: "folder", path, isRoot });
 		},

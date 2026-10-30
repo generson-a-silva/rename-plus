@@ -4,6 +4,8 @@ import {
 	clipboard,
 	Menu,
 	type MenuItemConstructorOptions,
+	type NativeImage,
+	nativeImage,
 	shell,
 } from "electron";
 import type { ContextMenuItem, FileOperationFailure, FileOperationResult } from "../shared/ipc";
@@ -12,6 +14,18 @@ import { tMain } from "./mainLocale";
 
 /** Tempo para aguardar um clique depois que o menu fecha (a ordem dos eventos varia por sistema). */
 const MENU_CLOSE_GRACE_MS = 100;
+
+const PNG_DATA_URL = "data:image/png;base64,";
+
+/** Ícone vindo da interface: PNG de 32 px marcado como escala 2x, para ocupar 16 px no menu. */
+function menuIcon(dataUrl: string): NativeImage | undefined {
+	if (!dataUrl.startsWith(PNG_DATA_URL)) return undefined;
+	const image = nativeImage.createFromBuffer(
+		Buffer.from(dataUrl.slice(PNG_DATA_URL.length), "base64"),
+		{ scaleFactor: 2 },
+	);
+	return image.isEmpty() ? undefined : image;
+}
 
 /** Exibe um menu de contexto nativo e resolve com o `id` do item clicado, ou `null`. */
 export function showContextMenu(
@@ -26,21 +40,20 @@ export function showContextMenu(
 			resolve(id);
 		};
 
-		const template: MenuItemConstructorOptions[] = items.map((item) =>
-			item.type === "separator"
-				? { type: "separator" }
-				: {
-						type: item.type ?? "normal",
-						label: item.label,
-						enabled: item.enabled ?? true,
-						checked: item.checked ?? false,
-						// Só exibe o atalho; quem trata a tecla é o renderer.
-						...(item.accelerator
-							? { accelerator: item.accelerator, registerAccelerator: false }
-							: {}),
-						click: () => settle(item.id),
-					},
-		);
+		const template: MenuItemConstructorOptions[] = items.map((item) => {
+			if (item.type === "separator") return { type: "separator" };
+			const icon = item.icon ? menuIcon(item.icon) : undefined;
+			return {
+				type: item.type ?? "normal",
+				label: item.label,
+				enabled: item.enabled ?? true,
+				checked: item.checked ?? false,
+				// Só exibe o atalho; quem trata a tecla é o renderer.
+				...(item.accelerator ? { accelerator: item.accelerator, registerAccelerator: false } : {}),
+				...(icon ? { icon } : {}),
+				click: () => settle(item.id),
+			};
+		});
 
 		Menu.buildFromTemplate(template).popup({
 			...(window ? { window } : {}),

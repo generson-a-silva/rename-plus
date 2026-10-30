@@ -21,8 +21,10 @@ export {
 	treeRootFor,
 } from "./filePathUtils";
 export { type HeicPreview, renderHeicPreview } from "./heicPreview";
+export { type AppIconName, ICON_PATHS } from "./iconPaths";
 export { insertItem, moveItem } from "./listReorder";
 export { loadStored, mergeDefaults, saveStored } from "./localPreferencesStorage";
+export { withMenuIcons } from "./menuIcons";
 export { diffNames, type NameDiffSegment } from "./nameDiff";
 export { type PdfPreview, renderPdfPreview } from "./pdfPreview";
 export {
